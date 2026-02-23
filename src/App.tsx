@@ -21,19 +21,57 @@ import {
   MessageCircle
 } from "lucide-react";
 
-const VideoPlayer = ({ src, className, opacity = 1 }: { src: string, className?: string, opacity?: number }) => {
+const VideoPlayer = ({ src, className, opacity = 1, isBackground = false }: { src: string, className?: string, opacity?: number, isBackground?: boolean }) => {
+  const [isInView, setIsInView] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
   const isYouTube = src.includes("youtube.com") || src.includes("youtu.be");
   
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsInView(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1, rootMargin: '200px' }
+    );
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+      observer.disconnect();
+    };
+  }, []);
+
+  // Don't render background videos on mobile to save performance
+  if (isBackground && isMobile) {
+    return <div ref={containerRef} className={`${className} bg-bg-primary`} style={{ opacity: 0.1 }} />;
+  }
+
   if (isYouTube) {
     const videoId = src.includes("v=") ? src.split("v=")[1].split("&")[0] : src.split("/").pop();
     return (
-      <div className={`${className} overflow-hidden pointer-events-none`} style={{ opacity }}>
-        <iframe
-          src={`https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=0&loop=1&playlist=${videoId}&modestbranding=1&rel=0&iv_load_policy=3&enablejsapi=1`}
-          className="absolute inset-0 w-full h-[150%] top-[-25%] pointer-events-none"
-          frameBorder="0"
-          allow="autoplay; encrypted-media"
-        />
+      <div ref={containerRef} className={`${className} overflow-hidden pointer-events-none bg-black/20`} style={{ opacity }}>
+        {isInView && (
+          <iframe
+            src={`https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=0&loop=1&playlist=${videoId}&modestbranding=1&rel=0&iv_load_policy=3&enablejsapi=1`}
+            className="absolute inset-0 w-full h-[150%] top-[-25%] pointer-events-none"
+            frameBorder="0"
+            allow="autoplay; encrypted-media"
+            title="Video Player"
+          />
+        )}
       </div>
     );
   }
@@ -41,32 +79,36 @@ const VideoPlayer = ({ src, className, opacity = 1 }: { src: string, className?:
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-    const playVideo = () => {
-      if (videoRef.current) {
-        videoRef.current.play().catch(error => {
-          console.log("Video play failed:", error);
-        });
-      }
-    };
-    
-    playVideo();
-    // Retry playing if it fails initially (sometimes needed for autoplay)
-    const timer = setTimeout(playVideo, 1000);
-    return () => clearTimeout(timer);
-  }, [src]);
+    if (isInView && videoRef.current) {
+      const playVideo = () => {
+        if (videoRef.current) {
+          videoRef.current.play().catch(error => {
+            console.log("Video play failed:", error);
+          });
+        }
+      };
+      
+      playVideo();
+      const timer = setTimeout(playVideo, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [isInView, src]);
 
   return (
-    <video 
-      ref={videoRef}
-      autoPlay
-      loop
-      muted
-      playsInline
-      className={className}
-      style={{ opacity }}
-    >
-      <source src={src} type="video/mp4" />
-    </video>
+    <div ref={containerRef} className={className} style={{ opacity }}>
+      {isInView && (
+        <video 
+          ref={videoRef}
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="w-full h-full object-cover"
+        >
+          <source src={src} type="video/mp4" />
+        </video>
+      )}
+    </div>
   );
 };
 
@@ -248,6 +290,7 @@ const ComputizePage = () => {
             src="https://www.youtube.com/watch?v=zG0nw695qIg"
             className="w-full h-full object-cover grayscale"
             opacity={0.2}
+            isBackground={true}
           />
           <div className="absolute inset-0 bg-gradient-to-b from-bg-primary via-transparent to-bg-primary" />
         </div>
