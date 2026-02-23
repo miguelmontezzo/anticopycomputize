@@ -4,6 +4,7 @@
  */
 
 import React, { useEffect, useRef } from "react";
+import { BrowserRouter, Routes, Route, Link, Navigate } from "react-router-dom";
 import { motion } from "motion/react";
 import { 
   ArrowDown, 
@@ -86,7 +87,7 @@ const FadeIn = ({ children, delay = 0 }: FadeInProps) => (
   </motion.div>
 );
 
-export default function App() {
+const ComputizePage = () => {
   return (
     <div className="min-h-screen selection:bg-accent-cyan/30 overflow-x-hidden">
       {/* Background Glows */}
@@ -97,9 +98,9 @@ export default function App() {
 
       {/* Navigation */}
       <nav className="fixed top-0 left-0 w-full z-50 px-6 py-8 flex justify-between items-center mix-blend-difference">
-        <div className="text-xs font-bold tracking-[0.2em] uppercase">
+        <Link to="/" className="text-xs font-bold tracking-[0.2em] uppercase hover:text-accent-cyan transition-colors">
           Anti Copy Club
-        </div>
+        </Link>
         <div className="hidden md:flex gap-8 text-[10px] font-medium tracking-widest uppercase text-muted">
           <a href="#analise" className="hover:text-white transition-colors">Análise</a>
           <a href="#solucao" className="hover:text-white transition-colors">Solução</a>
@@ -505,5 +506,39 @@ export default function App() {
         </div>
       </footer>
     </div>
+  );
+};
+
+const HomePage = () => {
+  return (
+    <div className="min-h-screen flex flex-col items-center justify-center bg-bg-primary text-white p-6">
+      <FadeIn>
+        <h1 className="text-6xl md:text-8xl font-bold tracking-tighter mb-12 text-center">
+          Anti Copy Club
+        </h1>
+      </FadeIn>
+      <FadeIn delay={0.2}>
+        <Link 
+          to="/computize" 
+          className="group flex items-center gap-4 px-12 py-6 border border-white/20 rounded-full text-xl font-medium hover:bg-white hover:text-black transition-all duration-500"
+        >
+          Computize Network
+          <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
+        </Link>
+      </FadeIn>
+    </div>
+  );
+};
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/computize" element={<ComputizePage />} />
+        {/* Fallback to home */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
