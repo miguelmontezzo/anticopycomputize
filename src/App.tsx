@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { BrowserRouter, Routes, Route, Link, Navigate } from "react-router-dom";
 import { motion } from "motion/react";
 import { 
@@ -510,21 +510,18 @@ const ComputizePage = () => {
 };
 
 const HomePage = () => {
+  const [clicks, setClicks] = useState(0);
+  const isBlue = clicks >= 5;
+
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-bg-primary text-white p-6">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-black text-white p-6 select-none">
       <FadeIn>
-        <h1 className="text-6xl md:text-8xl font-bold tracking-tighter mb-12 text-center">
+        <h1 
+          onClick={() => setClicks(prev => prev + 1)}
+          className={`text-6xl md:text-8xl font-bold tracking-tighter text-center cursor-pointer transition-colors duration-700 ${isBlue ? 'text-blue-500 shadow-[0_0_30px_rgba(59,130,246,0.5)]' : 'text-white'}`}
+        >
           Anti Copy Club
         </h1>
-      </FadeIn>
-      <FadeIn delay={0.2}>
-        <Link 
-          to="/computize" 
-          className="group flex items-center gap-4 px-12 py-6 border border-white/20 rounded-full text-xl font-medium hover:bg-white hover:text-black transition-all duration-500"
-        >
-          Computize Network
-          <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
-        </Link>
       </FadeIn>
     </div>
   );
