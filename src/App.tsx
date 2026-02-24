@@ -6,130 +6,26 @@
 import React, { useEffect, useRef, useState } from "react";
 import { BrowserRouter, Routes, Route, Link, Navigate } from "react-router-dom";
 import { motion } from "motion/react";
-import { 
-  ArrowDown, 
-  ArrowRight, 
-  Check, 
-  Globe, 
-  Instagram, 
-  Linkedin, 
-  Palette, 
-  Play, 
-  BookOpen, 
-  Trophy, 
+import {
+  ArrowDown,
+  ArrowRight,
+  Check,
+  Globe,
+  Instagram,
+  Linkedin,
+  Palette,
+  Play,
+  BookOpen,
+  Trophy,
   Shield,
   MessageCircle
 } from "lucide-react";
 
-const VideoPlayer = ({ src, className, opacity = 1, isBackground = false }: { src: string, className?: string, opacity?: number, isBackground?: boolean }) => {
-  const [isInView, setIsInView] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const isYouTube = src.includes("youtube.com") || src.includes("youtu.be");
-  
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsInView(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.1, rootMargin: '200px' }
-    );
-
-    if (containerRef.current) {
-      observer.observe(containerRef.current);
-    }
-
-    return () => {
-      window.removeEventListener('resize', checkMobile);
-      observer.disconnect();
-    };
-  }, []);
-
-  // Don't render background videos on mobile to save performance
-  if (isBackground && isMobile) {
-    return <div ref={containerRef} className={`${className} bg-bg-primary`} style={{ opacity: 0.1 }} />;
-  }
-
-  if (isYouTube) {
-    const videoId = src.includes("v=") ? src.split("v=")[1].split("&")[0] : src.split("/").pop();
-    return (
-      <div ref={containerRef} className={`${className} overflow-hidden pointer-events-none bg-black/20`} style={{ opacity }}>
-        {isInView && (
-          <iframe
-            src={`https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=0&loop=1&playlist=${videoId}&modestbranding=1&rel=0&iv_load_policy=3&enablejsapi=1`}
-            className="absolute inset-0 w-full h-[150%] top-[-25%] pointer-events-none"
-            frameBorder="0"
-            allow="autoplay; encrypted-media"
-            title="Video Player"
-          />
-        )}
-      </div>
-    );
-  }
-
-  const videoRef = useRef<HTMLVideoElement>(null);
-
-  useEffect(() => {
-    if (isInView && videoRef.current) {
-      const playVideo = () => {
-        if (videoRef.current) {
-          videoRef.current.play().catch(error => {
-            console.log("Video play failed:", error);
-          });
-        }
-      };
-      
-      playVideo();
-      const timer = setTimeout(playVideo, 1000);
-      return () => clearTimeout(timer);
-    }
-  }, [isInView, src]);
-
-  return (
-    <div ref={containerRef} className={className} style={{ opacity }}>
-      {isInView && (
-        <video 
-          ref={videoRef}
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="w-full h-full object-cover"
-        >
-          <source src={src} type="video/mp4" />
-        </video>
-      )}
-    </div>
-  );
-};
-
-interface FadeInProps {
-  children: React.ReactNode;
-  delay?: number;
-  key?: React.Key;
-}
-
-const FadeIn = ({ children, delay = 0 }: FadeInProps) => (
-  <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true }}
-    transition={{ duration: 0.8, delay, ease: [0.21, 0.47, 0.32, 0.98] }}
-  >
-    {children}
-  </motion.div>
-);
+import { FadeIn, VideoPlayer } from "./components/Shared";
+import IAServicePage from "./pages/IAServicePage";
 
 const ComputizePage = () => {
+
   return (
     <div className="min-h-screen selection:bg-accent-cyan/30 overflow-x-hidden">
       {/* Background Glows */}
@@ -155,8 +51,8 @@ const ComputizePage = () => {
       {/* SECTION 1 — HERO */}
       <section className="relative h-screen flex flex-col justify-center px-6 md:px-24 z-10">
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <img 
-            src="https://i.ibb.co/ZRC3KPrc/freepik-imagine-prompt-an-abstract-ultraminimalist-visuali-87174.png" 
+          <img
+            src="https://i.ibb.co/ZRC3KPrc/freepik-imagine-prompt-an-abstract-ultraminimalist-visuali-87174.png"
             alt="Hero Background"
             className="w-full h-full object-cover opacity-20 md:opacity-30 mix-blend-overlay"
             referrerPolicy="no-referrer"
@@ -166,7 +62,7 @@ const ComputizePage = () => {
             <div className="w-[80%] h-[80%] glow-mixed opacity-40" />
           </div>
         </div>
-        
+
         <div className="max-w-5xl relative z-10">
           <FadeIn>
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-[1.1] tracking-tighter mb-8">
@@ -176,19 +72,19 @@ const ComputizePage = () => {
               <span className="block text-muted font-light italic">O mercado ainda não sabe disso.</span>
             </h1>
           </FadeIn>
-          
+
           <FadeIn delay={0.2}>
             <p className="text-lg md:text-xl text-muted max-w-xl mb-10 font-light">
               Analisamos sua presença digital e chegamos com um plano para mudar isso.
             </p>
           </FadeIn>
-          
+
           <FadeIn delay={0.4}>
-            <a 
+            <a
               href="#analise"
               className="inline-flex items-center gap-3 px-8 py-4 border border-white rounded-full text-sm font-medium hover:bg-white hover:text-black transition-all duration-500 group"
             >
-              Ver a Análise 
+              Ver a Análise
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </a>
           </FadeIn>
@@ -207,7 +103,7 @@ const ComputizePage = () => {
         <FadeIn>
           <div className="text-[10px] tracking-[0.3em] text-muted uppercase mb-20">O MERCADO</div>
         </FadeIn>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-16 mb-24">
           {[
             { val: "90%", desc: "dos compradores B2B pesquisam online antes do primeiro contato" },
@@ -258,14 +154,14 @@ const ComputizePage = () => {
       {/* SECTION 4 — COMPETITIVE CONTEXT */}
       <section className="py-48 px-6 md:px-24 bg-bg-primary relative overflow-hidden z-10">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full glow-purple opacity-30 pointer-events-none" />
-        
+
         <div className="max-w-4xl mx-auto text-center">
           <FadeIn>
             <h2 className="text-4xl md:text-7xl font-bold tracking-tighter mb-12">
               Os concorrentes já estão nessa conversa.
             </h2>
           </FadeIn>
-          
+
           <FadeIn delay={0.2}>
             <p className="text-lg md:text-xl text-muted font-light leading-relaxed mb-16">
               Os players mais fortes do mercado já constroem autoridade nas redes sociais toda semana. Eles educam o mercado antes de vender. São lembrados antes do primeiro contato comercial.
@@ -286,7 +182,7 @@ const ComputizePage = () => {
       <section id="expert" className="py-32 px-6 md:px-24 relative z-10 overflow-hidden">
         {/* Background Video with 20% opacity */}
         <div className="absolute inset-0 pointer-events-none z-0">
-          <VideoPlayer 
+          <VideoPlayer
             src="https://www.youtube.com/watch?v=zG0nw695qIg"
             className="w-full h-full object-cover grayscale"
             opacity={0.2}
@@ -306,7 +202,7 @@ const ComputizePage = () => {
                 Apresentamos o Expert da Computize.
               </h2>
             </FadeIn>
-            
+
             <FadeIn delay={0.2}>
               <p className="text-xl text-muted font-light leading-relaxed">
                 Um especialista criado com Inteligência Artificial que representa a voz técnica e comercial da Computize — com rosto, voz e autoridade.
@@ -335,14 +231,14 @@ const ComputizePage = () => {
           <FadeIn delay={0.5}>
             <div className="glass-card aspect-video relative flex items-center justify-center group overflow-hidden rounded-2xl">
               {/* Expert Video Box */}
-              <VideoPlayer 
+              <VideoPlayer
                 src="https://www.youtube.com/watch?v=zG0nw695qIg"
                 className="absolute inset-0 w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-105 group-hover:scale-100"
               />
-              
+
               <div className="absolute inset-0 bg-gradient-to-t from-bg-primary/80 via-transparent to-transparent opacity-60 pointer-events-none" />
               <div className="absolute inset-0 bg-gradient-to-br from-accent-purple/20 to-accent-cyan/20 opacity-30 group-hover:opacity-10 transition-opacity pointer-events-none" />
-              
+
               <div className="absolute bottom-6 left-6 z-10 text-[10px] font-bold tracking-widest uppercase opacity-80 flex items-center gap-2 pointer-events-none">
                 <div className="w-2 h-2 rounded-full bg-accent-cyan animate-pulse" />
                 Expert — Computize Network
@@ -379,7 +275,7 @@ const ComputizePage = () => {
       {/* SECTION 7 — ABRINT 2026 */}
       <section className="py-48 px-6 md:px-24 relative overflow-hidden z-10">
         <div className="absolute top-0 right-0 w-1/2 h-full glow-cyan opacity-20 pointer-events-none" />
-        
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div className="max-w-4xl">
             <FadeIn>
@@ -387,7 +283,7 @@ const ComputizePage = () => {
                 Maio de 2026 — São Paulo
               </div>
             </FadeIn>
-            
+
             <FadeIn delay={0.2}>
               <h2 className="text-4xl md:text-6xl font-bold tracking-tighter mb-12 leading-[1.1]">
                 O maior evento de provedores do Brasil está chegando.
@@ -409,8 +305,8 @@ const ComputizePage = () => {
 
           <FadeIn delay={0.5}>
             <div className="glass-card p-4 rounded-2xl overflow-hidden group">
-              <img 
-                src="https://i.ibb.co/xKH32Ddj/freepik-carregue-trs-ativos-no-espao-de-trabalho-uma-foto-28406.png" 
+              <img
+                src="https://i.ibb.co/xKH32Ddj/freepik-carregue-trs-ativos-no-espao-de-trabalho-uma-foto-28406.png"
                 alt="Abrint Event"
                 className="w-full h-full object-cover rounded-xl grayscale group-hover:grayscale-0 transition-all duration-700 scale-105 group-hover:scale-100"
                 referrerPolicy="no-referrer"
@@ -470,7 +366,7 @@ const ComputizePage = () => {
                   Projeto Único
                 </div>
               </div>
-              
+
               <div>
                 <h3 className="text-xl font-bold mb-2">Abrint 2026</h3>
                 <div className="text-4xl font-bold">+ R$ 3.000</div>
@@ -508,7 +404,7 @@ const ComputizePage = () => {
       {/* SECTION 9 — FINAL CTA */}
       <section id="briefing" className="relative h-screen flex flex-col justify-center items-center text-center px-6 z-10 overflow-hidden">
         <div className="absolute inset-0 glow-mixed opacity-50 rotate-45 pointer-events-none" />
-        
+
         <div className="max-w-4xl relative z-10">
           <FadeIn>
             <h2 className="text-5xl md:text-8xl font-bold tracking-tighter leading-[0.9] mb-12">
@@ -516,7 +412,7 @@ const ComputizePage = () => {
               <span className="text-muted font-light italic">A comunicação começa agora.</span>
             </h2>
           </FadeIn>
-          
+
           <FadeIn delay={0.2}>
             <p className="text-xl text-muted font-light mb-16 max-w-2xl mx-auto">
               Precisamos de 1 hora com vocês para o briefing. Com isso em mãos, a máquina começa a rodar.
@@ -525,7 +421,7 @@ const ComputizePage = () => {
 
           <FadeIn delay={0.4}>
             <div className="flex justify-center">
-              <a 
+              <a
                 href="https://wa.me/5534999320196?text=Miguel%20achei%20top%20demais%2C%20bora%20j%C3%A1%20pro%20pr%C3%B3ximo%20passo"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -559,7 +455,7 @@ const HomePage = () => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-black text-white p-6 select-none">
       <FadeIn>
-        <h1 
+        <h1
           onClick={() => setClicks(prev => prev + 1)}
           className={`text-6xl md:text-8xl font-bold tracking-tighter text-center cursor-pointer transition-colors duration-700 ${isBlue ? 'text-blue-500 shadow-[0_0_30px_rgba(59,130,246,0.5)]' : 'text-white'}`}
         >
@@ -576,6 +472,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/computize" element={<ComputizePage />} />
+        <Route path="/ia-service" element={<IAServicePage />} />
         {/* Fallback to home */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
