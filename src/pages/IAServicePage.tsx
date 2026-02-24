@@ -53,12 +53,12 @@ const IAServicePage = () => {
                     {/* Main Hero Image/Card */}
                     <FadeIn>
                         <div className="relative w-full rounded-[2rem] overflow-hidden bg-gray-900 min-h-[70vh] flex flex-col justify-between p-10 md:p-16">
-                            {/* Fallback image background */}
+                            {/* Video background */}
                             <div className="absolute inset-0 z-0">
-                                <img
-                                    src="https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&q=80"
-                                    alt="Modern Office"
+                                <video
+                                    src="https://nthfbwootpzgpsjnerdw.supabase.co/storage/v1/object/sign/digital/bf9d9e4c-6774-413f-84f0-903aeab48993_hd.mp4?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9iMDM3Y2M3My1iMWUxLTQwYmQtODVjNS1lNjk1ZGM3ZmU1YzUiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJkaWdpdGFsL2JmOWQ5ZTRjLTY3NzQtNDEzZi04NGYwLTkwM2FlYWI0ODk5M19oZC5tcDQiLCJpYXQiOjE3NzE5NzM0ODQsImV4cCI6MTgwMzUwOTQ4NH0.T6xwP4oB1dxDnf9LyvJMwe8mnrpM_GG1_je6HeGJwtA"
                                     className="w-full h-full object-cover opacity-50 mix-blend-overlay"
+                                    autoPlay loop muted playsInline
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 to-transparent" />
                             </div>
