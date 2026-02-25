@@ -53,7 +53,7 @@ const STEPS = [
 ];
 
 export default function EmpPage() {
-    const [currentStep, setCurrentStep] = useState(0);
+    const [currentStep, setCurrentStep] = useState(-1);
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
     const [errorMsg, setErrorMsg] = useState('');
@@ -64,7 +64,7 @@ export default function EmpPage() {
     };
 
     const nextStep = () => setCurrentStep(prev => Math.min(prev + 1, 2));
-    const prevStep = () => setCurrentStep(prev => Math.max(prev - 1, 0));
+    const prevStep = () => setCurrentStep(prev => Math.max(prev - 1, -1));
 
     const handleSubmit = async () => {
         setLoading(true);
@@ -113,22 +113,26 @@ export default function EmpPage() {
                 <div className="text-xs font-bold tracking-[0.2em] uppercase">
                     Anti Copy Club — Metodologia EMP
                 </div>
-                <div className="text-xs text-muted flex items-center gap-2">
-                    Etapa <span className="text-white font-bold">{currentStep + 1}</span> de 3
-                </div>
+                {currentStep >= 0 && (
+                    <div className="text-xs text-muted flex items-center gap-2">
+                        Etapa <span className="text-white font-bold">{currentStep + 1}</span> de 3
+                    </div>
+                )}
             </nav>
 
             <main className="relative z-10 pt-32 pb-24 px-6 max-w-4xl mx-auto">
-                <FadeIn>
-                    <div className="mb-12">
-                        <h1 className="text-3xl md:text-5xl font-bold tracking-tighter mb-4 text-glow transition-all duration-500">
-                            {STEPS[currentStep].title}
-                        </h1>
-                        <p className="text-muted text-lg font-light">
-                            {STEPS[currentStep].description}
-                        </p>
-                    </div>
-                </FadeIn>
+                {currentStep >= 0 && (
+                    <FadeIn>
+                        <div className="mb-12">
+                            <h1 className="text-3xl md:text-5xl font-bold tracking-tighter mb-4 text-glow transition-all duration-500">
+                                {STEPS[currentStep].title}
+                            </h1>
+                            <p className="text-muted text-lg font-light">
+                                {STEPS[currentStep].description}
+                            </p>
+                        </div>
+                    </FadeIn>
+                )}
 
                 {errorMsg && (
                     <div className="p-4 mb-8 bg-red-500/10 border border-red-500/50 rounded-lg text-red-500 text-sm">
@@ -138,6 +142,55 @@ export default function EmpPage() {
 
                 <div className="glass-card p-6 md:p-12 mb-8">
                     <AnimatePresence mode="wait">
+                        {currentStep === -1 && (
+                            <motion.div
+                                key="step-intro"
+                                initial={{ opacity: 0, x: 20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                exit={{ opacity: 0, x: -20 }}
+                                transition={{ duration: 0.3 }}
+                                className="space-y-8 text-left"
+                            >
+                                <div className="mb-12 space-y-6">
+                                    <h3 className="text-3xl md:text-5xl font-bold tracking-tighter mb-4">Bem-vindo ao Diagnóstico.</h3>
+                                    <div className="text-muted font-light leading-relaxed space-y-4 text-lg">
+                                        <p>Prezada equipe Computize,</p>
+                                        <p>Antes de qualquer planejamento, acreditamos em algo simples: <strong>nenhuma estratégia funciona sem diagnóstico real.</strong></p>
+                                        <p>Por isso, desenvolvemos o Método "E, Mas, Por Isso", uma metodologia estratégica que usamos para entender profundamente o negócio do cliente antes de propor qualquer ação de conteúdo ou comunicação.</p>
+                                    </div>
+                                </div>
+
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 my-12">
+                                    <div className="bg-black/40 border border-white/10 rounded-2xl p-6 relative overflow-hidden group hover:border-accent-cyan/50 transition-colors">
+                                        <div className="absolute top-0 right-0 w-32 h-32 bg-accent-cyan/10 rounded-full blur-3xl -mr-16 -mt-16 group-hover:bg-accent-cyan/20 transition-all"></div>
+                                        <div className="text-[10px] tracking-widest uppercase text-accent-cyan font-bold mb-4">Etapa 1</div>
+                                        <h4 className="text-2xl font-bold mb-4">O "E"</h4>
+                                        <p className="text-muted text-sm font-light leading-relaxed">Mapeia onde a empresa está hoje: seus ativos, sua presença, seus canais e suas metas.</p>
+                                    </div>
+                                    <div className="bg-black/40 border border-white/10 rounded-2xl p-6 relative overflow-hidden group hover:border-accent-purple/50 transition-colors">
+                                        <div className="absolute top-0 right-0 w-32 h-32 bg-accent-purple/10 rounded-full blur-3xl -mr-16 -mt-16 group-hover:bg-accent-purple/20 transition-all"></div>
+                                        <div className="text-[10px] tracking-widest uppercase text-accent-purple font-bold mb-4">Etapa 2</div>
+                                        <h4 className="text-2xl font-bold mb-4">O "Mas"</h4>
+                                        <p className="text-muted text-sm font-light leading-relaxed">Identifica com honestidade o que trava o crescimento: os gargalos de comunicação, os conflitos narrativos e o que o mercado ainda não enxerga.</p>
+                                    </div>
+                                    <div className="bg-black/40 border border-white/10 rounded-2xl p-6 relative overflow-hidden group hover:border-accent-cyan/50 transition-colors">
+                                        <div className="absolute top-0 right-0 w-32 h-32 bg-accent-cyan/10 rounded-full blur-3xl -mr-16 -mt-16 group-hover:bg-accent-cyan/20 transition-all"></div>
+                                        <div className="text-[10px] tracking-widest uppercase text-accent-cyan font-bold mb-4">Etapa 3</div>
+                                        <h4 className="text-2xl font-bold mb-4">O "Por Isso"</h4>
+                                        <p className="text-muted text-sm font-light leading-relaxed">Onde construímos juntos o plano estratégico e executamos com IA, transformando tudo em conteúdo que gera autoridade e conversão.</p>
+                                    </div>
+                                </div>
+
+                                <div className="text-muted font-light leading-relaxed space-y-4 text-lg">
+                                    <p>Nos documentos a seguir você encontrará nossa análise inicial sobre a Computize, baseada no que já mapeamos externamente, seguida de perguntas estratégicas específicas para cada etapa.</p>
+                                    <p>Suas respostas são o que precisamos para fechar o diagnóstico completo e entregar um plano estratégico real, executável e alinhado aos objetivos de negócio da Computize para 2026, incluindo a preparação estratégica para a AGC26 Abrint.</p>
+                                    <p className="text-white border-l-2 border-white/30 pl-4 py-2 mt-6">
+                                        Pedimos que as respostas sejam enviadas até <strong className="text-accent-cyan">26/02/2026</strong> para que possamos iniciar a entrega do plano em seguida.
+                                    </p>
+                                </div>
+                            </motion.div>
+                        )}
+
                         {currentStep === 0 && (
                             <motion.div
                                 key="step-0"
@@ -252,16 +305,28 @@ export default function EmpPage() {
                 </div>
 
                 <div className="flex justify-between items-center mt-8">
-                    <button
-                        onClick={prevStep}
-                        disabled={currentStep === 0 || loading}
-                        className={`flex items-center gap-2 px-6 py-3 border border-white/20 rounded-full text-sm font-medium transition-colors ${currentStep === 0 ? 'opacity-30 cursor-not-allowed' : 'hover:bg-white/10'}`}
-                    >
-                        <ArrowLeft className="w-4 h-4" />
-                        Anterior
-                    </button>
+                    {currentStep >= 0 ? (
+                        <button
+                            onClick={prevStep}
+                            disabled={loading}
+                            className={`flex items-center gap-2 px-6 py-3 border border-white/20 rounded-full text-sm font-medium transition-colors hover:bg-white/10`}
+                        >
+                            <ArrowLeft className="w-4 h-4" />
+                            Anterior
+                        </button>
+                    ) : (
+                        <div /> // Placeholder to align "Próximo" to the right
+                    )}
 
-                    {currentStep < 2 ? (
+                    {currentStep < 0 ? (
+                        <button
+                            onClick={nextStep}
+                            className="flex items-center gap-2 px-8 py-3 bg-white text-black rounded-full text-sm font-bold shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:scale-105 transition-all"
+                        >
+                            Iniciar Diagnóstico
+                            <ArrowRight className="w-4 h-4" />
+                        </button>
+                    ) : currentStep < 2 ? (
                         <button
                             onClick={nextStep}
                             className="flex items-center gap-2 px-8 py-3 bg-white text-black rounded-full text-sm font-bold shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:scale-105 transition-all"
