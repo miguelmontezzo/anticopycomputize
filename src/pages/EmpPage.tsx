@@ -34,6 +34,10 @@ type EmpData = {
     aprovador_conteudo: string;
     canal_operacional: string;
     formato_aprovacao: string;
+    // Anexos e Instagram
+    instagram_user: string;
+    instagram_pass: string;
+    documentos_urls: string[];
 };
 
 const INITIAL_DATA: EmpData = {
@@ -44,12 +48,14 @@ const INITIAL_DATA: EmpData = {
     frase_posicionamento: '', promessa_central: '', oferta_abrint: '', recompensa_estande: '',
     meta_reunioes_abrint: '', clientes_case: '', historia_forte_mitigacao: '', aprovador_conteudo: '',
     canal_operacional: '', formato_aprovacao: '',
+    instagram_user: '', instagram_pass: '', documentos_urls: [],
 };
 
 const STEPS = [
     { id: 'E', title: 'Metodologia E: Onde a Computize Está Hoje', description: 'Visão Geral do Negócio' },
     { id: 'M', title: 'Metodologia M: O Que Trava a Computize Hoje', description: 'O Gargalo da Comunicação' },
     { id: 'P', title: 'Metodologia P: O Que Vamos Construir Juntos', description: 'A Solução Estratégica' },
+    { id: 'X', title: 'Sua Conta e Anexos', description: 'Informações Complementares e Acessos' },
 ];
 
 export default function EmpPage() {
@@ -58,12 +64,23 @@ export default function EmpPage() {
     const [success, setSuccess] = useState(false);
     const [errorMsg, setErrorMsg] = useState('');
     const [formData, setFormData] = useState<EmpData>(INITIAL_DATA);
+    const [filesToUpload, setFilesToUpload] = useState<File[]>([]);
 
     const handleChange = (field: keyof EmpData, value: string) => {
         setFormData(prev => ({ ...prev, [field]: value }));
     };
 
-    const nextStep = () => setCurrentStep(prev => Math.min(prev + 1, 2));
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files) {
+            setFilesToUpload(prev => [...prev, ...Array.from(e.target.files!)]);
+        }
+    };
+
+    const removeFile = (indexToRemove: number) => {
+        setFilesToUpload(prev => prev.filter((_, idx) => idx !== indexToRemove));
+    };
+
+    const nextStep = () => setCurrentStep(prev => Math.min(prev + 1, 3));
     const prevStep = () => setCurrentStep(prev => Math.max(prev - 1, -1));
 
     const handleSubmit = async () => {
@@ -73,8 +90,35 @@ export default function EmpPage() {
             if (!supabase) {
                 throw new Error('Supabase não configurado. Verifique as variáveis de ambiente na Vercel (VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY).');
             }
-            const { error } = await supabase.from('emp_responses').insert([formData]);
-            if (error) throw error;
+
+            const uploadedUrls: string[] = [];
+
+            // Dispara uploads do array inteiro
+            for (const file of filesToUpload) {
+                const fileExt = file.name.split('.').pop();
+                const fileName = `${Math.random().toString(36).substring(2, 15)}_${Date.now()}.${fileExt}`;
+                const filePath = `uploads/${fileName}`;
+
+                const { error: uploadError } = await supabase.storage
+                    .from('anticopyai')
+                    .upload(filePath, file);
+
+                if (uploadError) {
+                    console.error('Erro no upload: ', uploadError);
+                    throw new Error(`Falha ao fazer upload do arquivo ${file.name}`);
+                }
+
+                // Resgata o link publico
+                const { data } = supabase.storage.from('anticopyai').getPublicUrl(filePath);
+                uploadedUrls.push(data.publicUrl);
+            }
+
+            // Atribui os links à submissão do form
+            const finalData = { ...formData, documentos_urls: uploadedUrls };
+
+            const { error: insertError } = await supabase.from('emp_responses').insert([finalData]);
+            if (insertError) throw insertError;
+
             setSuccess(true);
         } catch (err: any) {
             console.error(err);
@@ -118,7 +162,7 @@ export default function EmpPage() {
                 </div>
                 {currentStep >= 0 && (
                     <div className="text-xs text-muted flex items-center gap-2">
-                        Etapa <span className="text-white font-bold">{currentStep + 1}</span> de 3
+                        Etapa <span className="text-white font-bold">{currentStep + 1}</span> de 4
                     </div>
                 )}
             </nav>
@@ -304,6 +348,84 @@ export default function EmpPage() {
                                 <Textarea label="10. Preferem aprovação por lote mensal ou peça por peça?" value={formData.formato_aprovacao} onChange={(v) => handleChange('formato_aprovacao', v)} />
                             </motion.div>
                         )}
+
+                        {currentStep === 3 && (
+                            <motion.div
+                                key="step-3"
+                                initial={{ opacity: 0, x: 20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                exit={{ opacity: 0, x: -20 }}
+                                transition={{ duration: 0.3 }}
+                                className="space-y-8 text-left"
+                            >
+                                <div className="mb-12 space-y-4">
+                                    <h3 className="text-2xl font-bold tracking-tighter text-accent-cyan">Sua Conta e Anexos Extras</h3>
+                                    <p className="text-muted font-light leading-relaxed">
+                                        Para conseguirmos montar uma comunicação o mais próxima da realidade, necessitamos do seu acesso ao Instagram para estudos ou configurações, além de quaisquer PDFs ou DOCs de apresentação originais da marca.
+                                    </p>
+                                </div>
+
+                                <div className="text-sm tracking-widest text-accent-cyan uppercase font-bold border-b border-white/10 pb-2 mb-6">Acesso ao Instagram</div>
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+                                    <div className="flex flex-col gap-2 relative">
+                                        <label className="text-white/80 font-medium text-sm">Usuário (@)</label>
+                                        <input
+                                            type="text"
+                                            value={formData.instagram_user}
+                                            onChange={(e) => handleChange('instagram_user', e.target.value)}
+                                            className="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-accent-cyan/50 focus:ring-1 focus:ring-accent-cyan/50 transition-all"
+                                            placeholder="Ex: @computize"
+                                        />
+                                    </div>
+                                    <div className="flex flex-col gap-2 relative">
+                                        <label className="text-white/80 font-medium text-sm">Senha</label>
+                                        <input
+                                            type="text"
+                                            value={formData.instagram_pass}
+                                            onChange={(e) => handleChange('instagram_pass', e.target.value)}
+                                            className="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-accent-cyan/50 focus:ring-1 focus:ring-accent-cyan/50 transition-all"
+                                            placeholder="Digite a senha atual"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="text-sm tracking-widest text-accent-cyan uppercase font-bold border-b border-white/10 pb-2 mb-6">Documentos da Empresa</div>
+
+                                <div className="bg-black/40 border border-dashed border-white/20 hover:border-accent-cyan/50 rounded-2xl p-8 text-center transition-all cursor-pointer relative">
+                                    <input
+                                        type="file"
+                                        multiple
+                                        onChange={handleFileChange}
+                                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                                        title="Clique para enviar arquivos"
+                                    />
+                                    <div className="text-white/60">
+                                        <p className="font-bold mb-2">Clique ou arraste até aqui</p>
+                                        <p className="text-sm font-light">Suporta PDFs, DOCs, e Imagens de apresentação.</p>
+                                    </div>
+                                </div>
+
+                                {filesToUpload.length > 0 && (
+                                    <div className="mt-6 flex flex-col gap-3">
+                                        <h4 className="text-sm font-bold text-white/80">Arquivos anexados ({filesToUpload.length}):</h4>
+                                        <ul className="space-y-2">
+                                            {filesToUpload.map((file, idx) => (
+                                                <li key={idx} className="flex justify-between items-center bg-white/5 p-3 rounded-lg border border-white/10 text-sm hover:border-white/20 transition-all">
+                                                    <span className="truncate max-w-[80%] text-muted text-xs pr-4">{file.name}</span>
+                                                    <button
+                                                        onClick={() => removeFile(idx)}
+                                                        className="text-red-400 hover:text-red-300 font-bold text-xs shrink-0 px-2 py-1 rounded bg-red-400/10 hover:bg-red-400/20 transition-colors"
+                                                    >
+                                                        Remover
+                                                    </button>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                )}
+                            </motion.div>
+                        )}
                     </AnimatePresence>
                 </div>
 
@@ -329,7 +451,7 @@ export default function EmpPage() {
                             Iniciar Diagnóstico
                             <ArrowRight className="w-4 h-4" />
                         </button>
-                    ) : currentStep < 2 ? (
+                    ) : currentStep < 3 ? (
                         <button
                             onClick={nextStep}
                             className="flex items-center gap-2 px-8 py-3 bg-white text-black rounded-full text-sm font-bold shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:scale-105 transition-all"
