@@ -70,6 +70,9 @@ export default function EmpPage() {
         setLoading(true);
         setErrorMsg('');
         try {
+            if (!supabase) {
+                throw new Error('Supabase não configurado. Verifique as variáveis de ambiente na Vercel (VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY).');
+            }
             const { error } = await supabase.from('emp_responses').insert([formData]);
             if (error) throw error;
             setSuccess(true);
