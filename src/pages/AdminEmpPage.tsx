@@ -77,12 +77,8 @@ export default function AdminEmpPage() {
     }
 
     return (
-        <div className="min-h-screen bg-bg-primary text-white p-6 md:p-12 relative overflow-x-hidden">
-            {/* Background Glows */}
-            <div className="fixed inset-0 pointer-events-none z-0">
-                <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] glow-purple opacity-20" />
-                <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] glow-cyan opacity-20" />
-            </div>
+        <div className="min-h-screen bg-transparent text-white p-6 md:p-12 relative overflow-x-hidden">
+
 
             <div className="max-w-7xl mx-auto relative z-10">
                 <header className="mb-12 border-b border-white/10 pb-6 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
