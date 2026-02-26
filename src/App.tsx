@@ -24,6 +24,7 @@ import {
 import { FadeIn, VideoPlayer } from "./components/Shared";
 import IAServicePage from "./pages/IAServicePage";
 import EmpPage from "./pages/EmpPage";
+import AdminEmpPage from "./pages/AdminEmpPage";
 
 const ComputizePage = () => {
 
@@ -474,6 +475,7 @@ export default function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/computize" element={<ComputizePage />} />
         <Route path="/computize/emp" element={<EmpPage />} />
+        <Route path="/admin/emp" element={<AdminEmpPage />} />
         <Route path="/ia-service" element={<IAServicePage />} />
         {/* Fallback to home */}
         <Route path="*" element={<Navigate to="/" replace />} />
