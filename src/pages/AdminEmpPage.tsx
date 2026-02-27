@@ -3,7 +3,7 @@ import { supabase } from '../lib/supabase';
 import { FadeIn } from '../components/Shared';
 import {
     FolderOpen, Instagram, Download, Clock, Expand, Shrink,
-    ChevronRight, User, Copy, Check as CheckIcon, FileDown
+    ChevronRight, User, Copy, Check as CheckIcon, FileDown, ExternalLink, Link as LinkIcon
 } from 'lucide-react';
 
 type EmpResponse = {
@@ -99,6 +99,7 @@ export default function AdminEmpPage() {
     const [loading, setLoading] = useState(true);
     const [expandedId, setExpandedId] = useState<string | null>(null);
     const [copiedId, setCopiedId] = useState<string | null>(null);
+    const [linkCopiedId, setLinkCopiedId] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchResponses = async () => {
@@ -200,11 +201,39 @@ export default function AdminEmpPage() {
                                                 </h3>
                                             </div>
 
-                                            <div className="flex items-center gap-4 text-sm text-muted">
+                                            <div className="flex items-center gap-3 text-sm text-muted">
                                                 <div className="flex items-center gap-1 bg-white/5 px-3 py-1.5 rounded-lg border border-white/5">
                                                     {docs.length} <FolderOpen className="w-3 h-3" />
                                                 </div>
-                                                <button className="text-accent-cyan flex flex-items gap-2 font-medium hover:text-white transition-colors">
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        const url = `${window.location.origin}/emp/view/${res.id}`;
+                                                        navigator.clipboard.writeText(url);
+                                                        setLinkCopiedId(res.id);
+                                                        setTimeout(() => setLinkCopiedId(null), 2000);
+                                                    }}
+                                                    title="Copiar link público"
+                                                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border transition-all ${linkCopiedId === res.id
+                                                            ? 'bg-green-500/10 text-green-400 border-green-500/20'
+                                                            : 'bg-white/5 hover:bg-white/10 text-white/50 hover:text-white border-white/5'
+                                                        }`}
+                                                >
+                                                    {linkCopiedId === res.id
+                                                        ? <><CheckIcon className="w-3 h-3" /> Link copiado</>
+                                                        : <><LinkIcon className="w-3 h-3" /> Link público</>}
+                                                </button>
+                                                <a
+                                                    href={`/emp/view/${res.id}`}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    onClick={(e) => e.stopPropagation()}
+                                                    title="Abrir visualização pública"
+                                                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-white/5 hover:bg-white/10 text-white/50 hover:text-white border border-white/5 transition-all"
+                                                >
+                                                    <ExternalLink className="w-3 h-3" /> Abrir
+                                                </a>
+                                                <button className="text-accent-cyan flex items-center gap-2 font-medium hover:text-white transition-colors">
                                                     {isExpanded ? <Shrink className="w-4 h-4" /> : <Expand className="w-4 h-4" />}
                                                     {isExpanded ? 'Fechar' : 'Visualizar Ficha'}
                                                 </button>
@@ -334,8 +363,8 @@ export default function AdminEmpPage() {
                                                         <button
                                                             onClick={handleCopy}
                                                             className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all ${copiedId === res.id
-                                                                    ? 'bg-green-500/20 text-green-400 border border-green-500/30'
-                                                                    : 'bg-white/5 hover:bg-white/10 text-white/70 hover:text-white border border-white/10'
+                                                                ? 'bg-green-500/20 text-green-400 border border-green-500/30'
+                                                                : 'bg-white/5 hover:bg-white/10 text-white/70 hover:text-white border border-white/10'
                                                                 }`}
                                                         >
                                                             {copiedId === res.id

@@ -28,6 +28,7 @@ import AdminEmpPage from "./pages/AdminEmpPage";
 import AdminLoginPage from "./pages/AdminLoginPage";
 import AdminDashboardPage from "./pages/AdminDashboardPage";
 import AdminLayout from "./components/AdminLayout";
+import EmpResponseViewPage from "./pages/EmpResponseViewPage";
 
 const ComputizePage = () => {
 
@@ -48,7 +49,7 @@ const ComputizePage = () => {
           <a href="#analise" className="hover:text-white transition-colors">Análise</a>
           <a href="#solucao" className="hover:text-white transition-colors">Solução</a>
           <a href="#expert" className="hover:text-white transition-colors">Expert IA</a>
-          <a href="#investimento" className="hover:text-white transition-colors">Investimento</a>
+          <a href="#diagnostico" className="hover:text-white transition-colors">Diagnóstico</a>
           <a href="#briefing" className="hover:text-white transition-colors">Briefing</a>
         </div>
       </nav>
@@ -321,89 +322,74 @@ const ComputizePage = () => {
         </div>
       </section>
 
-      {/* SECTION 8 — INVESTMENT */}
-      <section id="investimento" className="py-32 px-6 md:px-24 bg-bg-secondary relative z-10">
-        <FadeIn>
-          <div className="text-[10px] tracking-[0.3em] text-muted uppercase mb-20">O INVESTIMENTO</div>
-        </FadeIn>
-
-        <div className="grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-8 items-end mb-20">
+      {/* SECTION 8 — SOLICITAR DIAGNÓSTICO */}
+      <section id="diagnostico" className="py-32 px-6 md:px-24 bg-bg-secondary relative z-10">
+        <div className="max-w-4xl mx-auto">
           <FadeIn>
-            <div className="glass-card p-12 flex flex-col gap-10">
-              <div className="flex justify-between items-start">
-                <div>
-                  <h3 className="text-2xl font-bold mb-2">Plano Mensal Recorrente</h3>
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-5xl font-bold">R$ 9.000</span>
-                    <span className="text-muted text-sm">/mês</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {[
-                  "15 a 20 peças de conteúdo por mês",
-                  "Instagram + LinkedIn ativos toda semana",
-                  "Vídeos com Expert de IA inclusos",
-                  "Identidade visual completa (1º mês)",
-                  "Consultoria de site (1º mês)",
-                  "Relatório mensal de desempenho"
-                ].map((check, i) => (
-                  <div key={i} className="flex items-center gap-3">
-                    <div className="w-5 h-5 rounded-full bg-accent-cyan/10 flex items-center justify-center">
-                      <Check className="w-3 h-3 text-accent-cyan" />
-                    </div>
-                    <span className="text-sm text-muted font-light">{check}</span>
-                  </div>
-                ))}
-              </div>
-
-              <div className="text-[10px] tracking-widest uppercase text-muted/50">
-                Fidelidade mínima: 3 meses
-              </div>
-            </div>
+            <div className="text-[10px] tracking-[0.3em] text-muted uppercase mb-20">O PRÓXIMO PASSO</div>
           </FadeIn>
 
-          <FadeIn delay={0.2}>
-            <div className="glass-card p-10 border-accent-cyan/30 flex flex-col gap-8 relative overflow-hidden">
-              <div className="absolute top-0 right-0 p-4">
-                <div className="px-3 py-1 bg-accent-cyan text-black text-[8px] font-black tracking-widest uppercase rounded-full">
-                  Projeto Único
-                </div>
-              </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div className="flex flex-col gap-10">
+              <FadeIn>
+                <h2 className="text-4xl md:text-6xl font-bold tracking-tighter leading-[1.05]">
+                  Solicite seu<br />
+                  <span className="text-accent-cyan">diagnóstico</span><br />
+                  <span className="text-muted font-light italic">gratuito.</span>
+                </h2>
+              </FadeIn>
 
-              <div>
-                <h3 className="text-xl font-bold mb-2">Abrint 2026</h3>
-                <div className="text-4xl font-bold">+ R$ 3.000</div>
-                <p className="text-[10px] text-muted mt-2 font-light">
-                  Pagamento gradual até o mês do evento
+              <FadeIn delay={0.2}>
+                <p className="text-lg text-muted font-light leading-relaxed">
+                  Responda algumas perguntas sobre a Computize e nossa equipe vai montar um plano personalizado com as oportunidades reais da sua presença digital.
                 </p>
-              </div>
+              </FadeIn>
 
-              <div className="flex flex-col gap-4">
-                {[
-                  "Planejamento estratégico para o evento",
-                  "Campanha de aquecimento pré-Abrint",
-                  "Peças específicas para a feira",
-                  "Vídeo especial do Expert"
-                ].map((check, i) => (
-                  <div key={i} className="flex items-center gap-3">
-                    <Check className="w-3 h-3 text-accent-cyan" />
-                    <span className="text-xs text-muted font-light">{check}</span>
-                  </div>
-                ))}
-              </div>
+              <FadeIn delay={0.3}>
+                <div className="flex flex-col gap-4">
+                  {[
+                    { icon: <Check className="w-3 h-3 text-accent-cyan" />, text: "Análise completa dos seus canais digitais" },
+                    { icon: <Check className="w-3 h-3 text-accent-cyan" />, text: "Identificação das principais oportunidades" },
+                    { icon: <Check className="w-3 h-3 text-accent-cyan" />, text: "Plano de ação personalizado para a Computize" },
+                    { icon: <Check className="w-3 h-3 text-accent-cyan" />, text: "Apresentação sem compromisso" }
+                  ].map((item, i) => (
+                    <div key={i} className="flex items-center gap-3">
+                      <div className="w-5 h-5 rounded-full bg-accent-cyan/10 flex items-center justify-center flex-shrink-0">
+                        {item.icon}
+                      </div>
+                      <span className="text-sm text-muted font-light">{item.text}</span>
+                    </div>
+                  ))}
+                </div>
+              </FadeIn>
             </div>
-          </FadeIn>
-        </div>
 
-        <FadeIn delay={0.4}>
-          <div className="text-center">
-            <div className="text-3xl md:text-5xl font-bold tracking-tighter">
-              Total no mês do evento: <span className="text-accent-cyan">R$ 12.000</span>
-            </div>
+            <FadeIn delay={0.4}>
+              <div className="glass-card p-10 border-accent-cyan/20 flex flex-col gap-8 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-32 h-32 glow-cyan opacity-20 pointer-events-none" />
+
+                <div>
+                  <div className="text-[10px] tracking-[0.3em] text-accent-cyan uppercase font-bold mb-4">Diagnóstico Digital</div>
+                  <h3 className="text-2xl font-bold mb-3">Pronto para dar o próximo passo?</h3>
+                  <p className="text-muted text-sm font-light leading-relaxed">
+                    Leva menos de 5 minutos. Nosso time analisa tudo e entra em contato com um plano sob medida.
+                  </p>
+                </div>
+
+                <Link
+                  to="/computize/emp"
+                  className="w-full px-8 py-5 bg-white text-black rounded-full font-bold text-sm hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(255,255,255,0.15)] transition-all duration-300 text-center inline-block"
+                >
+                  Solicitar diagnóstico gratuito →
+                </Link>
+
+                <div className="text-[10px] tracking-widest uppercase text-muted/40 text-center">
+                  Sem compromisso • Resposta em até 24h
+                </div>
+              </div>
+            </FadeIn>
           </div>
-        </FadeIn>
+        </div>
       </section>
 
       {/* SECTION 9 — FINAL CTA */}
@@ -478,6 +464,7 @@ export default function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/computize" element={<ComputizePage />} />
         <Route path="/computize/emp" element={<EmpPage />} />
+        <Route path="/emp/view/:id" element={<EmpResponseViewPage />} />
 
         {/* Admin Routes */}
         <Route path="/admin/login" element={<AdminLoginPage />} />
