@@ -16,6 +16,7 @@ import {
     Mail,
     Grid,
     MessageCircle,
+    X,
 } from "lucide-react";
 import { FadeIn } from "../components/Shared";
 
@@ -620,58 +621,99 @@ const portfolio = [
     { type: 'video', src: 'https://nthfbwootpzgpsjnerdw.supabase.co/storage/v1/object/sign/digital/hf_20260120_013820_8ba7202c-f442-4eb5-9b82-dcc2919596a0.mp4?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9iMDM3Y2M3My1iMWUxLTQwYmQtODVjNS1lNjk1ZGM3ZmU1YzUiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJkaWdpdGFsL2hmXzIwMjYwMTIwXzAxMzgyMF84YmE3MjAyYy1mNDQyLTRlYjUtOWI4Mi1kY2MyOTE5NTk2YTAubXA0IiwiaWF0IjoxNzcxOTcyODUyLCJleHAiOjE4MDM1MDg4NTJ9.ZV77gJE1dHX_wpSSRl-guYblC-y31gzE3GOw8A1Yiho', label: '', tag: '', span: 'row-span-2' },
 ];
 
-const SlideGaleria = () => (
-    <div className="flex flex-col max-w-7xl mx-auto h-full px-4 py-16 justify-center gap-8">
-        <FadeIn>
-            <h2 className="text-4xl md:text-5xl font-black tracking-tighter text-gray-900 mb-2">O Que Já Construímos</h2>
-            <p className="text-gray-500 font-light text-lg">Estratégia e IA materializada na prática. O EMP em execução.</p>
-        </FadeIn>
+const SlideGaleria = () => {
+    const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
 
-        <FadeIn delay={0.15}>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3 auto-rows-[130px] md:auto-rows-[220px]">
-                {portfolio.map((item, i) => (
-                    <div
-                        key={i}
-                        className={`${item.span || ''} relative rounded-2xl overflow-hidden group cursor-pointer bg-gray-900 border border-gray-800`}
-                    >
-                        <video
-                            src={item.src}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-80 group-hover:opacity-100"
-                            autoPlay
-                            loop
-                            muted
-                            playsInline
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-transparent to-transparent" />
-                        {(item.label || item.tag) && (
-                            <div className="absolute bottom-4 left-4 z-10">
-                                {item.tag && <p className="text-emerald-400 text-xs font-semibold mb-1">{item.tag}</p>}
-                                {item.label && <p className="text-white font-bold text-sm md:text-lg">{item.label}</p>}
+    return (
+        <div className="flex flex-col max-w-7xl mx-auto h-full px-4 py-16 justify-center gap-8">
+            <FadeIn>
+                <h2 className="text-4xl md:text-5xl font-black tracking-tighter text-gray-900 mb-2">O Que Já Construímos</h2>
+                <p className="text-gray-500 font-light text-lg">Estratégia e IA materializada na prática. O EMP em execução.</p>
+            </FadeIn>
+
+            <FadeIn delay={0.15}>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3 auto-rows-[130px] md:auto-rows-[220px]">
+                    {portfolio.map((item, i) => (
+                        <div
+                            key={i}
+                            onClick={() => setSelectedVideo(item.src)}
+                            className={`${item.span || ''} relative rounded-2xl overflow-hidden group cursor-pointer bg-gray-900 border border-gray-800`}
+                        >
+                            <video
+                                src={item.src}
+                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-80 group-hover:opacity-100"
+                                autoPlay
+                                loop
+                                muted
+                                playsInline
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-transparent to-transparent" />
+                            {(item.label || item.tag) && (
+                                <div className="absolute bottom-4 left-4 z-10">
+                                    {item.tag && <p className="text-emerald-400 text-xs font-semibold mb-1">{item.tag}</p>}
+                                    {item.label && <p className="text-white font-bold text-sm md:text-lg">{item.label}</p>}
+                                </div>
+                            )}
+                            <div className="absolute top-3 right-3 bg-black/30 backdrop-blur p-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                                <Play className="w-3 h-3 text-white" />
                             </div>
-                        )}
-                        <div className="absolute top-3 right-3 bg-black/30 backdrop-blur p-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
-                            <Play className="w-3 h-3 text-white" />
                         </div>
-                    </div>
-                ))}
-            </div>
-        </FadeIn>
+                    ))}
+                </div>
+            </FadeIn>
 
-        <FadeIn delay={0.3}>
-            <div className="flex items-center justify-between">
-                <p className="text-xs text-gray-400 font-light uppercase tracking-widest">Anti Copy Club — Portfólio de Produção com IA</p>
-                <a
-                    href="https://www.instagram.com/anticopyclub"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-xs font-bold text-emerald-600 hover:text-emerald-700 transition-colors uppercase tracking-widest"
-                >
-                    Ver mais no Instagram →
-                </a>
-            </div>
-        </FadeIn>
-    </div>
-);
+            <FadeIn delay={0.3}>
+                <div className="flex items-center justify-between">
+                    <p className="text-xs text-gray-400 font-light uppercase tracking-widest">Anti Copy Club — Portfólio de Produção com IA</p>
+                    <a
+                        href="https://www.instagram.com/anticopyclub"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-xs font-bold text-emerald-600 hover:text-emerald-700 transition-colors uppercase tracking-widest"
+                    >
+                        Ver mais no Instagram →
+                    </a>
+                </div>
+            </FadeIn>
+
+            {/* Modal */}
+            <AnimatePresence>
+                {selectedVideo && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-10 bg-black/90 backdrop-blur-sm"
+                        onClick={() => setSelectedVideo(null)}
+                    >
+                        <motion.div
+                            initial={{ scale: 0.9, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.9, opacity: 0 }}
+                            className="relative w-full max-w-4xl aspect-[9/16] md:aspect-video bg-black rounded-3xl overflow-hidden shadow-2xl"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <video
+                                src={selectedVideo}
+                                className="w-full h-full object-contain"
+                                autoPlay
+                                controls
+                                muted
+                                playsInline
+                            />
+                            <button
+                                onClick={() => setSelectedVideo(null)}
+                                className="absolute top-6 right-6 p-2 bg-white/10 hover:bg-white/20 text-white rounded-full backdrop-blur-md transition-colors"
+                            >
+                                <X className="w-6 h-6" />
+                            </button>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </div>
+    );
+};
 
 const SlideDiagnostico = () => {
     const [showAfter, setShowAfter] = useState(false);
