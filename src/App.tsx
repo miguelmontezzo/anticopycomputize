@@ -29,6 +29,7 @@ import AdminLoginPage from "./pages/AdminLoginPage";
 import AdminDashboardPage from "./pages/AdminDashboardPage";
 import AdminLayout from "./components/AdminLayout";
 import EmpResponseViewPage from "./pages/EmpResponseViewPage";
+import MetodoEMPPage from "./pages/MetodoEMPPage";
 
 const ComputizePage = () => {
 
@@ -474,6 +475,7 @@ export default function App() {
         </Route>
 
         <Route path="/ia-service" element={<IAServicePage />} />
+        <Route path="/metodoEMP" element={<MetodoEMPPage />} />
         {/* Fallback to home */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
