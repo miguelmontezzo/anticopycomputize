@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import {
     ArrowRight,
@@ -12,11 +12,23 @@ import {
     Zap,
     Activity,
     Play,
-    Layout
+    Layout,
+    Send
 } from "lucide-react";
 import { FadeIn } from "../components/Shared";
 
 const IAServicePage = () => {
+    const [form, setForm] = useState({ nome: '', empresa: '', whatsapp: '' });
+    const [enviado, setEnviado] = useState(false);
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        const msg = encodeURIComponent(
+            `Olá Miguel! Gostaria de solicitar um diagnóstico estratégico.%0A%0ANome: ${form.nome}%0AEmpresa: ${form.empresa}%0AWhatsApp: ${form.whatsapp}`
+        );
+        window.open(`https://wa.me/5534999320196?text=${msg}`, '_blank');
+        setEnviado(true);
+    };
     return (
         <div className="min-h-screen bg-white text-gray-900 font-sans selection:bg-emerald-100 selection:text-emerald-900">
 
@@ -171,7 +183,6 @@ const IAServicePage = () => {
                         {[
                             {
                                 title: "Influencer de IA",
-                                price: "A partir de R$ 7.000 / mês",
                                 desc: "Criamos um influenciador digital estratégico para representar sua marca em conteúdos específicos.",
                                 obj: "Ampliar sua presença digital com eficiência de produção.",
                                 tags: ["Desenvolvimento da persona", "Identidade visual", "Direção criativa", "Produção recorrente de conteúdos com IA", "Gestão editorial", "Planejamento estratégico"],
@@ -179,7 +190,6 @@ const IAServicePage = () => {
                             },
                             {
                                 title: "Clone Digital",
-                                price: "A partir de R$ 8.000 / mês",
                                 desc: "Criamos conteúdos utilizando sua imagem e voz através de tecnologia de IA, com acompanhamento estratégico.",
                                 obj: "Reduzir sua necessidade de gravação constante sem perder identidade.",
                                 tags: ["Modelagem visual", "Modelagem de voz", "Direcionamento de roteiro", "Produção otimizada", "Gestão de calendário", "Revisão estratégica"],
@@ -187,7 +197,6 @@ const IAServicePage = () => {
                             },
                             {
                                 title: "Gestão Completa de Conteúdo com IA",
-                                price: "Projetos sob Diagnóstico",
                                 desc: "Integramos tudo em uma estrutura corporativa. Estratégia, design e produção entregando consistência sem amadores.",
                                 obj: "Organizar e acelerar sua produção digital corporativa.",
                                 tags: ["Planejamento editorial", "Criação de roteiros", "Produção visual com IA", "Design profissional", "Otimização de tempo", "Relatórios de performance"],
@@ -199,10 +208,7 @@ const IAServicePage = () => {
                                     <div className="mb-6">
                                         {service.icon}
                                     </div>
-                                    <h3 className="text-2xl font-bold text-gray-900 mb-2">{service.title}</h3>
-                                    <div className="inline-block px-3 py-1 bg-gray-50 text-gray-600 text-sm font-bold rounded mb-6">
-                                        {service.price}
-                                    </div>
+                                    <h3 className="text-2xl font-bold text-gray-900 mb-4">{service.title}</h3>
                                     <p className="text-gray-500 mb-8 leading-relaxed font-light">
                                         {service.desc}
                                     </p>
@@ -410,45 +416,95 @@ const IAServicePage = () => {
                     <FadeIn delay={0.2}>
                         <div className="bg-gray-50 p-10 rounded-3xl border border-gray-200 h-full flex flex-col justify-center">
                             <h3 className="text-3xl font-bold text-gray-900 mb-6">Investimento</h3>
-
-                            <div className="space-y-6 mb-8">
-                                <div className="flex justify-between items-center border-b border-gray-200 pb-4">
-                                    <span className="font-medium text-gray-600">Influencer de IA</span>
-                                    <span className="font-bold text-gray-900">A partir de R$ 7.000 / mês</span>
-                                </div>
-                                <div className="flex justify-between items-center border-b border-gray-200 pb-4">
-                                    <span className="font-medium text-gray-600">Clone Digital</span>
-                                    <span className="font-bold text-gray-900">A partir de R$ 8.000 / mês</span>
-                                </div>
-                                <div className="flex justify-between items-center pb-4">
-                                    <span className="font-medium text-gray-600">Projetos personalizados</span>
-                                    <span className="font-bold text-gray-900 text-right">Sob diagnóstico<br /><span className="font-normal text-sm text-gray-500">estratégico</span></span>
-                                </div>
-                            </div>
+                            <p className="text-gray-500 font-light leading-relaxed mb-6">
+                                Cada projeto é único. O investimento é definido a partir do diagnóstico estratégico, onde mapeamos seus objetivos, estrutura atual e o que é necessário para escalar sua presença digital com IA.
+                            </p>
+                            <a
+                                href="#contato"
+                                className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-500 text-white rounded-full font-bold text-sm hover:bg-emerald-600 transition-colors w-fit"
+                            >
+                                Solicitar diagnóstico <ArrowRight className="w-4 h-4" />
+                            </a>
                         </div>
                     </FadeIn>
                 </div>
             </section>
 
-            {/* FOOTER CTA */}
-            <section id="contato" className="py-32 px-6 bg-gray-50">
-                <div className="max-w-4xl mx-auto flex flex-col items-center text-center">
+            {/* SECTION - DIAGNÓSTICO */}
+            <section id="contato" className="py-24 px-6 bg-gray-50 border-t border-gray-100">
+                <div className="max-w-4xl mx-auto">
                     <FadeIn>
-                        <h2 className="text-4xl md:text-6xl font-bold tracking-tight text-gray-900 mb-6 leading-tight">
-                            Conteúdo não precisa ser pesado <br /><span className="text-gray-400 font-light">para ser consistente.</span>
-                        </h2>
-                        <p className="text-xl text-gray-500 font-medium mb-12 max-w-2xl mx-auto">
-                            Com a estrutura certa, você produz mais, com menos desgaste.
-                        </p>
-                        <a
-                            href="https://wa.me/5534999320196?text=Oi%20Miguel%2C%20quero%20solicitar%20um%20diagn%C3%B3stico%20estrat%C3%A9gico%20para%20minha%20presen%C3%A7a%20digital."
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="px-10 py-5 bg-emerald-500 text-white rounded-full font-bold text-lg hover:bg-emerald-600 transition-colors shadow-lg shadow-emerald-500/30 flex items-center gap-3 mx-auto"
-                        >
-                            Solicitar Diagnóstico Estratégico
-                            <ArrowRight className="w-5 h-5" />
-                        </a>
+                        <div className="text-center mb-16">
+                            <div className="inline-block px-4 py-1.5 bg-emerald-100 text-emerald-700 text-xs font-bold rounded-full uppercase tracking-widest mb-6">
+                                Diagnóstico gratuito
+                            </div>
+                            <h2 className="text-4xl md:text-6xl font-bold tracking-tight text-gray-900 mb-6 leading-tight">
+                                Vamos entender o seu negócio<br /><span className="text-gray-400 font-light">antes de propor qualquer coisa.</span>
+                            </h2>
+                            <p className="text-xl text-gray-500 font-light max-w-2xl mx-auto">
+                                Preencha os dados abaixo e nosso time entra em contato para agendar uma conversa estratégica sem compromisso.
+                            </p>
+                        </div>
+                    </FadeIn>
+
+                    <FadeIn delay={0.2}>
+                        {enviado ? (
+                            <div className="bg-emerald-50 border border-emerald-200 rounded-3xl p-12 text-center">
+                                <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                                    <Check className="w-8 h-8 text-emerald-600" />
+                                </div>
+                                <h3 className="text-2xl font-bold text-gray-900 mb-2">Solicitação enviada!</h3>
+                                <p className="text-gray-500 font-light">Abrimos o WhatsApp para você completar a solicitação. Retornaremos em breve.</p>
+                            </div>
+                        ) : (
+                            <form
+                                onSubmit={handleSubmit}
+                                className="bg-white p-8 md:p-12 rounded-3xl border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.05)] space-y-6"
+                            >
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div className="flex flex-col gap-2">
+                                        <label className="text-sm font-bold text-gray-700 uppercase tracking-wider">Nome</label>
+                                        <input
+                                            type="text"
+                                            required
+                                            placeholder="Seu nome"
+                                            value={form.nome}
+                                            onChange={e => setForm(p => ({ ...p, nome: e.target.value }))}
+                                            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-900 focus:outline-none focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400 transition-all"
+                                        />
+                                    </div>
+                                    <div className="flex flex-col gap-2">
+                                        <label className="text-sm font-bold text-gray-700 uppercase tracking-wider">Empresa / Projeto</label>
+                                        <input
+                                            type="text"
+                                            required
+                                            placeholder="Nome da empresa ou marca"
+                                            value={form.empresa}
+                                            onChange={e => setForm(p => ({ ...p, empresa: e.target.value }))}
+                                            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-900 focus:outline-none focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400 transition-all"
+                                        />
+                                    </div>
+                                </div>
+                                <div className="flex flex-col gap-2">
+                                    <label className="text-sm font-bold text-gray-700 uppercase tracking-wider">WhatsApp</label>
+                                    <input
+                                        type="tel"
+                                        required
+                                        placeholder="(XX) 9XXXX-XXXX"
+                                        value={form.whatsapp}
+                                        onChange={e => setForm(p => ({ ...p, whatsapp: e.target.value }))}
+                                        className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-900 focus:outline-none focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400 transition-all"
+                                    />
+                                </div>
+                                <button
+                                    type="submit"
+                                    className="w-full flex items-center justify-center gap-3 py-4 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl transition-colors text-base"
+                                >
+                                    Solicitar Diagnóstico Estratégico <Send className="w-4 h-4" />
+                                </button>
+                                <p className="text-center text-xs text-gray-400 font-light">Sem compromisso. Sem spam. Apenas uma conversa estratégica.</p>
+                            </form>
+                        )}
                     </FadeIn>
                 </div>
             </section>
