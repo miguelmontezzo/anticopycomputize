@@ -30,6 +30,9 @@ import AdminDashboardPage from "./pages/AdminDashboardPage";
 import AdminLayout from "./components/AdminLayout";
 import EmpResponseViewPage from "./pages/EmpResponseViewPage";
 import MetodoEMPPage from "./pages/MetodoEMPPage";
+import AdminClientsPage from "./pages/AdminClientsPage";
+import ClientIAServicePage from "./pages/ClientIAServicePage";
+import ClientAnalysisPage from "./pages/ClientAnalysisPage";
 
 const ComputizePage = () => {
 
@@ -472,9 +475,13 @@ export default function App() {
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<AdminDashboardPage />} />
           <Route path="emp" element={<AdminEmpPage />} />
+          <Route path="clientes" element={<AdminClientsPage />} />
         </Route>
 
         <Route path="/ia-service" element={<IAServicePage />} />
+        <Route path="/:slug/ia-service" element={<ClientIAServicePage />} />
+        <Route path="/:slug/analise" element={<ClientAnalysisPage />} />
+        <Route path="/:slug/emp" element={<EmpPage />} />
         <Route path="/metodoEMP" element={<MetodoEMPPage />} />
         {/* Fallback to home */}
         <Route path="*" element={<Navigate to="/" replace />} />

@@ -29,15 +29,22 @@ export default function AdminDashboardPage() {
             <FadeIn delay={0.2}>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <div className="bg-black/40 border border-white/10 hover:border-accent-cyan/50 transition-colors p-8 rounded-2xl flex flex-col gap-4">
+                        <h3 className="text-xl font-bold tracking-tight">Clientes & Rotas</h3>
+                        <p className="text-sm text-muted font-light leading-relaxed">
+                            Crie novas operações por cliente: apresentação, análise EMP e formulário.
+                        </p>
+                        <a href="/admin/clientes" className="mt-auto inline-flex items-center text-accent-cyan text-sm font-medium hover:text-white transition-colors">
+                            Gerenciar clientes →
+                        </a>
+                    </div>
+
+                    <div className="bg-black/40 border border-white/10 hover:border-accent-cyan/50 transition-colors p-8 rounded-2xl flex flex-col gap-4">
                         <h3 className="text-xl font-bold tracking-tight">Estratégia EMP</h3>
                         <p className="text-sm text-muted font-light leading-relaxed">
                             Respostas, capturas de logins e anexos do Diagnóstico Estratégico.
                         </p>
-                        <a
-                            href="/admin/emp"
-                            className="mt-auto inline-flex items-center text-accent-cyan text-sm font-medium hover:text-white transition-colors"
-                        >
-                            Acessar Ferramenta →
+                        <a href="/admin/emp" className="mt-auto inline-flex items-center text-accent-cyan text-sm font-medium hover:text-white transition-colors">
+                            Acessar respostas →
                         </a>
                     </div>
                 </div>

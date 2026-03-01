@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Outlet, useNavigate, useLocation, Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { motion } from 'motion/react';
-import { LayoutDashboard, FileText, LogOut, Loader2, Menu, X } from 'lucide-react';
+import { LayoutDashboard, FileText, LogOut, Loader2, Menu, X, FolderKanban } from 'lucide-react';
 
 export default function AdminLayout() {
     const [loading, setLoading] = useState(true);
@@ -46,6 +46,7 @@ export default function AdminLayout() {
 
     const navItems = [
         { path: '/admin', icon: <LayoutDashboard className="w-5 h-5" />, label: 'Dashboard' },
+        { path: '/admin/clientes', icon: <FolderKanban className="w-5 h-5" />, label: 'Clientes & Rotas' },
         { path: '/admin/emp', icon: <FileText className="w-5 h-5" />, label: 'Respostas EMP' },
     ];
 
