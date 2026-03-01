@@ -16,6 +16,12 @@ export default function AdminLoginPage() {
         setLoading(true);
         setError('');
 
+        if (!supabase) {
+            setError('Supabase não configurado. Defina VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY no .env.local.');
+            setLoading(false);
+            return;
+        }
+
         const { error: authError } = await supabase.auth.signInWithPassword({
             email,
             password
@@ -48,6 +54,11 @@ export default function AdminLoginPage() {
                     </div>
 
                     <form onSubmit={handleLogin} className="flex flex-col gap-5">
+                        {!supabase && (
+                            <div className="bg-amber-500/10 border border-amber-500/20 text-amber-300 text-xs px-4 py-3 rounded-lg text-center font-medium">
+                                Ambiente sem Supabase. Configure o .env.local para habilitar login.
+                            </div>
+                        )}
                         {error && (
                             <div className="bg-red-500/10 border border-red-500/20 text-red-500 text-xs px-4 py-3 rounded-lg text-center font-medium">
                                 {error}
