@@ -103,6 +103,12 @@ export default function AdminEmpPage() {
 
     useEffect(() => {
         const fetchResponses = async () => {
+            if (!supabase) {
+                setResponses([]);
+                setLoading(false);
+                return;
+            }
+
             const { data, error } = await supabase
                 .from('emp_responses')
                 .select('*')

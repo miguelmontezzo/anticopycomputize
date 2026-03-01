@@ -11,6 +11,13 @@ export default function AdminLayout() {
     const location = useLocation();
 
     useEffect(() => {
+        // Se Supabase não estiver configurado, evita crash e redireciona.
+        if (!supabase) {
+            navigate('/admin/login', { replace: true });
+            setLoading(false);
+            return;
+        }
+
         const checkSession = async () => {
             const { data: { session }, error } = await supabase.auth.getSession();
 
@@ -32,7 +39,7 @@ export default function AdminLayout() {
     }, [navigate]);
 
     const handleLogout = async () => {
-        await supabase.auth.signOut();
+        if (supabase) await supabase.auth.signOut();
         navigate('/admin/login', { replace: true });
     };
 

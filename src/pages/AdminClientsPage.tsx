@@ -22,7 +22,11 @@ export default function AdminClientsPage() {
   const [copied, setCopied] = useState<string | null>(null);
 
   async function load() {
-    if (!supabase) return;
+    if (!supabase) {
+      setItems([]);
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     const { data } = await supabase
       .from('client_projects')
@@ -46,6 +50,12 @@ export default function AdminClientsPage() {
       analise_resumo: form.analise_resumo,
       status: 'ativo'
     };
+
+    if (!supabase) {
+      setSaving(false);
+      alert('Supabase não configurado no ambiente.');
+      return;
+    }
 
     const { error } = await supabase.from('client_projects').insert([payload]);
     setSaving(false);
