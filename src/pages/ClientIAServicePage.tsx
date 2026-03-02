@@ -33,7 +33,7 @@ export default function ClientIAServicePage() {
 
         <div className="flex gap-3 flex-wrap">
           <Link to={`/${client.slug}/analise`} className="px-5 py-3 rounded-xl bg-black text-white">Ver Análise</Link>
-          <Link to={`/${client.slug}/calendario`} className="px-5 py-3 rounded-xl border border-gray-300">Ver Calendário</Link>
+          <Link to={`/calendario/${client.slug}`} className="px-5 py-3 rounded-xl border border-gray-300">Ver Calendário</Link>
           <Link to={`/${client.slug}/emp`} className="px-5 py-3 rounded-xl border border-gray-300">Responder EMP</Link>
         </div>
       </div>
