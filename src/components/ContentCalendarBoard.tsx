@@ -1,5 +1,6 @@
-import React, { useMemo, useState } from 'react';
-import { computoCalendarPosts, computoWeekLabel, type ApprovalStatus } from '../data/computoCalendar';
+import React, { useEffect, useMemo, useState } from 'react';
+import { computoCalendarPosts, computoWeekLabel, type ApprovalStatus, type CalendarPost } from '../data/computoCalendar';
+import { supabase } from '../lib/supabase';
 
 type StoryReview = { status: ApprovalStatus; feedback?: string };
 
@@ -22,8 +23,50 @@ function statusClasses(status: ApprovalStatus) {
 
 export default function ContentCalendarBoard({ slug, adminMode = false }: { slug: string; adminMode?: boolean }) {
   const storageKey = `${STORAGE_PREFIX}.${slug}`;
-  const posts = useMemo(() => computoCalendarPosts, []);
+  const [posts, setPosts] = useState<CalendarPost[]>(computoCalendarPosts);
+  const [weekLabel, setWeekLabel] = useState(computoWeekLabel);
+  const [loading, setLoading] = useState(false);
   const [formatFilter, setFormatFilter] = useState<'todos' | 'reels' | 'post-estatico' | 'carrossel' | 'stories'>('todos');
+
+  useEffect(() => {
+    const load = async () => {
+      if (!supabase) return;
+      setLoading(true);
+      const { data: calendar } = await supabase
+        .from('content_calendars')
+        .select('id,week_start,week_end')
+        .eq('slug', slug)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      if (calendar?.id) {
+        const { data: items } = await supabase
+          .from('content_calendar_items')
+          .select('*')
+          .eq('calendar_id', calendar.id)
+          .order('post_date', { ascending: true });
+
+        if (items && items.length) {
+          const mapped: CalendarPost[] = items.map((it: any) => ({
+            date: it.post_date,
+            dayLabel: it.day_label,
+            title: it.title,
+            format: it.format || 'Post',
+            pillar: it.pillar || '-',
+            theme: it.theme || '-',
+            objective: it.objective || '-',
+            caption: it.caption || '-',
+            stories: Array.isArray(it.stories) ? it.stories : [],
+          }));
+          setPosts(mapped);
+          setWeekLabel(`${calendar.week_start} a ${calendar.week_end}`);
+        }
+      }
+      setLoading(false);
+    };
+    load();
+  }, [slug]);
 
   const visiblePosts = useMemo(() => {
     if (formatFilter === 'todos' || formatFilter === 'stories') return posts;
@@ -133,7 +176,7 @@ export default function ContentCalendarBoard({ slug, adminMode = false }: { slug
         <div className="mb-8 flex items-center justify-between gap-4 flex-wrap">
           <div>
             <div className="text-xs uppercase tracking-widest text-white/50 mb-2">Calendário de Conteúdo</div>
-            <h1 className="text-3xl md:text-5xl font-bold tracking-tight">{slug} — Semana {computoWeekLabel}</h1>
+            <h1 className="text-3xl md:text-5xl font-bold tracking-tight">{slug} — Semana {weekLabel}</h1>
             <p className="text-white/60 mt-3 max-w-3xl">Visualize por data e aprove/reprove post + cada story em cards separados.</p>
           </div>
           {adminMode && (
@@ -154,6 +197,8 @@ export default function ContentCalendarBoard({ slug, adminMode = false }: { slug
             </button>
           ))}
         </div>
+
+        {loading && <div className="text-sm text-white/60 mb-3">Carregando calendário...</div>}
 
         {formatFilter === 'stories' ? (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
