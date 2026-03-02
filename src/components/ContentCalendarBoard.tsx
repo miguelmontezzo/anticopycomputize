@@ -29,6 +29,14 @@ function statusClasses(status: ApprovalStatus) {
 export default function ContentCalendarBoard({ slug, adminMode = false }: { slug: string; adminMode?: boolean }) {
   const storageKey = `${STORAGE_PREFIX}.${slug}`;
   const posts = useMemo(() => computoCalendarPosts, []);
+  const [formatFilter, setFormatFilter] = useState<'todos' | 'reels' | 'post-estatico' | 'carrossel'>('todos');
+
+  const visiblePosts = useMemo(() => {
+    if (formatFilter === 'todos') return posts;
+    if (formatFilter === 'reels') return posts.filter((p) => p.format.toLowerCase().includes('reels'));
+    if (formatFilter === 'carrossel') return posts.filter((p) => p.format.toLowerCase().includes('carrossel'));
+    return posts.filter((p) => p.format.toLowerCase().includes('post'));
+  }, [posts, formatFilter]);
 
   const [reviews, setReviews] = useState<ReviewMap>(() => {
     try {
@@ -104,8 +112,25 @@ export default function ContentCalendarBoard({ slug, adminMode = false }: { slug
           )}
         </div>
 
+        <div className="mb-5 flex flex-wrap gap-2">
+          {[
+            { key: 'todos', label: 'Todos' },
+            { key: 'reels', label: 'Reels' },
+            { key: 'carrossel', label: 'Carrossel' },
+            { key: 'post-estatico', label: 'Post Estático' },
+          ].map((f) => (
+            <button
+              key={f.key}
+              onClick={() => setFormatFilter(f.key as any)}
+              className={`px-3 py-1.5 rounded-full border text-sm ${formatFilter === f.key ? 'border-cyan-400/40 bg-cyan-400/10 text-cyan-200' : 'border-white/20 text-white/70'}`}
+            >
+              {f.label}
+            </button>
+          ))}
+        </div>
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-          {posts.map((post) => {
+          {visiblePosts.map((post) => {
             const r = current(post.date);
             return (
               <article key={post.date} className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 flex flex-col gap-4">

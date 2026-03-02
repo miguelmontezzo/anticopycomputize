@@ -55,7 +55,7 @@ export default function AdminLayout() {
         { path: '/admin', icon: <LayoutDashboard className="w-5 h-5" />, label: 'Dashboard' },
         { path: '/admin/clients', icon: <Users className="w-5 h-5" />, label: 'Clientes Getais' },
         { path: '/admin/clientes', icon: <FolderKanban className="w-5 h-5" />, label: 'Clientes & Rotas' },
-        { path: '/admin/calendario/computo', icon: <CalendarDays className="w-5 h-5" />, label: 'Calendário Computo' },
+        { path: '/admin/calendarios', icon: <CalendarDays className="w-5 h-5" />, label: 'Calendários' },
         { path: '/admin/pages', icon: <Globe className="w-5 h-5" />, label: 'Páginas' },
         { path: '/admin/forms', icon: <ClipboardList className="w-5 h-5" />, label: 'Formulários' },
         { path: '/admin/emp', icon: <FileText className="w-5 h-5" />, label: 'Respostas EMP' },

@@ -61,6 +61,8 @@ export default function AdminFormBuilderPage() {
         setSaving(true);
 
         try {
+            await supabase.from('forms').update({ title: form?.title }).eq('id', formId);
+
             // First delete all existing fields for this form entirely for simplicity.
             // In a robust app, we should accurately update/delete/insert
             await supabase.from('form_fields').delete().eq('form_id', formId);
@@ -114,9 +116,18 @@ export default function AdminFormBuilderPage() {
                         <Settings className="w-6 h-6 text-orange-400" />
                         <h1 className="text-3xl font-bold tracking-tighter">Construtor de Campos</h1>
                     </div>
-                    <p className="text-muted font-light mt-1">
-                        Editando os campos de: <span className="text-white font-medium">{form.title}</span>
+                    <p className="text-muted font-light mt-1 mb-3">
+                        Editando os campos e configurações do formulário.
                     </p>
+                    <div className="max-w-xl">
+                        <label className="block text-[10px] font-bold tracking-widest uppercase text-muted mb-1">Nome do formulário</label>
+                        <input
+                            type="text"
+                            value={form.title}
+                            onChange={(e) => setForm({ ...form, title: e.target.value })}
+                            className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-2 text-sm text-white focus:outline-none focus:border-orange-400"
+                        />
+                    </div>
                 </FadeIn>
                 <FadeIn delay={0.1}>
                     <button

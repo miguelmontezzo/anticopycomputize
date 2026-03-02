@@ -124,8 +124,8 @@ export default function AdminDashboardPage() {
                         <p className="text-sm text-muted font-light leading-relaxed">
                             Acesse rápido o calendário semanal e valide post a post com aprovado/reprovado.
                         </p>
-                        <a href="/admin/calendario/computo" className="mt-auto inline-flex items-center text-accent-cyan text-sm font-medium hover:text-white transition-colors">
-                            Abrir calendário →
+                        <a href="/admin/calendarios" className="mt-auto inline-flex items-center text-accent-cyan text-sm font-medium hover:text-white transition-colors">
+                            Gerenciar calendários →
                         </a>
                     </div>
                 </div>
