@@ -41,6 +41,36 @@ export interface ContentCalendarItem {
     stories_reviews?: any;
 }
 
+export type EmployeeRole = 'admin' | 'gestor' | 'editor' | 'social_media';
+
+export interface Employee {
+    id: string;
+    user_id: string | null;
+    name: string;
+    email: string;
+    role: EmployeeRole;
+    avatar_url: string | null;
+    is_active: boolean;
+    created_at: string;
+}
+
+export type TaskStatus = 'todo' | 'in_progress' | 'done';
+export type TaskPriority = 'low' | 'normal' | 'high' | 'urgent';
+
+export interface Task {
+    id: string;
+    client_id: string | null;
+    calendar_item_id: string | null;
+    title: string;
+    description: string | null;
+    status: TaskStatus;
+    assignee_id: string | null;
+    due_date: string | null;
+    priority: TaskPriority;
+    created_at: string;
+    updated_at: string;
+}
+
 export interface SitePage {
     id: string;
     slug: string;
