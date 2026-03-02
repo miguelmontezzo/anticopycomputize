@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { CalendarDays, Plus, Copy, Check, Edit2, Trash2, X, Upload } from 'lucide-react';
 
@@ -22,104 +22,82 @@ type ParsedItem = Omit<CalendarItem, 'id' | 'calendar_id'>;
 
 const emptyItem = { post_date: '', day_label: '', title: '', format: '', pillar: '', theme: '', objective: '', caption: '', storiesText: '' };
 
-function toIsoDateFromBR(raw?: string) {
-  if (!raw) return '';
-  const m = raw.match(/(\d{2})\/(\d{2})\/(\d{4})/);
-  if (!m) return '';
-  return `${m[3]}-${m[2]}-${m[1]}`;
-}
-
-function normalizeLooseText(text: string) {
-  return text
+const normalize = (text: string) =>
+  text
     .replace(/[\u00A0\u2000-\u200B\u202F\u205F\u3000]/g, ' ')
     .replace(/[ \t]+/g, ' ')
+    .replace(/\r/g, '')
     .replace(/\n{3,}/g, '\n\n')
     .trim();
-}
 
-function parseCalendarText(text: string): ParsedItem[] {
-  const normalized = normalizeLooseText(text);
-  const lines = normalized.split(/\r?\n/).map(l => l.trim());
-  const blocks: string[][] = [];
-  let current: string[] = [];
+const toISO = (br?: string) => {
+  const m = br?.match(/(\d{2})\/(\d{2})\/(\d{4})/);
+  return m ? `${m[3]}-${m[2]}-${m[1]}` : '';
+};
 
-  for (const line of lines) {
-    if (/POST\s*\d+/i.test(line) && /\(/.test(line)) {
-      if (current.length) blocks.push(current);
-      current = [line];
-    } else if (current.length) {
-      current.push(line);
-    }
-  }
-  if (current.length) blocks.push(current);
+function parseCalendarText(raw: string): ParsedItem[] {
+  const text = normalize(raw);
 
-  if (!blocks.length) {
-    const fallbackStories = lines
-      .filter(l => /story\s*\d+/i.test(l) || /^\d+[\).\-]/.test(l))
-      .map(l => l.replace(/^\d+[\).\-]\s*/, '').trim())
-      .filter(Boolean);
+  const sectionRegex = /(POST\s*\d+[\s\S]*?)(?=\n\s*POST\s*\d+|$)/gi;
+  const sections = [...text.matchAll(sectionRegex)].map((m) => m[1]);
 
-    return [{
-      post_date: new Date().toISOString().slice(0, 10),
-      day_label: 'Dia importado',
-      title: 'Conteúdo importado',
-      format: /reels/i.test(normalized) ? 'Reels' : /carrossel/i.test(normalized) ? 'Carrossel' : 'Post',
-      pillar: '-',
-      theme: '-',
-      objective: '-',
-      caption: normalized.slice(0, 1200) || '-',
-      stories: fallbackStories,
-    }];
-  }
-
-  return blocks.map((b) => {
-    const head = b[0] || '';
-    const dayLabel = (head.match(/—\s*([^(]+)/)?.[1] || '').trim();
-    const date = toIsoDateFromBR(head.match(/\((\d{2}\/\d{2}\/\d{4})\)/)?.[1]);
+  const parsed = sections.map((s) => {
+    const head = s.split('\n')[0] || '';
+    const date = toISO(head.match(/\((\d{2}\/\d{2}\/\d{4})\)/)?.[1]);
+    const dayLabel = (head.match(/—\s*([^(]+)/)?.[1] || 'Dia').trim();
     const title = (head.match(/POST\s*\d+\s*—\s*(.+)$/i)?.[1] || head).trim();
 
-    const getAfter = (prefix: string) => (b.find(l => l.toLowerCase().startsWith(prefix.toLowerCase())) || '').replace(new RegExp(`^${prefix}\s*:?
-?\s*`, 'i'), '').trim();
-    const format = getAfter('Formato');
-    const pillar = getAfter('Pilar');
-    const theme = getAfter('Tema');
+    const format = (s.match(/Formato\s*:\s*([^\n]+)/i)?.[1] || '').trim() || (/reels/i.test(s) ? 'Reels' : /carrossel/i.test(s) ? 'Carrossel' : 'Post');
+    const pillar = (s.match(/Pilar\s*:\s*([^\n]+)/i)?.[1] || '-').trim();
+    const theme = (s.match(/Tema\s*:\s*([^\n]+)/i)?.[1] || '-').trim();
 
-    const captionIdx = b.findIndex(l => /copy\s+da\s+legenda|legenda\s+sugerida/i.test(l));
-    const storiesIdx = b.findIndex(l => /stories/i.test(l));
+    const captionBlock = s.match(/(Copy\s+da\s+Legenda|Legenda\s+sugerida)\s*:?([\s\S]*?)(?=\n\s*📱|\n\s*POST\s*\d+|$)/i);
+    const caption = normalize((captionBlock?.[2] || '').replace(/^>+/gm, '').trim()) || '-';
 
-    const caption = captionIdx >= 0
-      ? b.slice(captionIdx + 1, storiesIdx > captionIdx ? storiesIdx : b.length).filter(Boolean).join(' ')
-      : '';
-
-    const stories = b
-      .slice(storiesIdx >= 0 ? storiesIdx + 1 : 0)
-      .filter(l => /story\s*\d+/i.test(l) || /^\d+[\).\-]/.test(l))
-      .map(l => l.replace(/^\d+[\).\-]\s*/, '').trim());
+    const stories: string[] = [];
+    const storyRegex = /Story\s*\d+\s*:?\s*([^\n]+)/gi;
+    for (const m of s.matchAll(storyRegex)) stories.push(normalize(m[1]));
 
     return {
-      post_date: date,
-      day_label: dayLabel || 'Dia da semana',
+      post_date: date || new Date().toISOString().slice(0, 10),
+      day_label: dayLabel,
       title,
-      format: format || 'Post',
-      pillar: pillar || '-',
-      theme: theme || '-',
+      format,
+      pillar,
+      theme,
       objective: '-',
-      caption: caption || '-',
+      caption,
       stories,
     };
-  }).filter(i => i.post_date && i.title);
+  }).filter((p) => p.title);
+
+  if (parsed.length) return parsed;
+
+  // fallback ultra-tolerante
+  return [{
+    post_date: new Date().toISOString().slice(0, 10),
+    day_label: 'Dia importado',
+    title: 'Conteúdo importado',
+    format: /reels/i.test(text) ? 'Reels' : /carrossel/i.test(text) ? 'Carrossel' : 'Post',
+    pillar: '-',
+    theme: '-',
+    objective: '-',
+    caption: text.slice(0, 1500) || '-',
+    stories: [...text.matchAll(/Story\s*\d+\s*:?\s*([^\n]+)/gi)].map((m) => normalize(m[1])),
+  }];
 }
 
 export default function AdminCalendarsPage() {
   const [clients, setClients] = useState<Client[]>([]);
   const [items, setItems] = useState<Calendar[]>([]);
   const [copied, setCopied] = useState<string | null>(null);
+  const [processing, setProcessing] = useState(false);
   const [form, setForm] = useState({ client_id: '', slug: '', title: '', week_start: '', week_end: '' });
 
-  const [parsedCreateItems, setParsedCreateItems] = useState<ParsedItem[]>([]);
-  const [parsedAppendItems, setParsedAppendItems] = useState<ParsedItem[]>([]);
   const [createRawText, setCreateRawText] = useState('');
+  const [parsedCreateItems, setParsedCreateItems] = useState<ParsedItem[]>([]);
   const [appendRawText, setAppendRawText] = useState('');
+  const [parsedAppendItems, setParsedAppendItems] = useState<ParsedItem[]>([]);
 
   const [editorOpen, setEditorOpen] = useState(false);
   const [selectedCalendar, setSelectedCalendar] = useState<Calendar | null>(null);
@@ -145,43 +123,42 @@ export default function AdminCalendarsPage() {
     setCalendarItems((data || []) as CalendarItem[]);
   };
 
-  const handleFileParse = async (file: File, mode: 'create' | 'append') => {
-    const ext = file.name.toLowerCase();
-    if (!(ext.endsWith('.md') || ext.endsWith('.txt'))) {
-      alert('Por enquanto o importador aceita .md e .txt.');
-      return;
-    }
-    const text = await file.text();
-    const parsed = parseCalendarText(text);
-    if (!parsed.length) {
-      alert('Não consegui identificar conteúdo.');
-      return;
-    }
-    if (mode === 'create') setParsedCreateItems(parsed);
-    else setParsedAppendItems(parsed);
-  };
-
-  const parsePastedText = (mode: 'create' | 'append') => {
+  const parsePastedText = async (mode: 'create' | 'append') => {
     const raw = mode === 'create' ? createRawText : appendRawText;
-    if (!raw.trim()) return alert('Cole algum texto primeiro.');
+    if (!raw.trim()) return alert('Cole um texto para processar.');
+    setProcessing(true);
     const parsed = parseCalendarText(raw);
     if (mode === 'create') setParsedCreateItems(parsed);
     else setParsedAppendItems(parsed);
+    setProcessing(false);
+  };
+
+  const handleFileParse = async (file: File, mode: 'create' | 'append') => {
+    const ext = file.name.toLowerCase();
+    if (!(ext.endsWith('.md') || ext.endsWith('.txt'))) return alert('Use .md ou .txt');
+    setProcessing(true);
+    const text = await file.text();
+    const parsed = parseCalendarText(text);
+    if (mode === 'create') setParsedCreateItems(parsed);
+    else setParsedAppendItems(parsed);
+    setProcessing(false);
   };
 
   const createCalendar = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.client_id || !form.slug || !form.title || !form.week_start || !form.week_end) return;
+
     const { data, error } = await supabase.from('content_calendars').insert([{ ...form, status: 'active' }]).select().single();
     if (error) return alert(error.message);
 
     if (parsedCreateItems.length && data?.id) {
       const payload = parsedCreateItems.map((p) => ({ ...p, calendar_id: data.id }));
       const ins = await supabase.from('content_calendar_items').insert(payload);
-      if (ins.error) alert(`Calendário criado, mas falhou ao inserir itens: ${ins.error.message}`);
+      if (ins.error) return alert(ins.error.message);
     }
 
     setForm({ client_id: '', slug: '', title: '', week_start: '', week_end: '' });
+    setCreateRawText('');
     setParsedCreateItems([]);
     load();
   };
@@ -202,11 +179,11 @@ export default function AdminCalendarsPage() {
       stories: itemForm.storiesText.split('\n').map((s: string) => s.trim()).filter(Boolean),
     };
 
-    const result = editingItemId
+    const res = editingItemId
       ? await supabase.from('content_calendar_items').update(payload).eq('id', editingItemId)
       : await supabase.from('content_calendar_items').insert([payload]);
 
-    if (result.error) return alert(result.error.message);
+    if (res.error) return alert(res.error.message);
     setItemForm(emptyItem);
     setEditingItemId(null);
     loadCalendarItems(selectedCalendar.id);
@@ -217,8 +194,14 @@ export default function AdminCalendarsPage() {
     const payload = parsedAppendItems.map((p) => ({ ...p, calendar_id: selectedCalendar.id }));
     const { error } = await supabase.from('content_calendar_items').insert(payload);
     if (error) return alert(error.message);
+    setAppendRawText('');
     setParsedAppendItems([]);
     loadCalendarItems(selectedCalendar.id);
+  };
+
+  const removeItem = async (id: string) => {
+    await supabase.from('content_calendar_items').delete().eq('id', id);
+    if (selectedCalendar) loadCalendarItems(selectedCalendar.id);
   };
 
   const editItem = (it: CalendarItem) => {
@@ -236,10 +219,15 @@ export default function AdminCalendarsPage() {
     });
   };
 
-  const removeItem = async (id: string) => {
-    await supabase.from('content_calendar_items').delete().eq('id', id);
-    if (selectedCalendar) loadCalendarItems(selectedCalendar.id);
-  };
+  const groupedByFormat = useMemo(() => {
+    const groups: Record<string, CalendarItem[]> = {};
+    for (const it of calendarItems) {
+      const key = (it.format || 'Outros').trim();
+      if (!groups[key]) groups[key] = [];
+      groups[key].push(it);
+    }
+    return groups;
+  }, [calendarItems]);
 
   const removeCalendar = async () => {
     await supabase.from('content_calendars').delete().eq('id', deleteModal.id);
@@ -255,9 +243,16 @@ export default function AdminCalendarsPage() {
 
   return (
     <div className="p-6 md:p-12 text-white">
+      {processing && (
+        <div className="fixed inset-0 z-[100] bg-black/90 flex items-center justify-center flex-col gap-3">
+          <div className="text-3xl font-bold tracking-wide">ANTI COPY</div>
+          <div className="text-sm text-white/70">Processando e estruturando calendário...</div>
+        </div>
+      )}
+
       <header className="mb-8 border-b border-white/10 pb-5">
         <h1 className="text-4xl font-bold tracking-tighter mb-2 flex items-center gap-3"><CalendarDays className="w-8 h-8 text-accent-cyan" /> Calendários</h1>
-        <p className="text-muted">Crie, edite e exclua calendários e conteúdos. Importador integrado (.md/.txt).</p>
+        <p className="text-muted">Importe por arquivo ou texto colado e gere cards automaticamente.</p>
       </header>
 
       <form onSubmit={createCalendar} className="bg-black/40 border border-white/10 rounded-2xl p-6 mb-8 grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -271,17 +266,18 @@ export default function AdminCalendarsPage() {
         <input type="date" value={form.week_end} onChange={(e) => setForm(s => ({ ...s, week_end: e.target.value }))} className="bg-black/40 border border-white/10 rounded-xl p-3" required />
 
         <label className="md:col-span-2 border border-white/10 rounded-xl p-3 text-sm flex items-center gap-2 cursor-pointer">
-          <Upload className="w-4 h-4" /> Importar arquivo para estrutura inicial (.md/.txt)
+          <Upload className="w-4 h-4" /> Importar arquivo inicial (.md/.txt)
           <input type="file" accept=".md,.txt" className="hidden" onChange={(e) => e.target.files?.[0] && handleFileParse(e.target.files[0], 'create')} />
         </label>
-        <textarea
-          value={createRawText}
-          onChange={(e) => setCreateRawText(e.target.value)}
-          placeholder="Ou cole aqui qualquer texto bruto que eu normalizo e estruturo..."
-          className="md:col-span-2 bg-black/40 border border-white/10 rounded-xl p-3 min-h-[120px]"
-        />
-        <button type="button" onClick={() => parsePastedText('create')} className="md:col-span-2 px-4 py-2 rounded-xl border border-cyan-500/30 text-cyan-200">Processar texto colado</button>
-        {parsedCreateItems.length > 0 && <div className="md:col-span-2 text-xs text-cyan-300">{parsedCreateItems.length} conteúdos prontos para criar junto com o calendário.</div>}
+        <textarea value={createRawText} onChange={(e) => setCreateRawText(e.target.value)} placeholder="Ou cole qualquer texto aqui..." className="md:col-span-2 bg-black/40 border border-white/10 rounded-xl p-3 min-h-[120px]" />
+        <button type="button" onClick={() => parsePastedText('create')} className="md:col-span-2 px-4 py-2 rounded-xl border border-cyan-500/30 text-cyan-200">Processar texto e gerar cards</button>
+
+        {parsedCreateItems.length > 0 && (
+          <div className="md:col-span-2 border border-cyan-500/20 bg-cyan-500/5 rounded-xl p-3 text-sm space-y-2">
+            <div className="font-semibold text-cyan-200">Prévia: {parsedCreateItems.length} cards</div>
+            {parsedCreateItems.map((p, i) => <div key={i} className="text-white/80">{p.post_date} • {p.title}</div>)}
+          </div>
+        )}
 
         <button className="md:col-span-2 inline-flex items-center justify-center gap-2 px-4 py-3 bg-accent-cyan/20 border border-accent-cyan/30 rounded-xl"><Plus className="w-4 h-4" /> Criar novo calendário</button>
       </form>
@@ -318,7 +314,7 @@ export default function AdminCalendarsPage() {
       {editorOpen && selectedCalendar && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/80" onClick={() => setEditorOpen(false)} />
-          <div className="relative w-full max-w-5xl max-h-[90vh] overflow-y-auto rounded-2xl border border-white/15 bg-[#0B0B0B] p-5">
+          <div className="relative w-full max-w-6xl max-h-[90vh] overflow-y-auto rounded-2xl border border-white/15 bg-[#0B0B0B] p-5">
             <button onClick={() => setEditorOpen(false)} className="absolute top-3 right-3 p-2 rounded-full bg-white/10"><X className="w-4 h-4" /></button>
             <h3 className="text-xl font-bold mb-4">Editar conteúdos — {selectedCalendar.title}</h3>
 
@@ -326,45 +322,42 @@ export default function AdminCalendarsPage() {
               <Upload className="w-4 h-4" /> Importar arquivo para adicionar conteúdos (.md/.txt)
               <input type="file" accept=".md,.txt" className="hidden" onChange={(e) => e.target.files?.[0] && handleFileParse(e.target.files[0], 'append')} />
             </label>
-            <textarea
-              value={appendRawText}
-              onChange={(e) => setAppendRawText(e.target.value)}
-              placeholder="Ou cole texto bruto aqui para adicionar novos conteúdos..."
-              className="mb-3 w-full bg-black/40 border border-white/10 rounded-xl p-3 min-h-[110px]"
-            />
-            <button type="button" onClick={() => parsePastedText('append')} className="mb-4 px-4 py-2 rounded-xl border border-cyan-500/30 text-cyan-200">Processar texto colado</button>
+            <textarea value={appendRawText} onChange={(e) => setAppendRawText(e.target.value)} placeholder="Cole texto para adicionar novos cards..." className="mb-3 w-full bg-black/40 border border-white/10 rounded-xl p-3 min-h-[110px]" />
+            <button type="button" onClick={() => parsePastedText('append')} className="mb-4 px-4 py-2 rounded-xl border border-cyan-500/30 text-cyan-200">Processar texto e gerar cards</button>
+
             {parsedAppendItems.length > 0 && (
               <div className="mb-4 flex items-center justify-between bg-cyan-500/10 border border-cyan-500/20 rounded-lg p-3 text-sm">
-                <span>{parsedAppendItems.length} conteúdos prontos para adicionar.</span>
+                <span>{parsedAppendItems.length} cards prontos para adicionar.</span>
                 <button onClick={appendParsedItems} className="px-3 py-1.5 rounded-lg border border-cyan-500/30">Adicionar agora</button>
               </div>
             )}
 
             <form onSubmit={saveItem} className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-5 border border-white/10 rounded-xl p-4 bg-black/30">
               <input type="date" value={itemForm.post_date} onChange={(e) => setItemForm((s: any) => ({ ...s, post_date: e.target.value }))} className="bg-black/40 border border-white/10 rounded-xl p-3" required />
-              <input value={itemForm.day_label} onChange={(e) => setItemForm((s: any) => ({ ...s, day_label: e.target.value }))} placeholder="Dia (ex: Terça-feira)" className="bg-black/40 border border-white/10 rounded-xl p-3" required />
+              <input value={itemForm.day_label} onChange={(e) => setItemForm((s: any) => ({ ...s, day_label: e.target.value }))} placeholder="Dia" className="bg-black/40 border border-white/10 rounded-xl p-3" required />
               <input value={itemForm.title} onChange={(e) => setItemForm((s: any) => ({ ...s, title: e.target.value }))} placeholder="Título" className="bg-black/40 border border-white/10 rounded-xl p-3 md:col-span-2" required />
-              <input value={itemForm.format} onChange={(e) => setItemForm((s: any) => ({ ...s, format: e.target.value }))} placeholder="Formato (Reels, Carrossel...)" className="bg-black/40 border border-white/10 rounded-xl p-3" />
+              <input value={itemForm.format} onChange={(e) => setItemForm((s: any) => ({ ...s, format: e.target.value }))} placeholder="Formato" className="bg-black/40 border border-white/10 rounded-xl p-3" />
               <input value={itemForm.pillar} onChange={(e) => setItemForm((s: any) => ({ ...s, pillar: e.target.value }))} placeholder="Pilar" className="bg-black/40 border border-white/10 rounded-xl p-3" />
-              <input value={itemForm.theme} onChange={(e) => setItemForm((s: any) => ({ ...s, theme: e.target.value }))} placeholder="Tema" className="bg-black/40 border border-white/10 rounded-xl p-3" />
-              <input value={itemForm.objective} onChange={(e) => setItemForm((s: any) => ({ ...s, objective: e.target.value }))} placeholder="Objetivo" className="bg-black/40 border border-white/10 rounded-xl p-3" />
               <textarea value={itemForm.caption} onChange={(e) => setItemForm((s: any) => ({ ...s, caption: e.target.value }))} placeholder="Legenda" className="bg-black/40 border border-white/10 rounded-xl p-3 md:col-span-2 min-h-[80px]" />
               <textarea value={itemForm.storiesText} onChange={(e) => setItemForm((s: any) => ({ ...s, storiesText: e.target.value }))} placeholder="Stories (1 por linha)" className="bg-black/40 border border-white/10 rounded-xl p-3 md:col-span-2 min-h-[100px]" />
               <button className="md:col-span-2 px-4 py-3 bg-accent-cyan/20 border border-accent-cyan/30 rounded-xl">{editingItemId ? 'Salvar edição' : 'Adicionar conteúdo'}</button>
             </form>
 
-            <div className="space-y-3">
-              {calendarItems.map((it) => (
-                <div key={it.id} className="border border-white/10 rounded-xl p-3 bg-black/30">
-                  <div className="flex justify-between gap-2">
-                    <div>
-                      <p className="font-semibold">{it.post_date} • {it.title}</p>
-                      <p className="text-xs text-white/60">{it.format} · {it.day_label}</p>
-                    </div>
-                    <div className="flex gap-2">
-                      <button onClick={() => editItem(it)} className="px-2 py-1 rounded border border-white/20 text-xs">Editar</button>
-                      <button onClick={() => removeItem(it.id)} className="px-2 py-1 rounded border border-red-500/30 text-red-300 text-xs">Excluir</button>
-                    </div>
+            <div className="grid md:grid-cols-3 gap-4">
+              {Object.entries(groupedByFormat).map(([format, cards]) => (
+                <div key={format} className="border border-white/10 rounded-xl p-3 bg-black/20">
+                  <h4 className="font-semibold mb-3">{format}</h4>
+                  <div className="space-y-2">
+                    {cards.map((it) => (
+                      <div key={it.id} className="border border-white/10 rounded-lg p-3 bg-black/30">
+                        <p className="text-sm font-medium">{it.post_date}</p>
+                        <p className="text-sm text-white/80">{it.title}</p>
+                        <div className="mt-2 flex gap-2">
+                          <button onClick={() => editItem(it)} className="px-2 py-1 rounded border border-white/20 text-xs">Editar</button>
+                          <button onClick={() => removeItem(it.id)} className="px-2 py-1 rounded border border-red-500/30 text-red-300 text-xs">Excluir</button>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
               ))}
@@ -378,7 +371,7 @@ export default function AdminCalendarsPage() {
           <div className="absolute inset-0 bg-black/80" onClick={() => setDeleteModal({ open: false, id: '', title: '' })} />
           <div className="relative w-full max-w-md rounded-2xl border border-white/15 bg-[#0B0B0B] p-5">
             <h3 className="text-lg font-bold mb-2">Excluir calendário</h3>
-            <p className="text-sm text-white/70 mb-4">Tem certeza que deseja excluir <strong>{deleteModal.title}</strong>? Essa ação remove calendário e conteúdos.</p>
+            <p className="text-sm text-white/70 mb-4">Tem certeza que deseja excluir <strong>{deleteModal.title}</strong>?</p>
             <div className="flex justify-end gap-2">
               <button onClick={() => setDeleteModal({ open: false, id: '', title: '' })} className="px-4 py-2 rounded-lg border border-white/20">Cancelar</button>
               <button onClick={removeCalendar} className="px-4 py-2 rounded-lg bg-red-500/20 border border-red-500/30 text-red-200">Excluir</button>

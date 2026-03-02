@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { computoCalendarPosts, computoWeekLabel, type ApprovalStatus, type CalendarPost } from '../data/computoCalendar';
+import { computoWeekLabel, type ApprovalStatus, type CalendarPost } from '../data/computoCalendar';
 import { supabase } from '../lib/supabase';
 
 type StoryReview = { status: ApprovalStatus; feedback?: string };
@@ -23,7 +23,7 @@ function statusClasses(status: ApprovalStatus) {
 
 export default function ContentCalendarBoard({ slug, adminMode = false }: { slug: string; adminMode?: boolean }) {
   const storageKey = `${STORAGE_PREFIX}.${slug}`;
-  const [posts, setPosts] = useState<CalendarPost[]>(computoCalendarPosts);
+  const [posts, setPosts] = useState<CalendarPost[]>([]);
   const [weekLabel, setWeekLabel] = useState(computoWeekLabel);
   const [loading, setLoading] = useState(false);
   const [formatFilter, setFormatFilter] = useState<'todos' | 'reels' | 'post-estatico' | 'carrossel' | 'stories'>('todos');
@@ -199,6 +199,7 @@ export default function ContentCalendarBoard({ slug, adminMode = false }: { slug
         </div>
 
         {loading && <div className="text-sm text-white/60 mb-3">Carregando calendário...</div>}
+        {!loading && posts.length === 0 && <div className="text-sm text-white/60 mb-3">Este calendário ainda não tem conteúdos.</div>}
 
         {formatFilter === 'stories' ? (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
