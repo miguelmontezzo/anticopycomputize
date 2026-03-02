@@ -118,7 +118,7 @@ export default function AdminClientsPage() {
                         <div className="w-10 h-10 rounded-xl bg-accent-cyan/10 flex items-center justify-center">
                             <Users className="w-5 h-5 text-accent-cyan" />
                         </div>
-                        <h1 className="text-4xl font-bold tracking-tighter">Clientes Getais</h1>
+                        <h1 className="text-4xl font-bold tracking-tighter">Clientes Gerais</h1>
                     </div>
                     <p className="text-muted font-light">
                         Gerencie as empresas e pessoas atendidas.

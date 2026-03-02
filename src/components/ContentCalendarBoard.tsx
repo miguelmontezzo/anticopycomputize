@@ -1,19 +1,27 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { computoWeekLabel, type ApprovalStatus, type CalendarPost } from '../data/computoCalendar';
 import { supabase } from '../lib/supabase';
+import { Loader2, ArrowLeft } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
-type StoryReview = { status: ApprovalStatus; feedback?: string };
+type ApprovalStatus = 'pendente' | 'aprovado' | 'reprovado';
 
-type ReviewItem = {
-  postStatus: ApprovalStatus;
-  postFeedback?: string;
-  stories: StoryReview[];
+type StoryReview = { status: ApprovalStatus; feedback: string };
+
+type DBItem = {
+  id: string;
+  post_date: string;
+  day_label: string;
+  title: string;
+  format: string;
+  pillar: string;
+  theme: string;
+  objective: string;
+  caption: string;
+  stories: string[];
+  post_status: ApprovalStatus;
+  post_feedback: string;
+  stories_reviews: StoryReview[];
 };
-
-type ReviewMap = Record<string, ReviewItem>;
-type RejectTarget = 'post' | 'story';
-
-const STORAGE_PREFIX = 'anticopy.calendar.reviews';
 
 function statusClasses(status: ApprovalStatus) {
   if (status === 'aprovado') return 'bg-emerald-500/15 text-emerald-300 border-emerald-400/30';
@@ -21,17 +29,27 @@ function statusClasses(status: ApprovalStatus) {
   return 'bg-white/5 text-white/70 border-white/10';
 }
 
+function storyReview(item: DBItem, idx: number): StoryReview {
+  return item.stories_reviews?.[idx] ?? { status: 'pendente', feedback: '' };
+}
+
 export default function ContentCalendarBoard({ slug, adminMode = false }: { slug: string; adminMode?: boolean }) {
-  const storageKey = `${STORAGE_PREFIX}.${slug}`;
-  const [posts, setPosts] = useState<CalendarPost[]>([]);
-  const [weekLabel, setWeekLabel] = useState(computoWeekLabel);
-  const [loading, setLoading] = useState(false);
+  const [items, setItems] = useState<DBItem[]>([]);
+  const [weekLabel, setWeekLabel] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [savingId, setSavingId] = useState<string | null>(null);
   const [formatFilter, setFormatFilter] = useState<'todos' | 'reels' | 'post-estatico' | 'carrossel' | 'stories'>('todos');
+
+  // Reject modal
+  const [modalOpen, setModalOpen] = useState(false);
+  const [rejectTarget, setRejectTarget] = useState<{ itemId: string; type: 'post' | 'story'; storyIndex?: number } | null>(null);
+  const [feedback, setFeedback] = useState('');
 
   useEffect(() => {
     const load = async () => {
       if (!supabase) return;
       setLoading(true);
+
       const { data: calendar } = await supabase
         .from('content_calendars')
         .select('id,week_start,week_end')
@@ -41,16 +59,17 @@ export default function ContentCalendarBoard({ slug, adminMode = false }: { slug
         .maybeSingle();
 
       if (calendar?.id) {
-        const { data: items } = await supabase
+        const { data } = await supabase
           .from('content_calendar_items')
           .select('*')
           .eq('calendar_id', calendar.id)
           .order('post_date', { ascending: true });
 
-        if (items && items.length) {
-          const mapped: CalendarPost[] = items.map((it: any) => ({
-            date: it.post_date,
-            dayLabel: it.day_label,
+        if (data?.length) {
+          setItems(data.map((it: any) => ({
+            id: it.id,
+            post_date: it.post_date,
+            day_label: it.day_label,
             title: it.title,
             format: it.format || 'Post',
             pillar: it.pillar || '-',
@@ -58,231 +77,358 @@ export default function ContentCalendarBoard({ slug, adminMode = false }: { slug
             objective: it.objective || '-',
             caption: it.caption || '-',
             stories: Array.isArray(it.stories) ? it.stories : [],
-          }));
-          setPosts(mapped);
+            post_status: (it.post_status as ApprovalStatus) || 'pendente',
+            post_feedback: it.post_feedback || '',
+            stories_reviews: Array.isArray(it.stories_reviews)
+              ? it.stories_reviews
+              : [],
+          })));
           setWeekLabel(`${calendar.week_start} a ${calendar.week_end}`);
         }
       }
+
       setLoading(false);
     };
     load();
   }, [slug]);
 
-  const visiblePosts = useMemo(() => {
-    if (formatFilter === 'todos' || formatFilter === 'stories') return posts;
-    if (formatFilter === 'reels') return posts.filter((p) => p.format.toLowerCase().includes('reels'));
-    if (formatFilter === 'carrossel') return posts.filter((p) => p.format.toLowerCase().includes('carrossel'));
-    return posts.filter((p) => p.format.toLowerCase().includes('post'));
-  }, [posts, formatFilter]);
+  /* ── helpers ─────────────────────────────────────────────────── */
 
-  const storiesOnlyCards = useMemo(() => {
-    return posts.flatMap((post) =>
-      post.stories.map((story, idx) => ({
-        date: post.date,
-        dayLabel: post.dayLabel,
-        postTitle: post.title,
-        story,
-        idx,
-        storiesCount: post.stories.length,
-      }))
+  const patch = (id: string, changes: Partial<DBItem>) => {
+    setItems(prev => prev.map(it => it.id === id ? { ...it, ...changes } : it));
+  };
+
+  const persist = async (id: string, changes: object) => {
+    setSavingId(id);
+    const { error } = await supabase
+      .from('content_calendar_items')
+      .update(changes)
+      .eq('id', id);
+    setSavingId(null);
+    if (error) console.error('Erro ao salvar:', error.message);
+  };
+
+  /* ── post actions ─────────────────────────────────────────────── */
+
+  const approvePost = (item: DBItem) => {
+    const changes = { post_status: 'aprovado' as ApprovalStatus, post_feedback: '' };
+    patch(item.id, changes);
+    persist(item.id, changes);
+  };
+
+  const resetPost = (item: DBItem) => {
+    const changes = { post_status: 'pendente' as ApprovalStatus, post_feedback: '' };
+    patch(item.id, changes);
+    persist(item.id, changes);
+  };
+
+  /* ── story actions ────────────────────────────────────────────── */
+
+  const approveStory = (item: DBItem, idx: number) => {
+    const reviews = [...(item.stories_reviews || [])];
+    reviews[idx] = { status: 'aprovado', feedback: '' };
+    patch(item.id, { stories_reviews: reviews });
+    persist(item.id, { stories_reviews: reviews });
+  };
+
+  const resetStory = (item: DBItem, idx: number) => {
+    const reviews = [...(item.stories_reviews || [])];
+    reviews[idx] = { status: 'pendente', feedback: '' };
+    patch(item.id, { stories_reviews: reviews });
+    persist(item.id, { stories_reviews: reviews });
+  };
+
+  /* ── reject modal ─────────────────────────────────────────────── */
+
+  const openReject = (itemId: string, type: 'post' | 'story', storyIndex?: number) => {
+    const item = items.find(it => it.id === itemId);
+    if (!item) return;
+    setRejectTarget({ itemId, type, storyIndex });
+    setFeedback(
+      type === 'post'
+        ? item.post_feedback
+        : storyReview(item, storyIndex!).feedback
     );
-  }, [posts]);
-
-  const [reviews, setReviews] = useState<ReviewMap>(() => {
-    try {
-      return JSON.parse(localStorage.getItem(storageKey) || '{}') as ReviewMap;
-    } catch {
-      return {};
-    }
-  });
-
-  const [modalOpen, setModalOpen] = useState(false);
-  const [rejectDate, setRejectDate] = useState<string>('');
-  const [rejectTarget, setRejectTarget] = useState<RejectTarget>('post');
-  const [rejectStoryIndex, setRejectStoryIndex] = useState<number | null>(null);
-  const [feedback, setFeedback] = useState('');
-
-  const save = (next: ReviewMap) => {
-    setReviews(next);
-    localStorage.setItem(storageKey, JSON.stringify(next));
-  };
-
-  const current = (date: string, storiesCount: number): ReviewItem => {
-    const existing = reviews[date];
-    if (!existing) return { postStatus: 'pendente', stories: Array.from({ length: storiesCount }, () => ({ status: 'pendente' as ApprovalStatus })) };
-    const stories = Array.from({ length: storiesCount }, (_, i) => existing.stories?.[i] || { status: 'pendente' as ApprovalStatus });
-    return { ...existing, stories };
-  };
-
-  const approvePost = (date: string, storiesCount: number) => {
-    const c = current(date, storiesCount);
-    save({ ...reviews, [date]: { ...c, postStatus: 'aprovado', postFeedback: '' } });
-  };
-
-  const resetPost = (date: string, storiesCount: number) => {
-    const c = current(date, storiesCount);
-    save({ ...reviews, [date]: { ...c, postStatus: 'pendente', postFeedback: '' } });
-  };
-
-  const approveStory = (date: string, storiesCount: number, idx: number) => {
-    const c = current(date, storiesCount);
-    const nextStories = [...c.stories];
-    nextStories[idx] = { status: 'aprovado' };
-    save({ ...reviews, [date]: { ...c, stories: nextStories } });
-  };
-
-  const resetStory = (date: string, storiesCount: number, idx: number) => {
-    const c = current(date, storiesCount);
-    const nextStories = [...c.stories];
-    nextStories[idx] = { status: 'pendente' };
-    save({ ...reviews, [date]: { ...c, stories: nextStories } });
-  };
-
-  const openRejectModal = (date: string, target: RejectTarget, storiesCount: number, storyIndex?: number) => {
-    const c = current(date, storiesCount);
-    setRejectDate(date);
-    setRejectTarget(target);
-    if (target === 'story' && typeof storyIndex === 'number') {
-      setRejectStoryIndex(storyIndex);
-      setFeedback(c.stories[storyIndex]?.feedback || '');
-    } else {
-      setRejectStoryIndex(null);
-      setFeedback(c.postFeedback || '');
-    }
     setModalOpen(true);
   };
 
   const confirmReject = () => {
-    if (!feedback.trim()) return;
-    const sourcePost = posts.find((p) => p.date === rejectDate);
-    if (!sourcePost) return;
-    const c = current(rejectDate, sourcePost.stories.length);
+    if (!feedback.trim() || !rejectTarget) return;
+    const item = items.find(it => it.id === rejectTarget.itemId);
+    if (!item) return;
 
-    if (rejectTarget === 'post') {
-      save({ ...reviews, [rejectDate]: { ...c, postStatus: 'reprovado', postFeedback: feedback.trim() } });
-    } else if (rejectStoryIndex !== null) {
-      const nextStories = [...c.stories];
-      nextStories[rejectStoryIndex] = { status: 'reprovado', feedback: feedback.trim() };
-      save({ ...reviews, [rejectDate]: { ...c, stories: nextStories } });
+    if (rejectTarget.type === 'post') {
+      const changes = { post_status: 'reprovado' as ApprovalStatus, post_feedback: feedback.trim() };
+      patch(item.id, changes);
+      persist(item.id, changes);
+    } else {
+      const reviews = [...(item.stories_reviews || [])];
+      reviews[rejectTarget.storyIndex!] = { status: 'reprovado', feedback: feedback.trim() };
+      patch(item.id, { stories_reviews: reviews });
+      persist(item.id, { stories_reviews: reviews });
     }
 
     setModalOpen(false);
     setFeedback('');
+    setRejectTarget(null);
   };
+
+  /* ── filtered lists ───────────────────────────────────────────── */
+
+  const visibleItems = useMemo(() => {
+    if (formatFilter === 'todos' || formatFilter === 'stories') return items;
+    if (formatFilter === 'reels') return items.filter(it => it.format.toLowerCase().includes('reels'));
+    if (formatFilter === 'carrossel') return items.filter(it => it.format.toLowerCase().includes('carrossel'));
+    return items.filter(it => it.format.toLowerCase().includes('post'));
+  }, [items, formatFilter]);
+
+  const storiesCards = useMemo(
+    () => items.flatMap(item => item.stories.map((story, idx) => ({ item, story, idx }))),
+    [items]
+  );
+
+  /* ── shared button helpers ────────────────────────────────────── */
+
+  const btnAprove = (onClick: () => void, disabled: boolean) => (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      className="flex-1 px-2 py-1.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-emerald-200 text-xs hover:bg-emerald-500/20 transition-colors disabled:opacity-40"
+    >
+      Aprovar
+    </button>
+  );
+
+  const btnReject = (onClick: () => void, disabled: boolean) => (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      className="flex-1 px-2 py-1.5 rounded-lg border border-rose-500/30 bg-rose-500/10 text-rose-200 text-xs hover:bg-rose-500/20 transition-colors disabled:opacity-40"
+    >
+      Reprovar
+    </button>
+  );
+
+  const btnReset = (onClick: () => void, disabled: boolean) => (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      className="px-2 py-1.5 rounded-lg border border-white/20 text-xs hover:bg-white/5 transition-colors disabled:opacity-40"
+    >
+      Reset
+    </button>
+  );
+
+  /* ── render ───────────────────────────────────────────────────── */
 
   return (
     <div className="min-h-screen bg-black text-white p-6 md:p-10">
       <div className="max-w-7xl mx-auto">
-        <div className="mb-8 flex items-center justify-between gap-4 flex-wrap">
+
+        {/* Header */}
+        <div className="mb-8 flex items-start justify-between gap-4 flex-wrap">
           <div>
             <div className="text-xs uppercase tracking-widest text-white/50 mb-2">Calendário de Conteúdo</div>
-            <h1 className="text-3xl md:text-5xl font-bold tracking-tight">{slug} — Semana {weekLabel}</h1>
-            <p className="text-white/60 mt-3 max-w-3xl">Visualize por data e aprove/reprove post + cada story em cards separados.</p>
+            <h1 className="text-3xl md:text-5xl font-bold tracking-tight">
+              {slug} {weekLabel && <span className="text-white/60 text-2xl md:text-3xl font-normal">— Semana {weekLabel}</span>}
+            </h1>
+            <p className="text-white/50 mt-2 text-sm">
+              Aprovações salvas em tempo real no banco de dados.
+            </p>
           </div>
           {adminMode && (
-            <span className="px-4 py-2 rounded-lg border border-cyan-400/30 text-cyan-300 text-sm">Modo Admin</span>
+            <Link
+              to="/admin/calendarios"
+              className="flex items-center gap-2 px-4 py-2 rounded-lg border border-white/20 text-sm text-white/70 hover:text-white hover:bg-white/5 transition-colors"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Calendários
+            </Link>
           )}
         </div>
 
-        <div className="mb-5 flex flex-wrap gap-2">
+        {/* Format filter */}
+        <div className="mb-6 flex flex-wrap gap-2">
           {[
             { key: 'todos', label: 'Todos' },
             { key: 'reels', label: 'Reels' },
             { key: 'carrossel', label: 'Carrossel' },
             { key: 'post-estatico', label: 'Post Estático' },
             { key: 'stories', label: 'Stories' },
-          ].map((f) => (
-            <button key={f.key} onClick={() => setFormatFilter(f.key as any)} className={`px-3 py-1.5 rounded-full border text-sm ${formatFilter === f.key ? 'border-cyan-400/40 bg-cyan-400/10 text-cyan-200' : 'border-white/20 text-white/70'}`}>
+          ].map(f => (
+            <button
+              key={f.key}
+              onClick={() => setFormatFilter(f.key as typeof formatFilter)}
+              className={`px-3 py-1.5 rounded-full border text-sm transition-colors ${
+                formatFilter === f.key
+                  ? 'border-cyan-400/40 bg-cyan-400/10 text-cyan-200'
+                  : 'border-white/20 text-white/60 hover:text-white hover:bg-white/5'
+              }`}
+            >
               {f.label}
             </button>
           ))}
         </div>
 
-        {loading && <div className="text-sm text-white/60 mb-3">Carregando calendário...</div>}
-        {!loading && posts.length === 0 && <div className="text-sm text-white/60 mb-3">Este calendário ainda não tem conteúdos.</div>}
+        {/* States */}
+        {loading && (
+          <div className="flex items-center gap-2 text-sm text-white/50 mb-6">
+            <Loader2 className="w-4 h-4 animate-spin" /> Carregando calendário...
+          </div>
+        )}
+        {!loading && items.length === 0 && (
+          <div className="text-center py-20 border border-white/5 rounded-2xl text-white/40">
+            Este calendário ainda não tem conteúdos.
+            {adminMode && (
+              <div className="mt-4">
+                <Link to="/admin/calendarios" className="text-accent-cyan underline text-sm">
+                  Adicionar conteúdos →
+                </Link>
+              </div>
+            )}
+          </div>
+        )}
 
-        {formatFilter === 'stories' ? (
+        {/* Stories view */}
+        {formatFilter === 'stories' && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-            {storiesOnlyCards.map((card) => {
-              const r = current(card.date, card.storiesCount);
-              const sr = r.stories[card.idx] || { status: 'pendente' as ApprovalStatus };
+            {storiesCards.map(({ item, story, idx }) => {
+              const sr = storyReview(item, idx);
+              const busy = savingId === item.id;
               return (
-                <article key={`${card.date}-${card.idx}`} className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 flex flex-col gap-3">
+                <article key={`${item.id}-s${idx}`} className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 flex flex-col gap-3">
                   <div className="flex items-start justify-between gap-3">
                     <div>
-                      <p className="text-xs uppercase tracking-widest text-cyan-300/80">{card.dayLabel}</p>
-                      <h2 className="text-base font-semibold mt-1">{card.postTitle}</h2>
+                      <p className="text-xs uppercase tracking-widest text-cyan-300/70">{item.day_label}</p>
+                      <h2 className="text-sm font-semibold mt-1">{item.title}</h2>
                     </div>
-                    <span className="text-xs px-3 py-1 rounded-full border border-white/20 bg-white/5">{card.date}</span>
+                    <span className="text-xs px-2 py-1 rounded-full border border-white/20 bg-white/5 shrink-0">{item.post_date}</span>
                   </div>
-                  <div className="border border-white/10 rounded-lg p-3 bg-black/30">
-                    <div className="flex items-center justify-between mb-2">
-                      <p className="text-sm text-white/80">Story {card.idx + 1}</p>
+
+                  <div className="border border-white/10 rounded-lg p-3 bg-black/30 flex-1 flex flex-col gap-2">
+                    <div className="flex items-center justify-between">
+                      <p className="text-sm text-white/70">Story {idx + 1}</p>
                       <span className={`text-xs px-2 py-0.5 rounded-full border ${statusClasses(sr.status)}`}>{sr.status}</span>
                     </div>
-                    <p className="text-sm text-white/70 mb-2">{card.story}</p>
-                    {sr.feedback && <p className="text-xs text-rose-200 mb-2">Direcionamento: {sr.feedback}</p>}
-                    <div className="flex gap-2">
-                      <button onClick={() => approveStory(card.date, card.storiesCount, card.idx)} className="flex-1 px-2 py-1.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-emerald-200 text-xs">Aprovar</button>
-                      <button onClick={() => openRejectModal(card.date, 'story', card.storiesCount, card.idx)} className="flex-1 px-2 py-1.5 rounded-lg border border-rose-500/30 bg-rose-500/10 text-rose-200 text-xs">Reprovar</button>
-                      <button onClick={() => resetStory(card.date, card.storiesCount, card.idx)} className="px-2 py-1.5 rounded-lg border border-white/20 text-xs">Reset</button>
+                    <p className="text-sm text-white/60 leading-relaxed flex-1">{story}</p>
+                    {sr.feedback && (
+                      <p className="text-xs text-rose-300 border-l-2 border-rose-500/40 pl-2">
+                        {sr.feedback}
+                      </p>
+                    )}
+                    <div className="flex gap-2 mt-1">
+                      {btnAprove(() => approveStory(item, idx), busy)}
+                      {btnReject(() => openReject(item.id, 'story', idx), busy)}
+                      {btnReset(() => resetStory(item, idx), busy)}
                     </div>
                   </div>
                 </article>
               );
             })}
           </div>
-        ) : (
+        )}
+
+        {/* Posts view */}
+        {formatFilter !== 'stories' && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-            {visiblePosts.map((post) => {
-              const r = current(post.date, post.stories.length);
+            {visibleItems.map(item => {
+              const busy = savingId === item.id;
               return (
-                <article key={post.date} className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 flex flex-col gap-4">
+                <article key={item.id} className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 flex flex-col gap-4">
+                  {/* Post header */}
                   <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <p className="text-xs uppercase tracking-widest text-cyan-300/80">{post.dayLabel}</p>
-                      <h2 className="text-xl font-semibold mt-1">{post.title}</h2>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs uppercase tracking-widest text-cyan-300/70">{item.day_label}</p>
+                      <h2 className="text-lg font-semibold mt-1 leading-snug">{item.title}</h2>
+                      <p className="text-xs text-white/40 mt-1">{item.format} · {item.pillar}</p>
                     </div>
-                    <span className="text-xs px-3 py-1 rounded-full border border-white/20 bg-white/5">{post.date}</span>
+                    <div className="flex flex-col items-end gap-1 shrink-0">
+                      <span className="text-xs px-2 py-1 rounded-full border border-white/20 bg-white/5">{item.post_date}</span>
+                      {busy && <Loader2 className="w-3 h-3 animate-spin text-white/30" />}
+                    </div>
                   </div>
 
-                  <section className="border border-white/10 rounded-xl p-3 bg-black/20">
-                    <div className="flex items-center justify-between mb-2">
-                      <h3 className="text-sm font-semibold">Post do dia</h3>
-                      <span className={`text-xs px-2 py-0.5 rounded-full border ${statusClasses(r.postStatus)}`}>{r.postStatus}</span>
+                  {/* Admin metadata */}
+                  {adminMode && (
+                    <div className="text-xs text-white/40 border border-white/5 rounded-lg p-2.5 bg-white/[0.02] space-y-1">
+                      <div><span className="text-white/25">Tema:</span> {item.theme}</div>
+                      <div><span className="text-white/25">Objetivo:</span> {item.objective}</div>
                     </div>
-                    <p className="text-sm text-white/70 leading-relaxed mb-3">{post.caption}</p>
-                    {r.postFeedback && <p className="text-xs text-rose-200 mb-2">Direcionamento: {r.postFeedback}</p>}
+                  )}
+
+                  {/* Post section */}
+                  <section className="border border-white/10 rounded-xl p-3 bg-black/20 flex flex-col gap-3">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-sm font-semibold">Post do dia</h3>
+                      <span className={`text-xs px-2 py-0.5 rounded-full border ${statusClasses(item.post_status)}`}>
+                        {item.post_status}
+                      </span>
+                    </div>
+                    <p className="text-sm text-white/65 leading-relaxed">{item.caption}</p>
+                    {item.post_feedback && (
+                      <p className="text-xs text-rose-300 border-l-2 border-rose-500/40 pl-2">
+                        {item.post_feedback}
+                      </p>
+                    )}
                     <div className="flex gap-2">
-                      <button onClick={() => approvePost(post.date, post.stories.length)} className="flex-1 px-3 py-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-emerald-200 text-sm">Aprovar</button>
-                      <button onClick={() => openRejectModal(post.date, 'post', post.stories.length)} className="flex-1 px-3 py-2 rounded-lg border border-rose-500/30 bg-rose-500/10 text-rose-200 text-sm">Reprovar</button>
-                      <button onClick={() => resetPost(post.date, post.stories.length)} className="px-3 py-2 rounded-lg border border-white/20 text-sm">Reset</button>
+                      <button
+                        onClick={() => approvePost(item)}
+                        disabled={busy}
+                        className="flex-1 px-3 py-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-emerald-200 text-sm hover:bg-emerald-500/20 transition-colors disabled:opacity-40"
+                      >
+                        Aprovar
+                      </button>
+                      <button
+                        onClick={() => openReject(item.id, 'post')}
+                        disabled={busy}
+                        className="flex-1 px-3 py-2 rounded-lg border border-rose-500/30 bg-rose-500/10 text-rose-200 text-sm hover:bg-rose-500/20 transition-colors disabled:opacity-40"
+                      >
+                        Reprovar
+                      </button>
+                      <button
+                        onClick={() => resetPost(item)}
+                        disabled={busy}
+                        className="px-3 py-2 rounded-lg border border-white/20 text-sm hover:bg-white/5 transition-colors disabled:opacity-40"
+                      >
+                        Reset
+                      </button>
                     </div>
                   </section>
 
-                  <section className="border border-white/10 rounded-xl p-3 bg-black/20">
-                    <h3 className="text-sm font-semibold mb-3">Stories do dia (cards separados)</h3>
-                    <div className="space-y-2">
-                      {post.stories.map((story, idx) => {
-                        const sr = r.stories[idx] || { status: 'pendente' as ApprovalStatus };
-                        return (
-                          <div key={story} className="border border-white/10 rounded-lg p-3 bg-black/30">
-                            <div className="flex items-center justify-between mb-2">
-                              <p className="text-sm text-white/80">Story {idx + 1}</p>
-                              <span className={`text-xs px-2 py-0.5 rounded-full border ${statusClasses(sr.status)}`}>{sr.status}</span>
+                  {/* Stories section */}
+                  {item.stories.length > 0 && (
+                    <section className="border border-white/10 rounded-xl p-3 bg-black/20">
+                      <h3 className="text-sm font-semibold mb-3">
+                        Stories ({item.stories.length})
+                      </h3>
+                      <div className="space-y-2">
+                        {item.stories.map((story, idx) => {
+                          const sr = storyReview(item, idx);
+                          return (
+                            <div key={idx} className="border border-white/10 rounded-lg p-3 bg-black/30">
+                              <div className="flex items-center justify-between mb-2">
+                                <p className="text-xs font-medium text-white/70">Story {idx + 1}</p>
+                                <span className={`text-xs px-2 py-0.5 rounded-full border ${statusClasses(sr.status)}`}>
+                                  {sr.status}
+                                </span>
+                              </div>
+                              <p className="text-xs text-white/55 leading-relaxed mb-2">{story}</p>
+                              {sr.feedback && (
+                                <p className="text-xs text-rose-300 border-l-2 border-rose-500/40 pl-2 mb-2">
+                                  {sr.feedback}
+                                </p>
+                              )}
+                              <div className="flex gap-2">
+                                {btnAprove(() => approveStory(item, idx), busy)}
+                                {btnReject(() => openReject(item.id, 'story', idx), busy)}
+                                {btnReset(() => resetStory(item, idx), busy)}
+                              </div>
                             </div>
-                            <p className="text-sm text-white/70 mb-2">{story}</p>
-                            {sr.feedback && <p className="text-xs text-rose-200 mb-2">Direcionamento: {sr.feedback}</p>}
-                            <div className="flex gap-2">
-                              <button onClick={() => approveStory(post.date, post.stories.length, idx)} className="flex-1 px-2 py-1.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-emerald-200 text-xs">Aprovar</button>
-                              <button onClick={() => openRejectModal(post.date, 'story', post.stories.length, idx)} className="flex-1 px-2 py-1.5 rounded-lg border border-rose-500/30 bg-rose-500/10 text-rose-200 text-xs">Reprovar</button>
-                              <button onClick={() => resetStory(post.date, post.stories.length, idx)} className="px-2 py-1.5 rounded-lg border border-white/20 text-xs">Reset</button>
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </section>
+                          );
+                        })}
+                      </div>
+                    </section>
+                  )}
                 </article>
               );
             })}
@@ -290,18 +436,35 @@ export default function ContentCalendarBoard({ slug, adminMode = false }: { slug
         )}
       </div>
 
-      {modalOpen && (
+      {/* Reject modal */}
+      {modalOpen && rejectTarget && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-black/80" onClick={() => setModalOpen(false)} />
-          <div className="relative w-full max-w-lg rounded-2xl border border-white/15 bg-[#0B0B0B] p-5">
-            <h3 className="text-lg font-bold mb-2">Direcionamento da reprovação</h3>
-            <p className="text-sm text-white/60 mb-3">
-              {rejectDate} · {rejectTarget === 'post' ? 'Post' : `Story ${rejectStoryIndex !== null ? rejectStoryIndex + 1 : ''}`}
+          <div className="absolute inset-0 bg-black/85" onClick={() => setModalOpen(false)} />
+          <div className="relative w-full max-w-lg rounded-2xl border border-white/15 bg-[#0B0B0B] p-6">
+            <h3 className="text-lg font-bold mb-1">Direcionamento da reprovação</h3>
+            <p className="text-sm text-white/50 mb-4">
+              {rejectTarget.type === 'post'
+                ? 'Post do dia'
+                : `Story ${(rejectTarget.storyIndex ?? 0) + 1}`}
             </p>
-            <textarea value={feedback} onChange={(e) => setFeedback(e.target.value)} className="w-full min-h-[120px] rounded-xl border border-white/20 bg-black/40 p-3 text-sm" placeholder="Explique exatamente o ajuste necessário..." />
+            <textarea
+              value={feedback}
+              onChange={e => setFeedback(e.target.value)}
+              className="w-full min-h-[120px] rounded-xl border border-white/20 bg-black/40 p-3 text-sm focus:outline-none focus:border-white/40 resize-none"
+              placeholder="Explique exatamente o ajuste necessário..."
+              autoFocus
+            />
             <div className="mt-4 flex justify-end gap-2">
-              <button onClick={() => setModalOpen(false)} className="px-4 py-2 rounded-lg border border-white/20">Cancelar</button>
-              <button onClick={confirmReject} className="px-4 py-2 rounded-lg bg-rose-500/20 border border-rose-500/30 text-rose-200">Salvar reprovação</button>
+              <button onClick={() => setModalOpen(false)} className="px-4 py-2 rounded-lg border border-white/20 text-sm hover:bg-white/5 transition-colors">
+                Cancelar
+              </button>
+              <button
+                onClick={confirmReject}
+                disabled={!feedback.trim()}
+                className="px-4 py-2 rounded-lg bg-rose-500/20 border border-rose-500/30 text-rose-200 text-sm hover:bg-rose-500/30 transition-colors disabled:opacity-40"
+              >
+                Salvar reprovação
+              </button>
             </div>
           </div>
         </div>

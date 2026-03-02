@@ -53,7 +53,7 @@ export default function AdminLayout() {
 
     const navItems = [
         { path: '/admin', icon: <LayoutDashboard className="w-5 h-5" />, label: 'Dashboard' },
-        { path: '/admin/clients', icon: <Users className="w-5 h-5" />, label: 'Clientes Getais' },
+        { path: '/admin/clients', icon: <Users className="w-5 h-5" />, label: 'Clientes Gerais' },
         { path: '/admin/clientes', icon: <FolderKanban className="w-5 h-5" />, label: 'Clientes & Rotas' },
         { path: '/admin/calendarios', icon: <CalendarDays className="w-5 h-5" />, label: 'Calendários' },
         { path: '/admin/pages', icon: <Globe className="w-5 h-5" />, label: 'Páginas' },
