@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FadeIn } from '../components/Shared';
 import { supabase } from '../lib/supabase';
-import { Users, Globe, ClipboardList, FolderKanban, FileText } from 'lucide-react';
+import { Users, Globe, ClipboardList, FolderKanban, FileText, CalendarDays } from 'lucide-react';
 
 export default function AdminDashboardPage() {
     const [userEmail, setUserEmail] = useState('');
@@ -111,6 +111,21 @@ export default function AdminDashboardPage() {
                         </p>
                         <a href="/admin/emp" className="mt-auto inline-flex items-center text-accent-cyan text-sm font-medium hover:text-white transition-colors">
                             Acessar respostas →
+                        </a>
+                    </div>
+
+                    <div className="bg-black/40 border border-white/10 hover:border-accent-cyan/50 transition-colors p-8 rounded-2xl flex flex-col gap-4">
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-xl bg-accent-cyan/10 flex items-center justify-center">
+                                <CalendarDays className="w-5 h-5 text-accent-cyan" />
+                            </div>
+                            <h3 className="text-xl font-bold tracking-tight">Calendário Computo</h3>
+                        </div>
+                        <p className="text-sm text-muted font-light leading-relaxed">
+                            Acesse rápido o calendário semanal e valide post a post com aprovado/reprovado.
+                        </p>
+                        <a href="/computo/calendario" className="mt-auto inline-flex items-center text-accent-cyan text-sm font-medium hover:text-white transition-colors">
+                            Abrir calendário →
                         </a>
                     </div>
                 </div>

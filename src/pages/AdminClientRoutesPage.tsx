@@ -109,6 +109,7 @@ export default function AdminClientRoutesPage() {
                         const p1 = `${window.location.origin}/${item.slug}/ia-service`;
                         const p2 = `${window.location.origin}/${item.slug}/analise`;
                         const p3 = `${window.location.origin}/${item.slug}/emp`;
+                        const p4 = `${window.location.origin}/${item.slug}/calendario`;
                         return (
                             <div key={item.id} className="bg-black/30 border border-white/10 rounded-xl p-4">
                                 <div className="flex items-center justify-between gap-4 flex-wrap">
@@ -119,8 +120,8 @@ export default function AdminClientRoutesPage() {
                                     <span className="text-xs px-2 py-1 rounded bg-white/10 border border-white/10">{item.status}</span>
                                 </div>
 
-                                <div className="mt-3 grid grid-cols-1 md:grid-cols-3 gap-2 text-xs">
-                                    {[{ label: 'Apresentação', url: p1 }, { label: 'Análise', url: p2 }, { label: 'Form EMP', url: p3 }].map(row => (
+                                <div className="mt-3 grid grid-cols-1 md:grid-cols-4 gap-2 text-xs">
+                                    {[{ label: 'Apresentação', url: p1 }, { label: 'Análise', url: p2 }, { label: 'Form EMP', url: p3 }, { label: 'Calendário', url: p4 }].map(row => (
                                         <div key={row.url} className="bg-white/5 border border-white/10 rounded-lg p-2 flex items-center justify-between gap-2">
                                             <span className="truncate">{row.label}</span>
                                             <div className="flex items-center gap-2 shrink-0">

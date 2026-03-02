@@ -39,6 +39,7 @@ import AdminFormResponsesPage from "./pages/AdminFormResponsesPage";
 import PublicPage from "./pages/PublicPage";
 import ClientIAServicePage from "./pages/ClientIAServicePage";
 import ClientAnalysisPage from "./pages/ClientAnalysisPage";
+import ClientCalendarPage from "./pages/ClientCalendarPage";
 
 const ComputizePage = () => {
 
@@ -495,6 +496,7 @@ export default function App() {
         <Route path="/ia-service" element={<IAServicePage />} />
         <Route path="/:slug/ia-service" element={<ClientIAServicePage />} />
         <Route path="/:slug/analise" element={<ClientAnalysisPage />} />
+        <Route path="/:slug/calendario" element={<ClientCalendarPage />} />
         <Route path="/:slug/emp" element={<EmpPage />} />
         <Route path="/metodoEMP" element={<MetodoEMPPage />} />
         {/* Fallback to home */}
