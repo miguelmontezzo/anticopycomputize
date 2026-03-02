@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FadeIn } from '../components/Shared';
 import { supabase } from '../lib/supabase';
+import { Users, Globe, ClipboardList } from 'lucide-react';
 
 export default function AdminDashboardPage() {
     const [userEmail, setUserEmail] = useState('');
@@ -28,6 +29,60 @@ export default function AdminDashboardPage() {
 
             <FadeIn delay={0.2}>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div className="bg-black/40 border border-white/10 hover:border-accent-cyan/50 transition-colors p-8 rounded-2xl flex flex-col gap-4">
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-xl bg-accent-cyan/10 flex items-center justify-center">
+                                <Users className="w-5 h-5 text-accent-cyan" />
+                            </div>
+                            <h3 className="text-xl font-bold tracking-tight">Clientes</h3>
+                        </div>
+                        <p className="text-sm text-muted font-light leading-relaxed">
+                            Gerenciar empresas e pessoas cadastradas na plataforma.
+                        </p>
+                        <a
+                            href="/admin/clients"
+                            className="mt-auto inline-flex items-center text-accent-cyan text-sm font-medium hover:text-white transition-colors"
+                        >
+                            Acessar Clientes →
+                        </a>
+                    </div>
+
+                    <div className="bg-black/40 border border-white/10 hover:border-accent-purple/50 transition-colors p-8 rounded-2xl flex flex-col gap-4">
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-xl bg-accent-purple/10 flex items-center justify-center">
+                                <Globe className="w-5 h-5 text-accent-purple" />
+                            </div>
+                            <h3 className="text-xl font-bold tracking-tight">Páginas</h3>
+                        </div>
+                        <p className="text-sm text-muted font-light leading-relaxed">
+                            Crie landing pages dinâmicas associadas aos clientes.
+                        </p>
+                        <a
+                            href="/admin/pages"
+                            className="mt-auto inline-flex items-center text-accent-purple text-sm font-medium hover:text-white transition-colors"
+                        >
+                            Acessar Páginas →
+                        </a>
+                    </div>
+
+                    <div className="bg-black/40 border border-white/10 hover:border-orange-500/50 transition-colors p-8 rounded-2xl flex flex-col gap-4">
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-xl bg-orange-500/10 flex items-center justify-center">
+                                <ClipboardList className="w-5 h-5 text-orange-400" />
+                            </div>
+                            <h3 className="text-xl font-bold tracking-tight">Formulários & Leads</h3>
+                        </div>
+                        <p className="text-sm text-muted font-light leading-relaxed">
+                            Construa formulários dinâmicos e capture as respostas de clientes.
+                        </p>
+                        <a
+                            href="/admin/forms"
+                            className="mt-auto inline-flex items-center text-orange-400 text-sm font-medium hover:text-white transition-colors"
+                        >
+                            Acessar Formulários →
+                        </a>
+                    </div>
+
                     <div className="bg-black/40 border border-white/10 hover:border-accent-cyan/50 transition-colors p-8 rounded-2xl flex flex-col gap-4">
                         <h3 className="text-xl font-bold tracking-tight">Estratégia EMP</h3>
                         <p className="text-sm text-muted font-light leading-relaxed">

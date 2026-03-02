@@ -30,6 +30,12 @@ import AdminDashboardPage from "./pages/AdminDashboardPage";
 import AdminLayout from "./components/AdminLayout";
 import EmpResponseViewPage from "./pages/EmpResponseViewPage";
 import MetodoEMPPage from "./pages/MetodoEMPPage";
+import AdminClientsPage from "./pages/AdminClientsPage";
+import AdminPagesPage from "./pages/AdminPagesPage";
+import AdminFormsPage from "./pages/AdminFormsPage";
+import AdminFormBuilderPage from "./pages/AdminFormBuilderPage";
+import AdminFormResponsesPage from "./pages/AdminFormResponsesPage";
+import PublicPage from "./pages/PublicPage";
 
 const ComputizePage = () => {
 
@@ -467,10 +473,18 @@ export default function App() {
         <Route path="/computize/emp" element={<EmpPage />} />
         <Route path="/emp/view/:id" element={<EmpResponseViewPage />} />
 
+        {/* Dynamic Public Pages */}
+        <Route path="/p/:slug" element={<PublicPage />} />
+
         {/* Admin Routes */}
         <Route path="/admin/login" element={<AdminLoginPage />} />
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<AdminDashboardPage />} />
+          <Route path="clients" element={<AdminClientsPage />} />
+          <Route path="pages" element={<AdminPagesPage />} />
+          <Route path="forms" element={<AdminFormsPage />} />
+          <Route path="forms/:id" element={<AdminFormBuilderPage />} />
+          <Route path="forms/:id/responses" element={<AdminFormResponsesPage />} />
           <Route path="emp" element={<AdminEmpPage />} />
         </Route>
 

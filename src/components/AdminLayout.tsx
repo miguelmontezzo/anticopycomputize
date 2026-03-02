@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Outlet, useNavigate, useLocation, Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { motion } from 'motion/react';
-import { LayoutDashboard, FileText, LogOut, Loader2, Menu, X } from 'lucide-react';
+import { LayoutDashboard, FileText, LogOut, Loader2, Menu, X, Users, Globe, ClipboardList } from 'lucide-react';
 
 export default function AdminLayout() {
     const [loading, setLoading] = useState(true);
@@ -46,6 +46,9 @@ export default function AdminLayout() {
 
     const navItems = [
         { path: '/admin', icon: <LayoutDashboard className="w-5 h-5" />, label: 'Dashboard' },
+        { path: '/admin/clients', icon: <Users className="w-5 h-5" />, label: 'Clientes' },
+        { path: '/admin/pages', icon: <Globe className="w-5 h-5" />, label: 'Páginas' },
+        { path: '/admin/forms', icon: <ClipboardList className="w-5 h-5" />, label: 'Formulários' },
         { path: '/admin/emp', icon: <FileText className="w-5 h-5" />, label: 'Respostas EMP' },
     ];
 
@@ -88,8 +91,8 @@ export default function AdminLayout() {
                                 to={item.path}
                                 onClick={() => setSidebarOpen(false)}
                                 className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${isActive
-                                        ? 'bg-accent-cyan/10 text-accent-cyan border border-accent-cyan/20'
-                                        : 'text-muted hover:text-white hover:bg-white/5 border border-transparent'
+                                    ? 'bg-accent-cyan/10 text-accent-cyan border border-accent-cyan/20'
+                                    : 'text-muted hover:text-white hover:bg-white/5 border border-transparent'
                                     }`}
                             >
                                 {item.icon}
