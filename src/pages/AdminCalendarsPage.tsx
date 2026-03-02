@@ -29,8 +29,17 @@ function toIsoDateFromBR(raw?: string) {
   return `${m[3]}-${m[2]}-${m[1]}`;
 }
 
+function normalizeLooseText(text: string) {
+  return text
+    .replace(/[\u00A0\u2000-\u200B\u202F\u205F\u3000]/g, ' ')
+    .replace(/[ \t]+/g, ' ')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+}
+
 function parseCalendarText(text: string): ParsedItem[] {
-  const lines = text.split(/\r?\n/).map(l => l.trim());
+  const normalized = normalizeLooseText(text);
+  const lines = normalized.split(/\r?\n/).map(l => l.trim());
   const blocks: string[][] = [];
   let current: string[] = [];
 
@@ -44,13 +53,33 @@ function parseCalendarText(text: string): ParsedItem[] {
   }
   if (current.length) blocks.push(current);
 
+  if (!blocks.length) {
+    const fallbackStories = lines
+      .filter(l => /story\s*\d+/i.test(l) || /^\d+[\).\-]/.test(l))
+      .map(l => l.replace(/^\d+[\).\-]\s*/, '').trim())
+      .filter(Boolean);
+
+    return [{
+      post_date: new Date().toISOString().slice(0, 10),
+      day_label: 'Dia importado',
+      title: 'Conteúdo importado',
+      format: /reels/i.test(normalized) ? 'Reels' : /carrossel/i.test(normalized) ? 'Carrossel' : 'Post',
+      pillar: '-',
+      theme: '-',
+      objective: '-',
+      caption: normalized.slice(0, 1200) || '-',
+      stories: fallbackStories,
+    }];
+  }
+
   return blocks.map((b) => {
     const head = b[0] || '';
     const dayLabel = (head.match(/—\s*([^(]+)/)?.[1] || '').trim();
     const date = toIsoDateFromBR(head.match(/\((\d{2}\/\d{2}\/\d{4})\)/)?.[1]);
     const title = (head.match(/POST\s*\d+\s*—\s*(.+)$/i)?.[1] || head).trim();
 
-    const getAfter = (prefix: string) => (b.find(l => l.toLowerCase().startsWith(prefix.toLowerCase())) || '').replace(new RegExp(`^${prefix}\s*:??\s*`, 'i'), '').trim();
+    const getAfter = (prefix: string) => (b.find(l => l.toLowerCase().startsWith(prefix.toLowerCase())) || '').replace(new RegExp(`^${prefix}\s*:?
+?\s*`, 'i'), '').trim();
     const format = getAfter('Formato');
     const pillar = getAfter('Pilar');
     const theme = getAfter('Tema');
@@ -89,6 +118,8 @@ export default function AdminCalendarsPage() {
 
   const [parsedCreateItems, setParsedCreateItems] = useState<ParsedItem[]>([]);
   const [parsedAppendItems, setParsedAppendItems] = useState<ParsedItem[]>([]);
+  const [createRawText, setCreateRawText] = useState('');
+  const [appendRawText, setAppendRawText] = useState('');
 
   const [editorOpen, setEditorOpen] = useState(false);
   const [selectedCalendar, setSelectedCalendar] = useState<Calendar | null>(null);
@@ -123,9 +154,17 @@ export default function AdminCalendarsPage() {
     const text = await file.text();
     const parsed = parseCalendarText(text);
     if (!parsed.length) {
-      alert('Não consegui identificar posts no arquivo. Use o padrão: POST X — DIA (dd/mm/aaaa).');
+      alert('Não consegui identificar conteúdo.');
       return;
     }
+    if (mode === 'create') setParsedCreateItems(parsed);
+    else setParsedAppendItems(parsed);
+  };
+
+  const parsePastedText = (mode: 'create' | 'append') => {
+    const raw = mode === 'create' ? createRawText : appendRawText;
+    if (!raw.trim()) return alert('Cole algum texto primeiro.');
+    const parsed = parseCalendarText(raw);
     if (mode === 'create') setParsedCreateItems(parsed);
     else setParsedAppendItems(parsed);
   };
@@ -235,6 +274,13 @@ export default function AdminCalendarsPage() {
           <Upload className="w-4 h-4" /> Importar arquivo para estrutura inicial (.md/.txt)
           <input type="file" accept=".md,.txt" className="hidden" onChange={(e) => e.target.files?.[0] && handleFileParse(e.target.files[0], 'create')} />
         </label>
+        <textarea
+          value={createRawText}
+          onChange={(e) => setCreateRawText(e.target.value)}
+          placeholder="Ou cole aqui qualquer texto bruto que eu normalizo e estruturo..."
+          className="md:col-span-2 bg-black/40 border border-white/10 rounded-xl p-3 min-h-[120px]"
+        />
+        <button type="button" onClick={() => parsePastedText('create')} className="md:col-span-2 px-4 py-2 rounded-xl border border-cyan-500/30 text-cyan-200">Processar texto colado</button>
         {parsedCreateItems.length > 0 && <div className="md:col-span-2 text-xs text-cyan-300">{parsedCreateItems.length} conteúdos prontos para criar junto com o calendário.</div>}
 
         <button className="md:col-span-2 inline-flex items-center justify-center gap-2 px-4 py-3 bg-accent-cyan/20 border border-accent-cyan/30 rounded-xl"><Plus className="w-4 h-4" /> Criar novo calendário</button>
@@ -276,10 +322,17 @@ export default function AdminCalendarsPage() {
             <button onClick={() => setEditorOpen(false)} className="absolute top-3 right-3 p-2 rounded-full bg-white/10"><X className="w-4 h-4" /></button>
             <h3 className="text-xl font-bold mb-4">Editar conteúdos — {selectedCalendar.title}</h3>
 
-            <label className="mb-4 border border-white/10 rounded-xl p-3 text-sm flex items-center gap-2 cursor-pointer">
+            <label className="mb-3 border border-white/10 rounded-xl p-3 text-sm flex items-center gap-2 cursor-pointer">
               <Upload className="w-4 h-4" /> Importar arquivo para adicionar conteúdos (.md/.txt)
               <input type="file" accept=".md,.txt" className="hidden" onChange={(e) => e.target.files?.[0] && handleFileParse(e.target.files[0], 'append')} />
             </label>
+            <textarea
+              value={appendRawText}
+              onChange={(e) => setAppendRawText(e.target.value)}
+              placeholder="Ou cole texto bruto aqui para adicionar novos conteúdos..."
+              className="mb-3 w-full bg-black/40 border border-white/10 rounded-xl p-3 min-h-[110px]"
+            />
+            <button type="button" onClick={() => parsePastedText('append')} className="mb-4 px-4 py-2 rounded-xl border border-cyan-500/30 text-cyan-200">Processar texto colado</button>
             {parsedAppendItems.length > 0 && (
               <div className="mb-4 flex items-center justify-between bg-cyan-500/10 border border-cyan-500/20 rounded-lg p-3 text-sm">
                 <span>{parsedAppendItems.length} conteúdos prontos para adicionar.</span>
