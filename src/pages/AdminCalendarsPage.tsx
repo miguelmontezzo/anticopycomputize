@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { supabase } from '../lib/supabase';
-import { CalendarDays, Plus, Copy, Check, Edit2, Trash2, X, Upload } from 'lucide-react';
+import { CalendarDays, Plus, Copy, Check, Edit2, Trash2, X, Upload, Sparkles } from 'lucide-react';
+import { GoogleGenAI } from '@google/genai';
 
 type Client = { id: string; name: string };
 type Calendar = { id: string; slug: string; title: string; week_start: string; week_end: string; status: string; client_id: string };
@@ -87,6 +88,37 @@ function parseCalendarText(raw: string): ParsedItem[] {
   }];
 }
 
+async function parseCalendarTextWithAI(raw: string): Promise<ParsedItem[] | null> {
+  const apiKey = (import.meta as any).env.VITE_GEMINI_API_KEY;
+  if (!apiKey) return null;
+
+  try {
+    const ai = new GoogleGenAI({ apiKey });
+    const prompt = `Converta o texto abaixo para JSON de calendário de conteúdo.
+Retorne APENAS um JSON válido no formato:
+[{"post_date":"YYYY-MM-DD","day_label":"...","title":"...","format":"...","pillar":"...","theme":"...","objective":"...","caption":"...","stories":["...","..."]}]
+Se faltar campo, preencha com '-'.\n\nTEXTO:\n${raw}`;
+
+    const res = await ai.models.generateContent({ model: 'gemini-2.5-flash', contents: prompt });
+    const txt = (res.text || '').trim().replace(/^```json/i, '').replace(/^```/, '').replace(/```$/, '').trim();
+    const parsed = JSON.parse(txt);
+    if (!Array.isArray(parsed)) return null;
+    return parsed.map((p: any) => ({
+      post_date: p.post_date || new Date().toISOString().slice(0, 10),
+      day_label: p.day_label || 'Dia',
+      title: p.title || 'Conteúdo importado',
+      format: p.format || 'Post',
+      pillar: p.pillar || '-',
+      theme: p.theme || '-',
+      objective: p.objective || '-',
+      caption: p.caption || '-',
+      stories: Array.isArray(p.stories) ? p.stories : [],
+    }));
+  } catch {
+    return null;
+  }
+}
+
 export default function AdminCalendarsPage() {
   const [clients, setClients] = useState<Client[]>([]);
   const [items, setItems] = useState<Calendar[]>([]);
@@ -127,7 +159,8 @@ export default function AdminCalendarsPage() {
     const raw = mode === 'create' ? createRawText : appendRawText;
     if (!raw.trim()) return alert('Cole um texto para processar.');
     setProcessing(true);
-    const parsed = parseCalendarText(raw);
+    const aiParsed = await parseCalendarTextWithAI(raw);
+    const parsed = aiParsed && aiParsed.length ? aiParsed : parseCalendarText(raw);
     if (mode === 'create') setParsedCreateItems(parsed);
     else setParsedAppendItems(parsed);
     setProcessing(false);
@@ -138,7 +171,8 @@ export default function AdminCalendarsPage() {
     if (!(ext.endsWith('.md') || ext.endsWith('.txt'))) return alert('Use .md ou .txt');
     setProcessing(true);
     const text = await file.text();
-    const parsed = parseCalendarText(text);
+    const aiParsed = await parseCalendarTextWithAI(text);
+    const parsed = aiParsed && aiParsed.length ? aiParsed : parseCalendarText(text);
     if (mode === 'create') setParsedCreateItems(parsed);
     else setParsedAppendItems(parsed);
     setProcessing(false);
@@ -252,7 +286,7 @@ export default function AdminCalendarsPage() {
 
       <header className="mb-8 border-b border-white/10 pb-5">
         <h1 className="text-4xl font-bold tracking-tighter mb-2 flex items-center gap-3"><CalendarDays className="w-8 h-8 text-accent-cyan" /> Calendários</h1>
-        <p className="text-muted">Importe por arquivo ou texto colado e gere cards automaticamente.</p>
+        <p className="text-muted flex items-center gap-2"><Sparkles className="w-4 h-4 text-cyan-300" /> Importe por arquivo ou texto colado e gere cards automaticamente com IA (fallback regex).</p>
       </header>
 
       <form onSubmit={createCalendar} className="bg-black/40 border border-white/10 rounded-2xl p-6 mb-8 grid grid-cols-1 md:grid-cols-2 gap-4">
