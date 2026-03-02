@@ -1,5 +1,4 @@
 import React, { useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { computoCalendarPosts, computoWeekLabel, type ApprovalStatus } from '../data/computoCalendar';
 
 type StoryReview = { status: ApprovalStatus; feedback?: string };
@@ -124,9 +123,7 @@ export default function ContentCalendarBoard({ slug, adminMode = false }: { slug
             <h1 className="text-3xl md:text-5xl font-bold tracking-tight">{slug} — Semana {computoWeekLabel}</h1>
             <p className="text-white/60 mt-3 max-w-3xl">Visualize por data e aprove/reprove post + cada story em cards separados.</p>
           </div>
-          {!adminMode ? (
-            <Link to={`/${slug}/ia-service`} className="px-4 py-2 rounded-lg border border-white/20 hover:bg-white/10">Voltar</Link>
-          ) : (
+          {adminMode && (
             <span className="px-4 py-2 rounded-lg border border-cyan-400/30 text-cyan-300 text-sm">Modo Admin</span>
           )}
         </div>
