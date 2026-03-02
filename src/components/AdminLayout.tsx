@@ -69,15 +69,22 @@ export default function AdminLayout() {
           setEmployeeId(emp.id);
           setEmployeeName(emp.name);
         } else {
-          // Not in employees — check if this is a portal-only user
-          const { data: clientUser } = await supabase
+          // Not in employees — check if this is a portal-only user.
+          // Use error handling so a missing table (404) doesn't block admin access.
+          const { data: clientUser, error: cuError } = await supabase
             .from('client_users')
             .select('id')
             .eq('user_id', session.user.id)
             .maybeSingle();
 
-          if (!clientUser) {
-            // Also check by email against clients table (pre-first-login portal users)
+          if (!cuError) {
+            // Table exists — check result
+            if (clientUser) {
+              navigate('/portal/login', { replace: true });
+              setLoading(false);
+              return;
+            }
+            // Not found in client_users — also check by email (pre-first-login)
             const { data: clientByEmail } = await supabase
               .from('clients')
               .select('id')
@@ -89,12 +96,8 @@ export default function AdminLayout() {
               setLoading(false);
               return;
             }
-          } else {
-            navigate('/portal/login', { replace: true });
-            setLoading(false);
-            return;
           }
-          // Not in employees, not a portal user → treat as owner/superuser
+          // cuError (table doesn't exist yet) or no match → treat as owner/superuser
         }
       }
 
