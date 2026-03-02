@@ -2,23 +2,18 @@ import React, { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { computoCalendarPosts, computoWeekLabel, type ApprovalStatus } from '../data/computoCalendar';
 
+type StoryReview = { status: ApprovalStatus; feedback?: string };
+
 type ReviewItem = {
   postStatus: ApprovalStatus;
   postFeedback?: string;
-  storiesStatus: ApprovalStatus;
-  storiesFeedback?: string;
+  stories: StoryReview[];
 };
 
 type ReviewMap = Record<string, ReviewItem>;
-
-type RejectTarget = 'post' | 'stories';
+type RejectTarget = 'post' | 'story';
 
 const STORAGE_PREFIX = 'anticopy.calendar.reviews';
-
-const defaultReview: ReviewItem = {
-  postStatus: 'pendente',
-  storiesStatus: 'pendente',
-};
 
 function statusClasses(status: ApprovalStatus) {
   if (status === 'aprovado') return 'bg-emerald-500/15 text-emerald-300 border-emerald-400/30';
@@ -49,6 +44,7 @@ export default function ContentCalendarBoard({ slug, adminMode = false }: { slug
   const [modalOpen, setModalOpen] = useState(false);
   const [rejectDate, setRejectDate] = useState<string>('');
   const [rejectTarget, setRejectTarget] = useState<RejectTarget>('post');
+  const [rejectStoryIndex, setRejectStoryIndex] = useState<number | null>(null);
   const [feedback, setFeedback] = useState('');
 
   const save = (next: ReviewMap) => {
@@ -56,42 +52,65 @@ export default function ContentCalendarBoard({ slug, adminMode = false }: { slug
     localStorage.setItem(storageKey, JSON.stringify(next));
   };
 
-  const current = (date: string): ReviewItem => reviews[date] || defaultReview;
-
-  const approve = (date: string, target: RejectTarget) => {
-    const c = current(date);
-    const updated: ReviewItem =
-      target === 'post'
-        ? { ...c, postStatus: 'aprovado', postFeedback: '' }
-        : { ...c, storiesStatus: 'aprovado', storiesFeedback: '' };
-    save({ ...reviews, [date]: updated });
+  const current = (date: string, storiesCount: number): ReviewItem => {
+    const existing = reviews[date];
+    if (!existing) return { postStatus: 'pendente', stories: Array.from({ length: storiesCount }, () => ({ status: 'pendente' as ApprovalStatus })) };
+    const stories = Array.from({ length: storiesCount }, (_, i) => existing.stories?.[i] || { status: 'pendente' as ApprovalStatus });
+    return { ...existing, stories };
   };
 
-  const reset = (date: string, target: RejectTarget) => {
-    const c = current(date);
-    const updated: ReviewItem =
-      target === 'post'
-        ? { ...c, postStatus: 'pendente', postFeedback: '' }
-        : { ...c, storiesStatus: 'pendente', storiesFeedback: '' };
-    save({ ...reviews, [date]: updated });
+  const approvePost = (date: string, storiesCount: number) => {
+    const c = current(date, storiesCount);
+    save({ ...reviews, [date]: { ...c, postStatus: 'aprovado', postFeedback: '' } });
   };
 
-  const openRejectModal = (date: string, target: RejectTarget) => {
+  const resetPost = (date: string, storiesCount: number) => {
+    const c = current(date, storiesCount);
+    save({ ...reviews, [date]: { ...c, postStatus: 'pendente', postFeedback: '' } });
+  };
+
+  const approveStory = (date: string, storiesCount: number, idx: number) => {
+    const c = current(date, storiesCount);
+    const nextStories = [...c.stories];
+    nextStories[idx] = { status: 'aprovado' };
+    save({ ...reviews, [date]: { ...c, stories: nextStories } });
+  };
+
+  const resetStory = (date: string, storiesCount: number, idx: number) => {
+    const c = current(date, storiesCount);
+    const nextStories = [...c.stories];
+    nextStories[idx] = { status: 'pendente' };
+    save({ ...reviews, [date]: { ...c, stories: nextStories } });
+  };
+
+  const openRejectModal = (date: string, target: RejectTarget, storiesCount: number, storyIndex?: number) => {
+    const c = current(date, storiesCount);
     setRejectDate(date);
     setRejectTarget(target);
-    const c = current(date);
-    setFeedback(target === 'post' ? c.postFeedback || '' : c.storiesFeedback || '');
+    if (target === 'story' && typeof storyIndex === 'number') {
+      setRejectStoryIndex(storyIndex);
+      setFeedback(c.stories[storyIndex]?.feedback || '');
+    } else {
+      setRejectStoryIndex(null);
+      setFeedback(c.postFeedback || '');
+    }
     setModalOpen(true);
   };
 
   const confirmReject = () => {
     if (!feedback.trim()) return;
-    const c = current(rejectDate);
-    const updated: ReviewItem =
-      rejectTarget === 'post'
-        ? { ...c, postStatus: 'reprovado', postFeedback: feedback.trim() }
-        : { ...c, storiesStatus: 'reprovado', storiesFeedback: feedback.trim() };
-    save({ ...reviews, [rejectDate]: updated });
+    const sourcePost = posts.find((p) => p.date === rejectDate);
+    if (!sourcePost) return;
+    const c = current(rejectDate, sourcePost.stories.length);
+
+    if (rejectTarget === 'post') {
+      save({ ...reviews, [rejectDate]: { ...c, postStatus: 'reprovado', postFeedback: feedback.trim() } });
+    } else if (rejectStoryIndex !== null) {
+      const nextStories = [...c.stories];
+      nextStories[rejectStoryIndex] = { status: 'reprovado', feedback: feedback.trim() };
+      save({ ...reviews, [rejectDate]: { ...c, stories: nextStories } });
+    }
+
     setModalOpen(false);
     setFeedback('');
   };
@@ -103,7 +122,7 @@ export default function ContentCalendarBoard({ slug, adminMode = false }: { slug
           <div>
             <div className="text-xs uppercase tracking-widest text-white/50 mb-2">Calendário de Conteúdo</div>
             <h1 className="text-3xl md:text-5xl font-bold tracking-tight">{slug} — Semana {computoWeekLabel}</h1>
-            <p className="text-white/60 mt-3 max-w-3xl">Visualize por data, aprove/reprove separado para post e stories.</p>
+            <p className="text-white/60 mt-3 max-w-3xl">Visualize por data e aprove/reprove post + cada story em cards separados.</p>
           </div>
           {!adminMode ? (
             <Link to={`/${slug}/ia-service`} className="px-4 py-2 rounded-lg border border-white/20 hover:bg-white/10">Voltar</Link>
@@ -119,11 +138,7 @@ export default function ContentCalendarBoard({ slug, adminMode = false }: { slug
             { key: 'carrossel', label: 'Carrossel' },
             { key: 'post-estatico', label: 'Post Estático' },
           ].map((f) => (
-            <button
-              key={f.key}
-              onClick={() => setFormatFilter(f.key as any)}
-              className={`px-3 py-1.5 rounded-full border text-sm ${formatFilter === f.key ? 'border-cyan-400/40 bg-cyan-400/10 text-cyan-200' : 'border-white/20 text-white/70'}`}
-            >
+            <button key={f.key} onClick={() => setFormatFilter(f.key as any)} className={`px-3 py-1.5 rounded-full border text-sm ${formatFilter === f.key ? 'border-cyan-400/40 bg-cyan-400/10 text-cyan-200' : 'border-white/20 text-white/70'}`}>
               {f.label}
             </button>
           ))}
@@ -131,7 +146,7 @@ export default function ContentCalendarBoard({ slug, adminMode = false }: { slug
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
           {visiblePosts.map((post) => {
-            const r = current(post.date);
+            const r = current(post.date, post.stories.length);
             return (
               <article key={post.date} className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 flex flex-col gap-4">
                 <div className="flex items-start justify-between gap-3">
@@ -142,12 +157,6 @@ export default function ContentCalendarBoard({ slug, adminMode = false }: { slug
                   <span className="text-xs px-3 py-1 rounded-full border border-white/20 bg-white/5">{post.date}</span>
                 </div>
 
-                <div className="text-sm text-white/80 space-y-1">
-                  <p><strong>Formato:</strong> {post.format}</p>
-                  <p><strong>Pilar:</strong> {post.pillar}</p>
-                  <p><strong>Tema:</strong> {post.theme}</p>
-                </div>
-
                 <section className="border border-white/10 rounded-xl p-3 bg-black/20">
                   <div className="flex items-center justify-between mb-2">
                     <h3 className="text-sm font-semibold">Post do dia</h3>
@@ -156,25 +165,33 @@ export default function ContentCalendarBoard({ slug, adminMode = false }: { slug
                   <p className="text-sm text-white/70 leading-relaxed mb-3">{post.caption}</p>
                   {r.postFeedback && <p className="text-xs text-rose-200 mb-2">Direcionamento: {r.postFeedback}</p>}
                   <div className="flex gap-2">
-                    <button onClick={() => approve(post.date, 'post')} className="flex-1 px-3 py-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-emerald-200 text-sm">Aprovar</button>
-                    <button onClick={() => openRejectModal(post.date, 'post')} className="flex-1 px-3 py-2 rounded-lg border border-rose-500/30 bg-rose-500/10 text-rose-200 text-sm">Reprovar</button>
-                    <button onClick={() => reset(post.date, 'post')} className="px-3 py-2 rounded-lg border border-white/20 text-sm">Reset</button>
+                    <button onClick={() => approvePost(post.date, post.stories.length)} className="flex-1 px-3 py-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-emerald-200 text-sm">Aprovar</button>
+                    <button onClick={() => openRejectModal(post.date, 'post', post.stories.length)} className="flex-1 px-3 py-2 rounded-lg border border-rose-500/30 bg-rose-500/10 text-rose-200 text-sm">Reprovar</button>
+                    <button onClick={() => resetPost(post.date, post.stories.length)} className="px-3 py-2 rounded-lg border border-white/20 text-sm">Reset</button>
                   </div>
                 </section>
 
                 <section className="border border-white/10 rounded-xl p-3 bg-black/20">
-                  <div className="flex items-center justify-between mb-2">
-                    <h3 className="text-sm font-semibold">Stories do dia</h3>
-                    <span className={`text-xs px-2 py-0.5 rounded-full border ${statusClasses(r.storiesStatus)}`}>{r.storiesStatus}</span>
-                  </div>
-                  <ul className="list-disc pl-5 text-sm text-white/70 space-y-1 mb-3">
-                    {post.stories.map((story) => <li key={story}>{story}</li>)}
-                  </ul>
-                  {r.storiesFeedback && <p className="text-xs text-rose-200 mb-2">Direcionamento: {r.storiesFeedback}</p>}
-                  <div className="flex gap-2">
-                    <button onClick={() => approve(post.date, 'stories')} className="flex-1 px-3 py-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-emerald-200 text-sm">Aprovar</button>
-                    <button onClick={() => openRejectModal(post.date, 'stories')} className="flex-1 px-3 py-2 rounded-lg border border-rose-500/30 bg-rose-500/10 text-rose-200 text-sm">Reprovar</button>
-                    <button onClick={() => reset(post.date, 'stories')} className="px-3 py-2 rounded-lg border border-white/20 text-sm">Reset</button>
+                  <h3 className="text-sm font-semibold mb-3">Stories do dia (cards separados)</h3>
+                  <div className="space-y-2">
+                    {post.stories.map((story, idx) => {
+                      const sr = r.stories[idx] || { status: 'pendente' as ApprovalStatus };
+                      return (
+                        <div key={story} className="border border-white/10 rounded-lg p-3 bg-black/30">
+                          <div className="flex items-center justify-between mb-2">
+                            <p className="text-sm text-white/80">Story {idx + 1}</p>
+                            <span className={`text-xs px-2 py-0.5 rounded-full border ${statusClasses(sr.status)}`}>{sr.status}</span>
+                          </div>
+                          <p className="text-sm text-white/70 mb-2">{story}</p>
+                          {sr.feedback && <p className="text-xs text-rose-200 mb-2">Direcionamento: {sr.feedback}</p>}
+                          <div className="flex gap-2">
+                            <button onClick={() => approveStory(post.date, post.stories.length, idx)} className="flex-1 px-2 py-1.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-emerald-200 text-xs">Aprovar</button>
+                            <button onClick={() => openRejectModal(post.date, 'story', post.stories.length, idx)} className="flex-1 px-2 py-1.5 rounded-lg border border-rose-500/30 bg-rose-500/10 text-rose-200 text-xs">Reprovar</button>
+                            <button onClick={() => resetStory(post.date, post.stories.length, idx)} className="px-2 py-1.5 rounded-lg border border-white/20 text-xs">Reset</button>
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 </section>
               </article>
@@ -188,13 +205,10 @@ export default function ContentCalendarBoard({ slug, adminMode = false }: { slug
           <div className="absolute inset-0 bg-black/80" onClick={() => setModalOpen(false)} />
           <div className="relative w-full max-w-lg rounded-2xl border border-white/15 bg-[#0B0B0B] p-5">
             <h3 className="text-lg font-bold mb-2">Direcionamento da reprovação</h3>
-            <p className="text-sm text-white/60 mb-3">{rejectDate} · {rejectTarget === 'post' ? 'Post' : 'Stories'}</p>
-            <textarea
-              value={feedback}
-              onChange={(e) => setFeedback(e.target.value)}
-              className="w-full min-h-[120px] rounded-xl border border-white/20 bg-black/40 p-3 text-sm"
-              placeholder="Explique exatamente o ajuste necessário..."
-            />
+            <p className="text-sm text-white/60 mb-3">
+              {rejectDate} · {rejectTarget === 'post' ? 'Post' : `Story ${rejectStoryIndex !== null ? rejectStoryIndex + 1 : ''}`}
+            </p>
+            <textarea value={feedback} onChange={(e) => setFeedback(e.target.value)} className="w-full min-h-[120px] rounded-xl border border-white/20 bg-black/40 p-3 text-sm" placeholder="Explique exatamente o ajuste necessário..." />
             <div className="mt-4 flex justify-end gap-2">
               <button onClick={() => setModalOpen(false)} className="px-4 py-2 rounded-lg border border-white/20">Cancelar</button>
               <button onClick={confirmReject} className="px-4 py-2 rounded-lg bg-rose-500/20 border border-rose-500/30 text-rose-200">Salvar reprovação</button>
