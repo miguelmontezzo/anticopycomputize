@@ -68,8 +68,34 @@ export default function AdminLayout() {
           setRole(emp.role as EmployeeRole);
           setEmployeeId(emp.id);
           setEmployeeName(emp.name);
+        } else {
+          // Not in employees — check if this is a portal-only user
+          const { data: clientUser } = await supabase
+            .from('client_users')
+            .select('id')
+            .eq('user_id', session.user.id)
+            .maybeSingle();
+
+          if (!clientUser) {
+            // Also check by email against clients table (pre-first-login portal users)
+            const { data: clientByEmail } = await supabase
+              .from('clients')
+              .select('id')
+              .eq('email', email)
+              .maybeSingle();
+
+            if (clientByEmail) {
+              navigate('/portal/login', { replace: true });
+              setLoading(false);
+              return;
+            }
+          } else {
+            navigate('/portal/login', { replace: true });
+            setLoading(false);
+            return;
+          }
+          // Not in employees, not a portal user → treat as owner/superuser
         }
-        // If not in employees table → treat as admin (owner/superuser)
       }
 
       setLoading(false);

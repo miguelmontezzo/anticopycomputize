@@ -48,6 +48,12 @@ import AdminSitePagesPage from "./pages/AdminSitePagesPage";
 import AdminSitePageEditorPage from "./pages/AdminSitePageEditorPage";
 import AdminTeamPage from "./pages/AdminTeamPage";
 import AdminTasksPage from "./pages/AdminTasksPage";
+import PortalLayout from "./components/PortalLayout";
+import ClientPortalLoginPage from "./pages/portal/ClientPortalLoginPage";
+import PortalCallbackPage from "./pages/portal/PortalCallbackPage";
+import PortalCalendarPage from "./pages/portal/PortalCalendarPage";
+import PortalNotificationsPage from "./pages/portal/PortalNotificationsPage";
+import PortalMeetingsPage from "./pages/portal/PortalMeetingsPage";
 
 const ComputizePage = () => {
 
@@ -507,6 +513,16 @@ export default function App() {
           <Route path="site-pages/:slug" element={<AdminSitePageEditorPage />} />
           <Route path="equipe" element={<AdminTeamPage />} />
           <Route path="tarefas" element={<AdminTasksPage />} />
+        </Route>
+
+        {/* Portal Routes */}
+        <Route path="/portal/login" element={<ClientPortalLoginPage />} />
+        <Route path="/portal/callback" element={<PortalCallbackPage />} />
+        <Route path="/portal/:slug" element={<PortalLayout />}>
+          <Route index element={<Navigate to="calendario" replace />} />
+          <Route path="calendario" element={<PortalCalendarPage />} />
+          <Route path="notificacoes" element={<PortalNotificationsPage />} />
+          <Route path="reunioes" element={<PortalMeetingsPage />} />
         </Route>
 
         <Route path="/ia-service" element={<IAServicePage />} />
