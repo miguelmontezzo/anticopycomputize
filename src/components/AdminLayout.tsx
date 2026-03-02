@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Outlet, useNavigate, useLocation, Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { motion } from 'motion/react';
-import { LayoutDashboard, FileText, LogOut, Loader2, Menu, X, Users, Globe, ClipboardList } from 'lucide-react';
+import { LayoutDashboard, FileText, LogOut, Loader2, Menu, X, Users, Globe, ClipboardList, FolderKanban } from 'lucide-react';
 
 export default function AdminLayout() {
     const [loading, setLoading] = useState(true);
@@ -11,6 +11,13 @@ export default function AdminLayout() {
     const location = useLocation();
 
     useEffect(() => {
+        // Se Supabase não estiver configurado, evita crash e redireciona.
+        if (!supabase) {
+            navigate('/admin/login', { replace: true });
+            setLoading(false);
+            return;
+        }
+
         const checkSession = async () => {
             const { data: { session }, error } = await supabase.auth.getSession();
 
@@ -32,7 +39,7 @@ export default function AdminLayout() {
     }, [navigate]);
 
     const handleLogout = async () => {
-        await supabase.auth.signOut();
+        if (supabase) await supabase.auth.signOut();
         navigate('/admin/login', { replace: true });
     };
 
@@ -46,7 +53,8 @@ export default function AdminLayout() {
 
     const navItems = [
         { path: '/admin', icon: <LayoutDashboard className="w-5 h-5" />, label: 'Dashboard' },
-        { path: '/admin/clients', icon: <Users className="w-5 h-5" />, label: 'Clientes' },
+        { path: '/admin/clients', icon: <Users className="w-5 h-5" />, label: 'Clientes Getais' },
+        { path: '/admin/clientes', icon: <FolderKanban className="w-5 h-5" />, label: 'Clientes & Rotas' },
         { path: '/admin/pages', icon: <Globe className="w-5 h-5" />, label: 'Páginas' },
         { path: '/admin/forms', icon: <ClipboardList className="w-5 h-5" />, label: 'Formulários' },
         { path: '/admin/emp', icon: <FileText className="w-5 h-5" />, label: 'Respostas EMP' },

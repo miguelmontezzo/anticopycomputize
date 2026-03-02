@@ -31,11 +31,14 @@ import AdminLayout from "./components/AdminLayout";
 import EmpResponseViewPage from "./pages/EmpResponseViewPage";
 import MetodoEMPPage from "./pages/MetodoEMPPage";
 import AdminClientsPage from "./pages/AdminClientsPage";
+import AdminClientRoutesPage from "./pages/AdminClientRoutesPage";
 import AdminPagesPage from "./pages/AdminPagesPage";
 import AdminFormsPage from "./pages/AdminFormsPage";
 import AdminFormBuilderPage from "./pages/AdminFormBuilderPage";
 import AdminFormResponsesPage from "./pages/AdminFormResponsesPage";
 import PublicPage from "./pages/PublicPage";
+import ClientIAServicePage from "./pages/ClientIAServicePage";
+import ClientAnalysisPage from "./pages/ClientAnalysisPage";
 
 const ComputizePage = () => {
 
@@ -319,7 +322,7 @@ const ComputizePage = () => {
           <FadeIn delay={0.5}>
             <div className="glass-card p-4 rounded-2xl overflow-hidden group">
               <img
-                src="https://i.ibb.co/xKH32Ddj/freepik-carregue-trs-ativos-no-espao-de-trabalho-uma-foto-28406.png"
+                src="https://i.ibb.co/xKH32Dadj/freepik-carregue-trs-ativos-no-espao-de-trabalho-uma-foto-28406.png"
                 alt="Abrint Event"
                 className="w-full h-full object-cover rounded-xl grayscale group-hover:grayscale-0 transition-all duration-700 scale-105 group-hover:scale-100"
                 referrerPolicy="no-referrer"
@@ -486,9 +489,13 @@ export default function App() {
           <Route path="forms/:id" element={<AdminFormBuilderPage />} />
           <Route path="forms/:id/responses" element={<AdminFormResponsesPage />} />
           <Route path="emp" element={<AdminEmpPage />} />
+          <Route path="clientes" element={<AdminClientRoutesPage />} />
         </Route>
 
         <Route path="/ia-service" element={<IAServicePage />} />
+        <Route path="/:slug/ia-service" element={<ClientIAServicePage />} />
+        <Route path="/:slug/analise" element={<ClientAnalysisPage />} />
+        <Route path="/:slug/emp" element={<EmpPage />} />
         <Route path="/metodoEMP" element={<MetodoEMPPage />} />
         {/* Fallback to home */}
         <Route path="*" element={<Navigate to="/" replace />} />

@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { FadeIn } from '../components/Shared';
 import { supabase } from '../lib/supabase';
-import { Users, Globe, ClipboardList } from 'lucide-react';
+import { Users, Globe, ClipboardList, FolderKanban, FileText } from 'lucide-react';
 
 export default function AdminDashboardPage() {
     const [userEmail, setUserEmail] = useState('');
 
     useEffect(() => {
         const getUser = async () => {
+            if (!supabase) return;
             const { data: { user } } = await supabase.auth.getUser();
             if (user?.email) {
                 setUserEmail(user.email);
@@ -34,7 +35,7 @@ export default function AdminDashboardPage() {
                             <div className="w-10 h-10 rounded-xl bg-accent-cyan/10 flex items-center justify-center">
                                 <Users className="w-5 h-5 text-accent-cyan" />
                             </div>
-                            <h3 className="text-xl font-bold tracking-tight">Clientes</h3>
+                            <h3 className="text-xl font-bold tracking-tight">Clientes Getais</h3>
                         </div>
                         <p className="text-sm text-muted font-light leading-relaxed">
                             Gerenciar empresas e pessoas cadastradas na plataforma.
@@ -44,6 +45,21 @@ export default function AdminDashboardPage() {
                             className="mt-auto inline-flex items-center text-accent-cyan text-sm font-medium hover:text-white transition-colors"
                         >
                             Acessar Clientes →
+                        </a>
+                    </div>
+
+                    <div className="bg-black/40 border border-white/10 hover:border-accent-cyan/50 transition-colors p-8 rounded-2xl flex flex-col gap-4">
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-xl bg-accent-cyan/10 flex items-center justify-center">
+                                <FolderKanban className="w-5 h-5 text-accent-cyan" />
+                            </div>
+                            <h3 className="text-xl font-bold tracking-tight">Clientes & Rotas</h3>
+                        </div>
+                        <p className="text-sm text-muted font-light leading-relaxed">
+                            Crie novas operações por cliente: apresentação, análise EMP e formulário.
+                        </p>
+                        <a href="/admin/clientes" className="mt-auto inline-flex items-center text-accent-cyan text-sm font-medium hover:text-white transition-colors">
+                            Gerenciar clientes & rotas →
                         </a>
                     </div>
 
@@ -84,15 +100,17 @@ export default function AdminDashboardPage() {
                     </div>
 
                     <div className="bg-black/40 border border-white/10 hover:border-accent-cyan/50 transition-colors p-8 rounded-2xl flex flex-col gap-4">
-                        <h3 className="text-xl font-bold tracking-tight">Estratégia EMP</h3>
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-xl bg-accent-cyan/10 flex items-center justify-center">
+                                <FileText className="w-5 h-5 text-accent-cyan" />
+                            </div>
+                            <h3 className="text-xl font-bold tracking-tight">Estratégia EMP</h3>
+                        </div>
                         <p className="text-sm text-muted font-light leading-relaxed">
                             Respostas, capturas de logins e anexos do Diagnóstico Estratégico.
                         </p>
-                        <a
-                            href="/admin/emp"
-                            className="mt-auto inline-flex items-center text-accent-cyan text-sm font-medium hover:text-white transition-colors"
-                        >
-                            Acessar Ferramenta →
+                        <a href="/admin/emp" className="mt-auto inline-flex items-center text-accent-cyan text-sm font-medium hover:text-white transition-colors">
+                            Acessar respostas →
                         </a>
                     </div>
                 </div>

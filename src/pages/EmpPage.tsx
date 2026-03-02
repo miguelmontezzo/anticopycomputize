@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { useParams } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { FadeIn } from '../components/Shared';
 import { Check, ArrowRight, ArrowLeft, Loader2 } from 'lucide-react';
@@ -59,6 +60,10 @@ const STEPS = [
 ];
 
 export default function EmpPage() {
+    const { slug } = useParams();
+    const clientSlug = slug || 'computize';
+    const clientName = slug ? slug.replace(/-/g, ' ') : 'Computize';
+
     const [currentStep, setCurrentStep] = useState(-1);
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
@@ -114,9 +119,15 @@ export default function EmpPage() {
             }
 
             // Atribui os links à submissão do form
-            const finalData = { ...formData, documentos_urls: uploadedUrls };
+            const finalData = { ...formData, documentos_urls: uploadedUrls, client_slug: clientSlug } as any;
 
-            const { error: insertError } = await supabase.from('emp_responses').insert([finalData]);
+            // Compatibilidade: tenta com client_slug e, se a coluna não existir, faz fallback
+            let { error: insertError } = await supabase.from('emp_responses').insert([finalData]);
+            if (insertError && /client_slug|column/i.test(insertError.message || '')) {
+                const { client_slug, ...fallbackData } = finalData;
+                const retry = await supabase.from('emp_responses').insert([fallbackData]);
+                insertError = retry.error;
+            }
             if (insertError) throw insertError;
 
             setSuccess(true);
@@ -248,7 +259,7 @@ export default function EmpPage() {
                                 className="space-y-8 text-left"
                             >
                                 <div className="mb-12 space-y-4">
-                                    <h3 className="text-2xl font-bold tracking-tighter text-accent-cyan">Onde a Computize Está Hoje</h3>
+                                    <h3 className="text-2xl font-bold tracking-tighter text-accent-cyan">Onde {clientName} Está Hoje</h3>
                                     <div className="text-muted font-light leading-relaxed space-y-4">
                                         <p>A Computize é uma empresa especializada em proteção DDoS de alta performance, operando com nuvem de mitigação sob demanda 24/7. Seu core business está centrado em garantir que provedores, ISPs e empresas com infraestrutura crítica permaneçam online independentemente do volume ou intensidade dos ataques recebidos.</p>
                                         <p>O que a empresa entrega na prática não é apenas tecnologia. É continuidade de operação, segurança de receita e tranquilidade operacional para negócios que literalmente não podem parar. Esse valor estratégico, no entanto, ainda não está sendo comunicado com a profundidade que merece.</p>
@@ -283,7 +294,7 @@ export default function EmpPage() {
                                 className="space-y-8 text-left"
                             >
                                 <div className="mb-12 space-y-4">
-                                    <h3 className="text-2xl font-bold tracking-tighter text-accent-purple">O Que Trava a Computize Hoje</h3>
+                                    <h3 className="text-2xl font-bold tracking-tighter text-accent-purple">O Que Trava {clientName} Hoje</h3>
                                     <div className="text-muted font-light leading-relaxed space-y-4">
                                         <p>A Computize tem tudo que uma empresa precisa para dominar o mercado: operação real, entrega consistente e infraestrutura própria. O Gargalo Central é a Técnica Sem Narrativa. A comunicação atual fala para quem já sabe que precisa de proteção DDoS, mas não desperta urgência em quem ainda não viveu um ataque.</p>
                                         <p>Outro problema é a Invisibilidade das Provas. A empresa vive de confiança, e confiança se constrói com provas concretas. Hoje as provas são invisíveis para o mercado: não há histórias públicas, depoimentos ou números de impacto evidentes para quem avalia de fora.</p>
