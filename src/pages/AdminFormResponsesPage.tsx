@@ -73,16 +73,16 @@ export default function AdminFormResponsesPage() {
     if (loading) {
         return (
             <div className="flex items-center justify-center min-h-[60vh]">
-                <Loader2 className="w-8 h-8 animate-spin text-orange-400" />
+                <Loader2 className="w-6 h-6 animate-spin text-gray-400" />
             </div>
         );
     }
 
-    if (!form) return <div className="p-12 text-center text-white/50">Formulário não encontrado.</div>;
+    if (!form) return <div className="p-12 text-center text-gray-500">Formulário não encontrado.</div>;
 
     return (
-        <div className="p-6 md:p-12">
-            <header className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-white/10 pb-6">
+        <div className="p-6 md:p-10 max-w-5xl mx-auto">
+            <header className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-gray-200 pb-6">
                 <FadeIn>
                     <button
                         onClick={() => navigate('/admin/forms')}

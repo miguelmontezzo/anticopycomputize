@@ -135,25 +135,23 @@ export default function AdminEmpPage() {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-bg-primary flex items-center justify-center text-white font-bold tracking-widest uppercase">
-                <span className="animate-pulse">Carregando Diagnósticos...</span>
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center text-gray-500 font-medium">
+                <span>Carregando diagnósticos...</span>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-transparent text-white p-6 md:p-12 overflow-x-hidden">
+        <div className="min-h-screen bg-gray-50 text-gray-900 p-6 md:p-10 overflow-x-hidden">
             <div className="max-w-7xl mx-auto">
-                <header className="mb-12 border-b border-white/10 pb-6 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+                <header className="mb-8 border-b border-gray-200 pb-6 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
                     <div>
-                        <FadeIn>
-                            <h1 className="text-4xl font-bold tracking-tighter mb-2">Painel de Respostas EMP</h1>
-                            <p className="text-muted font-light">Diagnósticos estratégicos e acessos confidenciais capturados pelo formulário.</p>
-                        </FadeIn>
+                        <h1 className="text-2xl font-semibold text-gray-900 mb-1">Respostas EMP</h1>
+                        <p className="text-sm text-gray-500">Diagnósticos estratégicos capturados pelo formulário.</p>
                     </div>
-                    <div className="bg-white/5 border border-white/10 px-4 py-2 rounded-lg text-sm text-white/70 flex items-center gap-2">
-                        <FolderOpen className="w-4 h-4 text-accent-cyan" />
-                        {responses.length} Registros Encontrados
+                    <div className="bg-white border border-gray-200 px-4 py-2 rounded-lg text-sm text-gray-600 flex items-center gap-2">
+                        <FolderOpen className="w-4 h-4 text-gray-400" />
+                        {responses.length} Registros
                     </div>
                 </header>
 
