@@ -401,54 +401,60 @@
 
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr;gap:12px;align-items:start;margin-top:22px;">
 
-        <!-- vídeo 1 — 9:16 autoplay muted loop -->
+        <!-- vídeo 1 — iframe YT autoplay muted loop 9:16 -->
         <div class="media-item" data-type="yt" data-id="233QIMNvhuE"
              style="border-radius:12px;overflow:hidden;aspect-ratio:9/16;background:#000;position:relative;cursor:pointer;">
-          <img src="https://i.ytimg.com/vi/233QIMNvhuE/oar2.jpg"
-               style="width:100%;height:100%;object-fit:cover;display:block;" alt="Vídeo 1">
-          <video muted loop playsinline
-                 style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none;"
-                 data-src="https://youtube.com/shorts/233QIMNvhuE">
-          </video>
-          <div class="play-overlay">
-            <div class="play-btn"></div>
+          <iframe
+            src="https://www.youtube.com/embed/233QIMNvhuE?autoplay=1&mute=1&loop=1&playlist=233QIMNvhuE&controls=0&rel=0&modestbranding=1&playsinline=1"
+            style="position:absolute;inset:0;width:100%;height:100%;border:none;pointer-events:none;"
+            allow="autoplay; encrypted-media"
+            allowfullscreen
+            title="Vídeo Candidato IA 1">
+          </iframe>
+          <div class="play-overlay" style="background:transparent;">
+            <div class="play-btn" style="opacity:0.7;"></div>
           </div>
         </div>
 
-        <!-- vídeo 2 — 9:16 autoplay muted loop -->
+        <!-- vídeo 2 — iframe YT autoplay muted loop 9:16 -->
         <div class="media-item" data-type="yt" data-id="OY_904pzs1o"
              style="border-radius:12px;overflow:hidden;aspect-ratio:9/16;background:#000;position:relative;cursor:pointer;">
-          <img src="https://i.ytimg.com/vi/OY_904pzs1o/oar2.jpg"
-               style="width:100%;height:100%;object-fit:cover;display:block;" alt="Vídeo 2">
-          <div class="play-overlay">
-            <div class="play-btn"></div>
+          <iframe
+            src="https://www.youtube.com/embed/OY_904pzs1o?autoplay=1&mute=1&loop=1&playlist=OY_904pzs1o&controls=0&rel=0&modestbranding=1&playsinline=1"
+            style="position:absolute;inset:0;width:100%;height:100%;border:none;pointer-events:none;"
+            allow="autoplay; encrypted-media"
+            allowfullscreen
+            title="Vídeo Candidato IA 2">
+          </iframe>
+          <div class="play-overlay" style="background:transparent;">
+            <div class="play-btn" style="opacity:0.7;"></div>
           </div>
         </div>
 
-        <!-- imagem 1 — 9:16 -->
+        <!-- imagem 1 — proporção natural da imagem (9:16 aprox) -->
         <div class="media-item" data-type="img"
              data-src="https://i.ibb.co/prWLtSq1/freepik-flat-design-storyboard-illustration-a-female-polit-48981.jpg"
-             style="border-radius:12px;overflow:hidden;aspect-ratio:9/16;background:#111;cursor:pointer;position:relative;">
+             style="border-radius:12px;overflow:hidden;background:#111;cursor:pointer;position:relative;">
           <img src="https://i.ibb.co/prWLtSq1/freepik-flat-design-storyboard-illustration-a-female-polit-48981.jpg"
-               style="width:100%;height:100%;object-fit:cover;display:block;" alt="Candidata IA">
+               style="width:100%;height:auto;display:block;border-radius:12px;" alt="Candidata IA">
           <div class="play-overlay"><div style="font-size:22px;opacity:.8">🔍</div></div>
         </div>
 
-        <!-- imagem 2 — 4:3 -->
+        <!-- imagem 2 — proporção natural da imagem (4:3 aprox) -->
         <div class="media-item" data-type="img"
              data-src="https://i.ibb.co/chGD6xHY/freepik-cartoon-deputies-voting-in-the-government-hall-of-48980.jpg"
-             style="border-radius:12px;overflow:hidden;aspect-ratio:4/3;background:#111;cursor:pointer;position:relative;align-self:center;">
+             style="border-radius:12px;overflow:hidden;background:#111;cursor:pointer;position:relative;align-self:center;">
           <img src="https://i.ibb.co/chGD6xHY/freepik-cartoon-deputies-voting-in-the-government-hall-of-48980.jpg"
-               style="width:100%;height:100%;object-fit:cover;display:block;" alt="Cena política IA">
+               style="width:100%;height:auto;display:block;border-radius:12px;" alt="Cena política IA">
           <div class="play-overlay"><div style="font-size:22px;opacity:.8">🔍</div></div>
         </div>
 
-        <!-- imagem 3 — 4:3 -->
+        <!-- imagem 3 — proporção natural da imagem (4:3 aprox) -->
         <div class="media-item" data-type="img"
              data-src="https://i.ibb.co/fzbfPgJS/freepik-flat-design-illustration-of-a-confused-brazilian-c-48979.jpg"
-             style="border-radius:12px;overflow:hidden;aspect-ratio:4/3;background:#111;cursor:pointer;position:relative;align-self:center;">
+             style="border-radius:12px;overflow:hidden;background:#111;cursor:pointer;position:relative;align-self:center;">
           <img src="https://i.ibb.co/fzbfPgJS/freepik-flat-design-illustration-of-a-confused-brazilian-c-48979.jpg"
-               style="width:100%;height:100%;object-fit:cover;display:block;" alt="Ilustração IA">
+               style="width:100%;height:auto;display:block;border-radius:12px;" alt="Ilustração IA">
           <div class="play-overlay"><div style="font-size:22px;opacity:.8">🔍</div></div>
         </div>
 
