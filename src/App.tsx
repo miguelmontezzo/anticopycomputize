@@ -479,6 +479,7 @@ export default function App() {
 
         {/* Dynamic Public Pages */}
         <Route path="/p/:slug" element={<PublicPage />} />
+        <Route path="/:slug" element={<PublicPage />} />
 
         {/* Admin Routes */}
         <Route path="/admin/login" element={<AdminLoginPage />} />

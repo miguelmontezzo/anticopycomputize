@@ -137,19 +137,19 @@ export default function PublicPage() {
                 />
             </div>
 
-            <main className="relative z-10 flex flex-col min-h-screen px-6 md:px-12 py-16 md:py-24 max-w-3xl mx-auto">
+            <main className="relative z-10 flex flex-col min-h-screen px-4 sm:px-6 md:px-12 py-10 sm:py-14 md:py-24 max-w-3xl mx-auto">
                 {/* Header Simples (Renderização do Page) */}
                 <FadeIn>
-                    <div className="mb-16">
+                    <div className="mb-10 sm:mb-14 md:mb-16">
                         <div
                             className="w-16 h-1 mb-6 rounded-full"
                             style={{ backgroundColor: brandColor }}
                         />
-                        <h1 className="text-5xl md:text-6xl font-bold tracking-tighter leading-[1.1] mb-6">
+                        <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold tracking-tighter leading-[1.1] mb-4 sm:mb-6">
                             {page.title}
                         </h1>
                         {/* Como o contentJson seria genérico, aqui deixamos uma introdução limpa */}
-                        <p className="text-xl text-muted font-light leading-relaxed">
+                        <p className="text-base sm:text-lg md:text-xl text-muted font-light leading-relaxed">
                             Preencha o formulário abaixo para avançarmos.
                         </p>
                     </div>
@@ -158,7 +158,7 @@ export default function PublicPage() {
                 {/* Área do Formulário */}
                 {form && (
                     <FadeIn delay={0.2}>
-                        <div className="glass-card p-6 md:p-10 rounded-2xl relative overflow-hidden bg-black/40 backdrop-blur-md border hover:border-white/20 transition-colors" style={{ borderTopColor: `${brandColor}40` }}>
+                        <div className="glass-card p-4 sm:p-6 md:p-10 rounded-2xl relative overflow-hidden bg-black/40 backdrop-blur-md border hover:border-white/20 transition-colors" style={{ borderTopColor: `${brandColor}40` }}>
 
                             <div className="mb-8 border-b border-white/10 pb-6">
                                 <h2 className="text-2xl font-bold tracking-tight mb-2">{form.title}</h2>
@@ -296,7 +296,7 @@ export default function PublicPage() {
                 )}
 
                 {/* Footer Minimalista */}
-                <div className="mt-auto pt-16 text-center text-[10px] tracking-widest text-muted uppercase font-bold">
+                <div className="mt-auto pt-10 sm:pt-12 md:pt-16 text-center text-[10px] tracking-widest text-muted uppercase font-bold">
                     Powered by Anti Copy
                 </div>
             </main>
