@@ -1264,31 +1264,22 @@
           <!-- Siqueira JR -->
           <div class="media-item" data-type="yt" data-id="qrwBaaZOrVg"
             style="border-radius:12px;overflow:hidden;aspect-ratio:3/4;background:#000;position:relative;cursor:pointer;">
-            <iframe
-              src="https://www.youtube.com/embed/qrwBaaZOrVg?autoplay=1&mute=1&loop=1&playlist=qrwBaaZOrVg&controls=0&rel=0&modestbranding=1&playsinline=1"
-              style="position:absolute;inset:0;width:100%;height:100%;border:none;pointer-events:none;"
-              allow="autoplay; encrypted-media" allowfullscreen title="Siqueira JR">
-            </iframe>
+            <div data-yt-bg="qrwBaaZOrVg" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;">
+            </div>
           </div>
 
           <!-- Tarcísio de Freitas -->
           <div class="media-item" data-type="yt" data-id="LccXl1DkmFM"
             style="border-radius:12px;overflow:hidden;aspect-ratio:3/4;background:#000;position:relative;cursor:pointer;">
-            <iframe
-              src="https://www.youtube.com/embed/LccXl1DkmFM?autoplay=1&mute=1&loop=1&playlist=LccXl1DkmFM&controls=0&rel=0&modestbranding=1&playsinline=1"
-              style="position:absolute;inset:0;width:100%;height:100%;border:none;pointer-events:none;"
-              allow="autoplay; encrypted-media" allowfullscreen title="Tarcísio de Freitas">
-            </iframe>
+            <div data-yt-bg="LccXl1DkmFM" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;">
+            </div>
           </div>
 
           <!-- Val Marchiori -->
           <div class="media-item" data-type="yt" data-id="lLBJJMw3cQA"
             style="border-radius:12px;overflow:hidden;aspect-ratio:3/4;background:#000;position:relative;cursor:pointer;">
-            <iframe
-              src="https://www.youtube.com/embed/lLBJJMw3cQA?autoplay=1&mute=1&loop=1&playlist=lLBJJMw3cQA&controls=0&rel=0&modestbranding=1&playsinline=1"
-              style="position:absolute;inset:0;width:100%;height:100%;border:none;pointer-events:none;"
-              allow="autoplay; encrypted-media" allowfullscreen title="Val Marchiori">
-            </iframe>
+            <div data-yt-bg="lLBJJMw3cQA" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;">
+            </div>
           </div>
 
         </div>
@@ -1380,21 +1371,15 @@
           <!-- vídeo 1 — iframe YT autoplay muted loop 9:16 -->
           <div class="media-item" data-type="yt" data-id="233QIMNvhuE"
             style="border-radius:12px;overflow:hidden;aspect-ratio:9/16;background:#000;position:relative;cursor:pointer;">
-            <iframe
-              src="https://www.youtube.com/embed/233QIMNvhuE?autoplay=1&mute=1&loop=1&playlist=233QIMNvhuE&controls=0&rel=0&modestbranding=1&playsinline=1"
-              style="position:absolute;inset:0;width:100%;height:100%;border:none;pointer-events:none;"
-              allow="autoplay; encrypted-media" allowfullscreen title="Vídeo Candidato IA 1">
-            </iframe>
+            <div data-yt-bg="233QIMNvhuE" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;">
+            </div>
           </div>
 
           <!-- vídeo 2 — iframe YT autoplay muted loop 9:16 -->
           <div class="media-item" data-type="yt" data-id="OY_904pzs1o"
             style="border-radius:12px;overflow:hidden;aspect-ratio:9/16;background:#000;position:relative;cursor:pointer;">
-            <iframe
-              src="https://www.youtube.com/embed/OY_904pzs1o?autoplay=1&mute=1&loop=1&playlist=OY_904pzs1o&controls=0&rel=0&modestbranding=1&playsinline=1"
-              style="position:absolute;inset:0;width:100%;height:100%;border:none;pointer-events:none;"
-              allow="autoplay; encrypted-media" allowfullscreen title="Vídeo Candidato IA 2">
-            </iframe>
+            <div data-yt-bg="OY_904pzs1o" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;">
+            </div>
           </div>
 
           <!-- imagem 1 — proporção natural da imagem (9:16 aprox) -->
@@ -1456,6 +1441,7 @@
         style="max-width:90vw;max-height:88vh;display:flex;align-items:center;justify-content:center;position:relative;">
       </div>
     </div>
+    <script src="https://www.youtube.com/iframe_api"></script>
 
     <!-- S7: CLONE -->
     <div class="slide" data-label="Clone de Avatar IA">
@@ -1842,6 +1828,47 @@
     }
 
     lb.addEventListener('click', e => { if (e.target === lb) closeLightbox(); });
+
+    // ── YOUTUBE SEAMLESS LOOP API ──
+    const ytPlayers = [];
+    window.onYouTubeIframeAPIReady = function () {
+      document.querySelectorAll('[data-yt-bg]').forEach((el) => {
+        const videoId = el.dataset.ytBg;
+        const player = new YT.Player(el, {
+          height: '100%',
+          width: '100%',
+          videoId: videoId,
+          playerVars: {
+            'autoplay': 1,
+            'mute': 1,
+            'controls': 0,
+            'rel': 0,
+            'showinfo': 0,
+            'modestbranding': 1,
+            'iv_load_policy': 3,
+            'disablekb': 1,
+            'fs': 0,
+            'playsinline': 1,
+            'autohide': 1,
+            'loop': 1,
+            'playlist': videoId
+          },
+          events: {
+            'onReady': (event) => {
+              event.target.mute();
+              event.target.playVideo();
+            },
+            'onStateChange': (event) => {
+              // Quando o vídeo termina, volta pro início instantaneamente
+              if (event.data === YT.PlayerState.ENDED) {
+                event.target.playVideo();
+              }
+            }
+          }
+        });
+        ytPlayers.push(player);
+      });
+    };
 
     initGallery();
     goTo(0);
