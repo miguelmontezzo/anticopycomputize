@@ -1,712 +1,1757 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Anti Copy Club — Produção com IA · Eleições 2026</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,900;1,300&display=swap');
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root {
-    --black: #0a0a0a; --white: #f5f4f0; --green: #00e676; --green-dim: rgba(0,230,118,0.12);
-    --yellow: #ffd600; --red: #ff3d3d; --blue: #4fc3f7; --gray: #777; --border: rgba(255,255,255,0.08);
-  }
-  html, body { height: 100%; background: var(--black); color: var(--white); font-family: 'DM Sans', sans-serif; overflow: hidden; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anti Copy Club — Produção com IA · Eleições 2026</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,900;1,300&display=swap');
 
-  /* NAV */
-  nav {
-    position: fixed; top: 0; left: 0; width: 100%; z-index: 100;
-    padding: 16px 40px; display: flex; align-items: center; justify-content: space-between;
-    background: rgba(10,10,10,0.92); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border);
-  }
-  .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-  .nav-logo-mark { width: 26px; height: 26px; border-radius: 8px; background: var(--green); display: flex; align-items: center; justify-content: center; }
-  .nav-logo-mark span { width: 8px; height: 8px; border-radius: 50%; background: var(--black); display: block; }
-  .nav-brand { font-size: 12px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--white); line-height: 1.2; }
-  .nav-brand small { display: block; font-size: 9px; font-weight: 500; color: var(--gray); letter-spacing: .08em; }
-  .nav-dots { display: flex; align-items: center; gap: 5px; }
-  .dot-btn { width: 7px; height: 7px; border-radius: 4px; border: none; cursor: pointer; transition: all .3s; background: rgba(255,255,255,0.18); }
-  .dot-btn.active { width: 26px; background: var(--green); }
-  .nav-right { display: flex; align-items: center; gap: 14px; }
-  .nav-counter { font-size: 11px; font-weight: 700; color: var(--gray); letter-spacing: .12em; }
-  .btn-pdf { display: flex; align-items: center; gap: 6px; padding: 7px 16px; border-radius: 100px; background: rgba(255,255,255,0.06); border: 1px solid var(--border); color: var(--white); font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all .2s; }
-  .btn-pdf:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,.25); }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-  /* SLIDES */
-  #stage { position: fixed; inset: 0; display: flex; flex-direction: column; }
-  .slide { display: none; flex: 1; padding-top: 68px; padding-bottom: 66px; overflow-y: auto; animation: fadeUp .45s ease forwards; }
-  .slide.active { display: flex; flex-direction: column; }
-  @keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
-  .slide-inner { max-width: 980px; margin: auto; width: 100%; padding: 36px 40px; flex: 1; display: flex; flex-direction: column; justify-content: center; }
+    :root {
+      --black: #0a0a0a;
+      --white: #f5f4f0;
+      --green: #00e676;
+      --green-dim: rgba(0, 230, 118, 0.12);
+      --yellow: #ffd600;
+      --red: #ff3d3d;
+      --blue: #4fc3f7;
+      --gray: #777;
+      --border: rgba(255, 255, 255, 0.08);
+    }
 
-  /* FOOTER */
-  footer { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(10,10,10,0.92); backdrop-filter: blur(12px); border-top: 1px solid var(--border); padding: 12px 40px; display: flex; align-items: center; justify-content: space-between; z-index: 100; }
-  .btn { display: inline-flex; align-items: center; gap: 7px; padding: 9px 20px; border-radius: 100px; font-size: 13px; font-weight: 700; cursor: pointer; border: none; transition: all .2s; font-family: 'DM Sans', sans-serif; }
-  .btn-outline { background: transparent; color: var(--white); border: 1px solid rgba(255,255,255,.18); }
-  .btn-outline:hover { border-color: rgba(255,255,255,.45); }
-  .btn-outline:disabled { opacity: .22; pointer-events: none; }
-  .btn-primary { background: var(--white); color: var(--black); }
-  .btn-primary:hover { background: var(--green); }
-  .btn-primary:disabled { opacity: .25; pointer-events: none; }
-  .footer-label { font-size: 11px; font-weight: 700; color: var(--gray); letter-spacing: .12em; text-transform: uppercase; }
+    html,
+    body {
+      height: 100%;
+      background: var(--black);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      overflow: hidden;
+    }
 
-  /* TYPOGRAPHY */
-  .tag { display: inline-block; padding: 4px 13px; border: 1px solid var(--border); border-radius: 100px; font-size: 10px; font-weight: 800; letter-spacing: .15em; text-transform: uppercase; color: var(--gray); margin-bottom: 20px; }
-  .tag.green { border-color: rgba(0,230,118,.35); color: var(--green); background: var(--green-dim); }
-  .tag.yellow { border-color: rgba(255,214,0,.3); color: var(--yellow); background: rgba(255,214,0,0.08); }
-  .tag.blue { border-color: rgba(79,195,247,.3); color: var(--blue); background: rgba(79,195,247,0.08); }
-  h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(58px,9vw,112px); line-height: .92; letter-spacing: .02em; margin-bottom: 22px; }
-  h1 .g { color: var(--green); } h1 .y { color: var(--yellow); } h1 .b { color: var(--blue); }
-  h2 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(34px,5.2vw,62px); letter-spacing: .03em; line-height: 1; margin-bottom: 16px; }
-  h2 .g { color: var(--green); } h2 .y { color: var(--yellow); } h2 .b { color: var(--blue); }
-  .lead { font-size: clamp(15px,2.2vw,18px); font-weight: 300; line-height: 1.75; color: rgba(245,244,240,.6); max-width: 620px; }
-  .lead strong { color: var(--white); font-weight: 600; }
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 100;
+      padding: 16px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(10, 10, 10, 0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
 
-  /* HERO STATS */
-  .hero-stats { display: flex; gap: 36px; margin-top: 40px; border-top: 1px solid var(--border); padding-top: 28px; flex-wrap: wrap; }
-  .hs-item .hn { font-family: 'Bebas Neue'; font-size: 48px; color: var(--green); line-height: 1; }
-  .hs-item .hl { font-size: 11px; font-weight: 600; color: var(--gray); text-transform: uppercase; letter-spacing: .1em; margin-top: 3px; }
-  .vdiv { width: 1px; background: var(--border); }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
 
-  /* COMPARE */
-  .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 28px; }
-  .ccol { border-radius: 14px; padding: 24px 22px; border: 1px solid var(--border); }
-  .ccol.trad { background: rgba(255,61,61,.05); border-color: rgba(255,61,61,.2); }
-  .ccol.ai { background: rgba(0,230,118,.04); border-color: rgba(0,230,118,.22); }
-  .ccol-head { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .14em; margin-bottom: 18px; }
-  .ccol.trad .ccol-head { color: var(--red); }
-  .ccol.ai .ccol-head { color: var(--green); }
-  .citem { display: flex; justify-content: space-between; align-items: baseline; padding: 9px 0; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 13px; }
-  .citem:last-child { border: none; }
-  .citem .cl { color: rgba(245,244,240,.45); }
-  .citem .cv { font-weight: 600; color: var(--white); }
-  .ctotal { margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,.1); display: flex; justify-content: space-between; align-items: baseline; }
-  .ctotal .cl { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--gray); }
-  .ccol.trad .ctotal .bv { font-family: 'Bebas Neue'; font-size: 34px; color: var(--red); }
-  .ccol.ai .ctotal .bv { font-family: 'Bebas Neue'; font-size: 34px; color: var(--green); }
+    .nav-logo-mark {
+      width: 26px;
+      height: 26px;
+      border-radius: 8px;
+      background: var(--green);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
-  /* PRICE TABLE */
-  .ptable { margin-top: 28px; width: 100%; border-collapse: collapse; }
-  .ptable th { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .14em; color: var(--gray); text-align: left; padding: 0 14px 12px; }
-  .ptable th:not(:first-child) { text-align: right; }
-  .ptable td { padding: 13px 14px; border-top: 1px solid rgba(255,255,255,0.04); font-size: 13px; color: rgba(245,244,240,.65); }
-  .ptable td:not(:first-child) { text-align: right; }
-  .ptable td.b { color: var(--white); font-weight: 600; }
-  .ptable tr:hover td { background: rgba(255,255,255,0.02); }
-  .pill { display: inline-block; padding: 3px 9px; border-radius: 100px; font-size: 10px; font-weight: 700; }
-  .pill.green { background: var(--green-dim); color: var(--green); border: 1px solid rgba(0,230,118,.28); }
-  .pill.yellow { background: rgba(255,214,0,.1); color: var(--yellow); border: 1px solid rgba(255,214,0,.28); }
-  .pill.blue { background: rgba(79,195,247,.1); color: var(--blue); border: 1px solid rgba(79,195,247,.28); }
+    .nav-logo-mark span {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--black);
+      display: block;
+    }
 
-  /* VOLUME */
-  .volgrid { display: grid; grid-template-columns: repeat(3,1fr); gap: 13px; margin-top: 28px; }
-  .volcol { border-radius: 13px; padding: 22px 18px; border: 1px solid var(--border); background: rgba(255,255,255,0.025); text-align: center; }
-  .volcol .vb { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; color: var(--gray); margin-bottom: 10px; }
-  .volcol .va { font-family: 'Bebas Neue'; font-size: 36px; color: var(--green); line-height: 1; margin-bottom: 14px; }
-  .vitem { display: flex; justify-content: space-between; font-size: 12px; color: rgba(245,244,240,.5); padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
-  .vitem:last-child { border: none; }
-  .vitem .vn { font-weight: 700; color: var(--white); }
+    .nav-brand {
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--white);
+      line-height: 1.2;
+    }
 
-  /* HBOX */
-  .hbox { border-radius: 13px; padding: 18px 22px; margin-top: 18px; display: flex; align-items: flex-start; gap: 14px; }
-  .hbox.green { background: linear-gradient(135deg,rgba(0,230,118,.07),rgba(0,230,118,.02)); border: 1px solid rgba(0,230,118,.2); }
-  .hbox.yellow { background: rgba(255,214,0,.05); border: 1px solid rgba(255,214,0,.2); }
-  .hbox.blue { background: rgba(79,195,247,.05); border: 1px solid rgba(79,195,247,.2); }
-  .hbox .hi { font-size: 22px; flex-shrink: 0; margin-top: 2px; }
-  .hbox p { font-size: 13px; line-height: 1.65; color: rgba(245,244,240,.65); }
-  .hbox p strong { color: var(--white); }
+    .nav-brand small {
+      display: block;
+      font-size: 9px;
+      font-weight: 500;
+      color: var(--gray);
+      letter-spacing: .08em;
+    }
 
-  /* IMAGE SLOTS */
-  .img-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-top: 28px; }
-  .img-slot { aspect-ratio: 16/9; border-radius: 12px; border: 1.5px dashed rgba(255,255,255,.15); background: rgba(255,255,255,.03); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; transition: all .2s; overflow: hidden; position: relative; }
-  .img-slot:hover { border-color: rgba(0,230,118,.4); background: rgba(0,230,118,.04); }
-  .img-slot .is-icon { font-size: 24px; opacity: .4; pointer-events: none; }
-  .img-slot .is-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--gray); pointer-events: none; }
-  .img-slot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 12px; }
-  .img-slot label { position: absolute; inset: 0; cursor: pointer; }
-  .img-slot input[type=file] { display: none; }
+    .nav-dots {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
 
-  /* CANDIDATE GRID */
-  .cand-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 28px; }
-  .cand-block { border-radius: 14px; padding: 22px 20px; border: 1px solid var(--border); background: rgba(255,255,255,0.025); }
-  .cand-block h4 { font-family: 'Bebas Neue'; font-size: 22px; color: var(--blue); letter-spacing: .04em; margin-bottom: 12px; }
-  .cand-item { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 12px; color: rgba(245,244,240,.6); line-height: 1.5; }
-  .cand-item:last-child { border: none; }
-  .cand-item .ci-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--blue); flex-shrink: 0; margin-top: 5px; }
-  .cand-item strong { color: var(--white); }
+    .dot-btn {
+      width: 7px;
+      height: 7px;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      transition: all .3s;
+      background: rgba(255, 255, 255, 0.18);
+    }
 
-  /* CLONE CARDS */
-  .clone-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 13px; margin-top: 26px; }
-  .clone-card { border-radius: 14px; padding: 22px 18px; border: 1px solid var(--border); background: rgba(255,255,255,0.025); }
-  .clone-card.feat { border-color: rgba(79,195,247,.3); background: rgba(79,195,247,.05); }
-  .clone-name { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .12em; color: var(--gray); margin-bottom: 8px; }
-  .clone-card.feat .clone-name { color: var(--blue); }
-  .clone-price { font-family: 'Bebas Neue'; font-size: 36px; color: var(--white); line-height: 1; margin-bottom: 4px; }
-  .clone-unit { font-size: 11px; color: var(--gray); margin-bottom: 14px; }
-  .clone-feat { list-style: none; }
-  .clone-feat li { font-size: 12px; color: rgba(245,244,240,.55); line-height: 1.6; padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,.04); }
-  .clone-feat li::before { content: '→ '; color: var(--blue); font-weight: 700; }
-  .clone-feat li:last-child { border: none; }
+    .dot-btn.active {
+      width: 26px;
+      background: var(--green);
+    }
 
-  /* HYPEX / CREDITS */
-  .credit-box { background: rgba(255,214,0,.05); border: 1px solid rgba(255,214,0,.2); border-radius: 16px; padding: 28px; margin-top: 28px; }
-  .credit-box h3 { font-family: 'Bebas Neue'; font-size: 26px; color: var(--yellow); letter-spacing: .05em; margin-bottom: 8px; }
-  .hx-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; margin-top: 20px; }
-  .hxs { text-align: center; padding: 16px; background: rgba(255,214,0,.04); border-radius: 10px; border: 1px solid rgba(255,214,0,.12); }
-  .hxs .hv { font-family: 'Bebas Neue'; font-size: 40px; color: var(--yellow); line-height: 1; }
-  .hxs .hlb { font-size: 10px; font-weight: 700; color: var(--gray); text-transform: uppercase; letter-spacing: .1em; margin-top: 4px; }
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
 
-  /* CREDIT FLOW */
-  .credit-flow { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; margin-top: 28px; background: var(--border); border-radius: 14px; overflow: hidden; }
-  .cf-step { background: rgba(255,255,255,0.025); padding: 24px 20px; position: relative; }
-  .cf-step::after { content: '→'; position: absolute; right: -14px; top: 50%; transform: translateY(-50%); font-size: 20px; color: var(--gray); z-index: 2; }
-  .cf-step:last-child::after { display: none; }
-  .cf-num { font-family: 'Bebas Neue'; font-size: 48px; color: rgba(255,214,0,.2); line-height: 1; margin-bottom: 8px; }
-  .cf-title { font-size: 13px; font-weight: 700; color: var(--white); margin-bottom: 6px; }
-  .cf-desc { font-size: 12px; color: rgba(245,244,240,.5); line-height: 1.55; }
+    .nav-counter {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--gray);
+      letter-spacing: .12em;
+    }
 
-  /* CTA */
-  .cta-wrap { text-align: center; }
-  .cta-wrap h1 { margin-bottom: 14px; }
-  .cta-wrap .lead { margin: 0 auto 36px; }
-  .cta-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-  .btn-big { padding: 13px 30px; border-radius: 100px; font-size: 14px; font-weight: 700; cursor: pointer; border: none; font-family: 'DM Sans', sans-serif; transition: all .2s; }
-  .btn-big-green { background: var(--green); color: var(--black); }
-  .btn-big-green:hover { background: #00ff88; }
-  .btn-big-outline { background: transparent; color: var(--white); border: 1px solid rgba(255,255,255,.22); }
-  .btn-big-outline:hover { border-color: var(--white); }
+    .btn-pdf {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 16px;
+      border-radius: 100px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border);
+      color: var(--white);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      transition: all .2s;
+    }
 
-  /* PRINT */
-  /* PLAY OVERLAY */
-  .play-overlay {
-    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-    background:rgba(0,0,0,0.25);transition:background .2s;
-  }
-  .media-item:hover .play-overlay { background:rgba(0,0,0,0.45); }
-  .play-btn {
-    width:48px;height:48px;border-radius:50%;
-    background:rgba(255,255,255,0.15);border:2px solid rgba(255,255,255,0.6);
-    display:flex;align-items:center;justify-content:center;
-    transition:transform .2s;
-  }
-  .media-item:hover .play-btn { transform:scale(1.1); }
-  .play-btn::after {
-    content:'';width:0;height:0;border-style:solid;
-    border-width:9px 0 9px 18px;
-    border-color:transparent transparent transparent #fff;
-    margin-left:4px;display:block;
-  }
+    .btn-pdf:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, .25);
+    }
 
-  @media print {
-    html, body { overflow: visible !important; height: auto !important; background: #0a0a0a !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    nav, footer { display: none !important; }
-    #stage { position: static !important; display: block !important; }
-    .slide { display: flex !important; flex-direction: column; padding: 50px 40px !important; min-height: 100vh; page-break-after: always; animation: none !important; }
-    .slide-inner { padding: 20px 0 !important; }
-  }
-  @media (max-width:680px) {
-    nav { padding: 12px 18px; } footer { padding: 10px 18px; } .slide-inner { padding: 22px 18px; }
-    .compare, .cand-grid { grid-template-columns: 1fr; }
-    .volgrid, .clone-grid, .credit-flow { grid-template-columns: 1fr; }
-    .img-grid { grid-template-columns: 1fr 1fr; }
-    .hx-stats { grid-template-columns: 1fr 1fr; }
-    .cf-step::after { display: none; }
-  }
-</style>
+    /* SLIDES */
+    #stage {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .slide {
+      display: none;
+      flex: 1;
+      padding-top: 68px;
+      padding-bottom: 66px;
+      overflow-y: auto;
+      animation: fadeUp .45s ease forwards;
+    }
+
+    .slide.active {
+      display: flex;
+      flex-direction: column;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .slide-inner {
+      max-width: 980px;
+      margin: auto;
+      width: 100%;
+      padding: 36px 40px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    /* FOOTER */
+    footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(10, 10, 10, 0.92);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid var(--border);
+      padding: 12px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 100;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 20px;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      transition: all .2s;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--white);
+      border: 1px solid rgba(255, 255, 255, .18);
+    }
+
+    .btn-outline:hover {
+      border-color: rgba(255, 255, 255, .45);
+    }
+
+    .btn-outline:disabled {
+      opacity: .22;
+      pointer-events: none;
+    }
+
+    .btn-primary {
+      background: var(--white);
+      color: var(--black);
+    }
+
+    .btn-primary:hover {
+      background: var(--green);
+    }
+
+    .btn-primary:disabled {
+      opacity: .25;
+      pointer-events: none;
+    }
+
+    .footer-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--gray);
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    /* TYPOGRAPHY */
+    .tag {
+      display: inline-block;
+      padding: 4px 13px;
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--gray);
+      margin-bottom: 20px;
+    }
+
+    .tag.green {
+      border-color: rgba(0, 230, 118, .35);
+      color: var(--green);
+      background: var(--green-dim);
+    }
+
+    .tag.yellow {
+      border-color: rgba(255, 214, 0, .3);
+      color: var(--yellow);
+      background: rgba(255, 214, 0, 0.08);
+    }
+
+    .tag.blue {
+      border-color: rgba(79, 195, 247, .3);
+      color: var(--blue);
+      background: rgba(79, 195, 247, 0.08);
+    }
+
+    h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(58px, 9vw, 112px);
+      line-height: .92;
+      letter-spacing: .02em;
+      margin-bottom: 22px;
+    }
+
+    h1 .g {
+      color: var(--green);
+    }
+
+    h1 .y {
+      color: var(--yellow);
+    }
+
+    h1 .b {
+      color: var(--blue);
+    }
+
+    h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(34px, 5.2vw, 62px);
+      letter-spacing: .03em;
+      line-height: 1;
+      margin-bottom: 16px;
+    }
+
+    h2 .g {
+      color: var(--green);
+    }
+
+    h2 .y {
+      color: var(--yellow);
+    }
+
+    h2 .b {
+      color: var(--blue);
+    }
+
+    .lead {
+      font-size: clamp(15px, 2.2vw, 18px);
+      font-weight: 300;
+      line-height: 1.75;
+      color: rgba(245, 244, 240, .6);
+      max-width: 620px;
+    }
+
+    .lead strong {
+      color: var(--white);
+      font-weight: 600;
+    }
+
+    /* HERO STATS */
+    .hero-stats {
+      display: flex;
+      gap: 36px;
+      margin-top: 40px;
+      border-top: 1px solid var(--border);
+      padding-top: 28px;
+      flex-wrap: wrap;
+    }
+
+    .hs-item .hn {
+      font-family: 'Bebas Neue';
+      font-size: 48px;
+      color: var(--green);
+      line-height: 1;
+    }
+
+    .hs-item .hl {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--gray);
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      margin-top: 3px;
+    }
+
+    .vdiv {
+      width: 1px;
+      background: var(--border);
+    }
+
+    /* COMPARE */
+    .compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 28px;
+    }
+
+    .ccol {
+      border-radius: 14px;
+      padding: 24px 22px;
+      border: 1px solid var(--border);
+    }
+
+    .ccol.trad {
+      background: rgba(255, 61, 61, .05);
+      border-color: rgba(255, 61, 61, .2);
+    }
+
+    .ccol.ai {
+      background: rgba(0, 230, 118, .04);
+      border-color: rgba(0, 230, 118, .22);
+    }
+
+    .ccol-head {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .14em;
+      margin-bottom: 18px;
+    }
+
+    .ccol.trad .ccol-head {
+      color: var(--red);
+    }
+
+    .ccol.ai .ccol-head {
+      color: var(--green);
+    }
+
+    .citem {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 9px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      font-size: 13px;
+    }
+
+    .citem:last-child {
+      border: none;
+    }
+
+    .citem .cl {
+      color: rgba(245, 244, 240, .45);
+    }
+
+    .citem .cv {
+      font-weight: 600;
+      color: var(--white);
+    }
+
+    .ctotal {
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255, 255, 255, .1);
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    .ctotal .cl {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--gray);
+    }
+
+    .ccol.trad .ctotal .bv {
+      font-family: 'Bebas Neue';
+      font-size: 34px;
+      color: var(--red);
+    }
+
+    .ccol.ai .ctotal .bv {
+      font-family: 'Bebas Neue';
+      font-size: 34px;
+      color: var(--green);
+    }
+
+    /* PRICE TABLE */
+    .ptable {
+      margin-top: 28px;
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .ptable th {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .14em;
+      color: var(--gray);
+      text-align: left;
+      padding: 0 14px 12px;
+    }
+
+    .ptable th:not(:first-child) {
+      text-align: right;
+    }
+
+    .ptable td {
+      padding: 13px 14px;
+      border-top: 1px solid rgba(255, 255, 255, 0.04);
+      font-size: 13px;
+      color: rgba(245, 244, 240, .65);
+    }
+
+    .ptable td:not(:first-child) {
+      text-align: right;
+    }
+
+    .ptable td.b {
+      color: var(--white);
+      font-weight: 600;
+    }
+
+    .ptable tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .pill {
+      display: inline-block;
+      padding: 3px 9px;
+      border-radius: 100px;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .pill.green {
+      background: var(--green-dim);
+      color: var(--green);
+      border: 1px solid rgba(0, 230, 118, .28);
+    }
+
+    .pill.yellow {
+      background: rgba(255, 214, 0, .1);
+      color: var(--yellow);
+      border: 1px solid rgba(255, 214, 0, .28);
+    }
+
+    .pill.blue {
+      background: rgba(79, 195, 247, .1);
+      color: var(--blue);
+      border: 1px solid rgba(79, 195, 247, .28);
+    }
+
+    /* VOLUME */
+    .volgrid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 13px;
+      margin-top: 28px;
+    }
+
+    .volcol {
+      border-radius: 13px;
+      padding: 22px 18px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.025);
+      text-align: center;
+    }
+
+    .volcol .vb {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: var(--gray);
+      margin-bottom: 10px;
+    }
+
+    .volcol .va {
+      font-family: 'Bebas Neue';
+      font-size: 36px;
+      color: var(--green);
+      line-height: 1;
+      margin-bottom: 14px;
+    }
+
+    .vitem {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: rgba(245, 244, 240, .5);
+      padding: 5px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .vitem:last-child {
+      border: none;
+    }
+
+    .vitem .vn {
+      font-weight: 700;
+      color: var(--white);
+    }
+
+    /* HBOX */
+    .hbox {
+      border-radius: 13px;
+      padding: 18px 22px;
+      margin-top: 18px;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+
+    .hbox.green {
+      background: linear-gradient(135deg, rgba(0, 230, 118, .07), rgba(0, 230, 118, .02));
+      border: 1px solid rgba(0, 230, 118, .2);
+    }
+
+    .hbox.yellow {
+      background: rgba(255, 214, 0, .05);
+      border: 1px solid rgba(255, 214, 0, .2);
+    }
+
+    .hbox.blue {
+      background: rgba(79, 195, 247, .05);
+      border: 1px solid rgba(79, 195, 247, .2);
+    }
+
+    .hbox .hi {
+      font-size: 22px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .hbox p {
+      font-size: 13px;
+      line-height: 1.65;
+      color: rgba(245, 244, 240, .65);
+    }
+
+    .hbox p strong {
+      color: var(--white);
+    }
+
+    /* IMAGE SLOTS */
+    .img-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .img-slot {
+      aspect-ratio: 16/9;
+      border-radius: 12px;
+      border: 1.5px dashed rgba(255, 255, 255, .15);
+      background: rgba(255, 255, 255, .03);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all .2s;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .img-slot:hover {
+      border-color: rgba(0, 230, 118, .4);
+      background: rgba(0, 230, 118, .04);
+    }
+
+    .img-slot .is-icon {
+      font-size: 24px;
+      opacity: .4;
+      pointer-events: none;
+    }
+
+    .img-slot .is-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--gray);
+      pointer-events: none;
+    }
+
+    .img-slot img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 12px;
+    }
+
+    .img-slot label {
+      position: absolute;
+      inset: 0;
+      cursor: pointer;
+    }
+
+    .img-slot input[type=file] {
+      display: none;
+    }
+
+    /* CANDIDATE GRID */
+    .cand-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 28px;
+    }
+
+    .cand-block {
+      border-radius: 14px;
+      padding: 22px 20px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.025);
+    }
+
+    .cand-block h4 {
+      font-family: 'Bebas Neue';
+      font-size: 22px;
+      color: var(--blue);
+      letter-spacing: .04em;
+      margin-bottom: 12px;
+    }
+
+    .cand-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      font-size: 12px;
+      color: rgba(245, 244, 240, .6);
+      line-height: 1.5;
+    }
+
+    .cand-item:last-child {
+      border: none;
+    }
+
+    .cand-item .ci-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--blue);
+      flex-shrink: 0;
+      margin-top: 5px;
+    }
+
+    .cand-item strong {
+      color: var(--white);
+    }
+
+    /* CLONE CARDS */
+    .clone-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 13px;
+      margin-top: 26px;
+    }
+
+    .clone-card {
+      border-radius: 14px;
+      padding: 22px 18px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.025);
+    }
+
+    .clone-card.feat {
+      border-color: rgba(79, 195, 247, .3);
+      background: rgba(79, 195, 247, .05);
+    }
+
+    .clone-name {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: var(--gray);
+      margin-bottom: 8px;
+    }
+
+    .clone-card.feat .clone-name {
+      color: var(--blue);
+    }
+
+    .clone-price {
+      font-family: 'Bebas Neue';
+      font-size: 36px;
+      color: var(--white);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .clone-unit {
+      font-size: 11px;
+      color: var(--gray);
+      margin-bottom: 14px;
+    }
+
+    .clone-feat {
+      list-style: none;
+    }
+
+    .clone-feat li {
+      font-size: 12px;
+      color: rgba(245, 244, 240, .55);
+      line-height: 1.6;
+      padding: 4px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, .04);
+    }
+
+    .clone-feat li::before {
+      content: '→ ';
+      color: var(--blue);
+      font-weight: 700;
+    }
+
+    .clone-feat li:last-child {
+      border: none;
+    }
+
+    /* HYPEX / CREDITS */
+    .credit-box {
+      background: rgba(255, 214, 0, .05);
+      border: 1px solid rgba(255, 214, 0, .2);
+      border-radius: 16px;
+      padding: 28px;
+      margin-top: 28px;
+    }
+
+    .credit-box h3 {
+      font-family: 'Bebas Neue';
+      font-size: 26px;
+      color: var(--yellow);
+      letter-spacing: .05em;
+      margin-bottom: 8px;
+    }
+
+    .hx-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-top: 20px;
+    }
+
+    .hxs {
+      text-align: center;
+      padding: 16px;
+      background: rgba(255, 214, 0, .04);
+      border-radius: 10px;
+      border: 1px solid rgba(255, 214, 0, .12);
+    }
+
+    .hxs .hv {
+      font-family: 'Bebas Neue';
+      font-size: 40px;
+      color: var(--yellow);
+      line-height: 1;
+    }
+
+    .hxs .hlb {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--gray);
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      margin-top: 4px;
+    }
+
+    /* CREDIT FLOW */
+    .credit-flow {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      margin-top: 28px;
+      background: var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .cf-step {
+      background: rgba(255, 255, 255, 0.025);
+      padding: 24px 20px;
+      position: relative;
+    }
+
+    .cf-step::after {
+      content: '→';
+      position: absolute;
+      right: -14px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 20px;
+      color: var(--gray);
+      z-index: 2;
+    }
+
+    .cf-step:last-child::after {
+      display: none;
+    }
+
+    .cf-num {
+      font-family: 'Bebas Neue';
+      font-size: 48px;
+      color: rgba(255, 214, 0, .2);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .cf-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 6px;
+    }
+
+    .cf-desc {
+      font-size: 12px;
+      color: rgba(245, 244, 240, .5);
+      line-height: 1.55;
+    }
+
+    /* CTA */
+    .cta-wrap {
+      text-align: center;
+    }
+
+    .cta-wrap h1 {
+      margin-bottom: 14px;
+    }
+
+    .cta-wrap .lead {
+      margin: 0 auto 36px;
+    }
+
+    .cta-btns {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-big {
+      padding: 13px 30px;
+      border-radius: 100px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      font-family: 'DM Sans', sans-serif;
+      transition: all .2s;
+    }
+
+    .btn-big-green {
+      background: var(--green);
+      color: var(--black);
+    }
+
+    .btn-big-green:hover {
+      background: #00ff88;
+    }
+
+    .btn-big-outline {
+      background: transparent;
+      color: var(--white);
+      border: 1px solid rgba(255, 255, 255, .22);
+    }
+
+    .btn-big-outline:hover {
+      border-color: var(--white);
+    }
+
+    /* PRINT */
+    /* PLAY OVERLAY */
+    .play-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.25);
+      transition: background .2s;
+    }
+
+    .media-item:hover .play-overlay {
+      background: rgba(0, 0, 0, 0.45);
+    }
+
+    .play-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.15);
+      border: 2px solid rgba(255, 255, 255, 0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform .2s;
+    }
+
+    .media-item:hover .play-btn {
+      transform: scale(1.1);
+    }
+
+    .play-btn::after {
+      content: '';
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 9px 0 9px 18px;
+      border-color: transparent transparent transparent #fff;
+      margin-left: 4px;
+      display: block;
+    }
+
+    @media print {
+
+      html,
+      body {
+        overflow: visible !important;
+        height: auto !important;
+        background: #0a0a0a !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      nav,
+      footer {
+        display: none !important;
+      }
+
+      #stage {
+        position: static !important;
+        display: block !important;
+      }
+
+      .slide {
+        display: flex !important;
+        flex-direction: column;
+        padding: 50px 40px !important;
+        min-height: 100vh;
+        page-break-after: always;
+        animation: none !important;
+      }
+
+      .slide-inner {
+        padding: 20px 0 !important;
+      }
+    }
+
+    @media (max-width:680px) {
+      nav {
+        padding: 12px 18px;
+      }
+
+      footer {
+        padding: 10px 18px;
+      }
+
+      .slide-inner {
+        padding: 22px 18px;
+      }
+
+      .compare,
+      .cand-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .volgrid,
+      .clone-grid,
+      .credit-flow {
+        grid-template-columns: 1fr;
+      }
+
+      .img-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .hx-stats {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .cf-step::after {
+        display: none;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-<nav>
-  <div class="nav-logo">
-    <div class="nav-logo-mark"><span></span></div>
-    <div class="nav-brand">Anti Copy Club <small>Eleições 2026</small></div>
-  </div>
-  <div class="nav-dots" id="navDots"></div>
-  <div class="nav-right">
-    <span class="nav-counter" id="navCounter">1 / 11</span>
-    <button class="btn-pdf" onclick="exportPDF()">⬇ Salvar PDF</button>
-  </div>
-</nav>
-
-<div id="stage">
-
-  <!-- S1: CAPA -->
-  <div class="slide active" data-label="Introdução">
-    <div class="slide-inner">
-      <div class="tag green">Anti Copy Club · Proposta Comercial 2026</div>
-      <h1>O FUTURO DA<br><span class="g">PRODUÇÃO</span><br>POLÍTICA</h1>
-      <p class="lead">Vídeos e imagens produzidos com <strong>Inteligência Artificial de última geração</strong>. Volume ilimitado, entrega em 24–48h e custo <strong>até 10× menor</strong> que uma produção tradicional em estúdio.</p>
-      <div class="hero-stats">
-        <div class="hs-item"><div class="hn">R$1,50</div><div class="hl">por segundo de vídeo</div></div>
-        <div class="vdiv"></div>
-        <div class="hs-item"><div class="hn">R$0,42</div><div class="hl">por imagem gerada</div></div>
-        <div class="vdiv"></div>
-        <div class="hs-item"><div class="hn">R$2,00</div><div class="hl">por segundo de clone</div></div>
-      </div>
+  <nav>
+    <div class="nav-logo">
+      <div class="nav-logo-mark"><span></span></div>
+      <div class="nav-brand">Anti Copy Club <small>Eleições 2026</small></div>
     </div>
-  </div>
+    <div class="nav-dots" id="navDots"></div>
+    <div class="nav-right">
+      <span class="nav-counter" id="navCounter">1 / 11</span>
+      <button class="btn-pdf" onclick="exportPDF()">⬇ Salvar PDF</button>
+    </div>
+  </nav>
 
-  <!-- S2: PROBLEMA -->
-  <div class="slide" data-label="O Problema">
-    <div class="slide-inner">
-      <div class="tag">Produção Tradicional vs IA</div>
-      <h2>UM DIA DE ESTÚDIO<br>CUSTA ATÉ <span class="y">R$13.500</span></h2>
-      <div class="compare">
-        <div class="ccol trad">
-          <div class="ccol-head">🎬 Produção Tradicional — São Paulo</div>
-          <div class="citem"><span class="cl">Aluguel de estúdio</span><span class="cv">R$ 3.500</span></div>
-          <div class="citem"><span class="cl">Videomaker (diária)</span><span class="cv">R$ 2.500</span></div>
-          <div class="citem"><span class="cl">Fotógrafo (diária)</span><span class="cv">R$ 2.000</span></div>
-          <div class="citem"><span class="cl">Maquiagem</span><span class="cv">R$ 800</span></div>
-          <div class="citem"><span class="cl">Cenografia</span><span class="cv">R$ 2.000</span></div>
-          <div class="citem"><span class="cl">Áudio / Sonoplastia</span><span class="cv">R$ 1.200</span></div>
-          <div class="citem"><span class="cl">Direção de arte</span><span class="cv">R$ 1.500</span></div>
-          <div class="ctotal"><span class="cl">Total por dia</span><span class="bv">R$ 13.500</span></div>
-        </div>
-        <div class="ccol ai">
-          <div class="ccol-head">🤖 Produção com IA — Anti Copy Club</div>
-          <div class="citem"><span class="cl">10 vídeos de 2min</span><span class="cv">R$ 1.800</span></div>
-          <div class="citem"><span class="cl">50 imagens geradas</span><span class="cv">R$ 21</span></div>
-          <div class="citem"><span class="cl">Corte & distribuição</span><span class="cv">R$ 80</span></div>
-          <div class="citem"><span class="cl">Revisão e entrega</span><span class="cv">incluso</span></div>
-          <div class="citem"><span class="cl">Prazo</span><span class="cv">24–48h</span></div>
-          <div class="citem"><span class="cl">Escala</span><span class="cv">ilimitada</span></div>
-          <div class="ctotal"><span class="cl">Total</span><span class="bv">R$ 1.901</span></div>
+  <div id="stage">
+
+    <!-- S1: CAPA -->
+    <div class="slide active" data-label="Introdução">
+      <div class="slide-inner">
+        <div class="tag green">Anti Copy Club · Proposta Comercial 2026</div>
+        <h1>O FUTURO DA<br><span class="g">PRODUÇÃO</span><br>POLÍTICA</h1>
+        <p class="lead">Vídeos e imagens produzidos com <strong>Inteligência Artificial de última geração</strong>.
+          Volume ilimitado, entrega em 24–48h e custo <strong>até 10× menor</strong> que uma produção tradicional em
+          estúdio.</p>
+        <div class="hero-stats">
+          <div class="hs-item">
+            <div class="hn">R$1,50</div>
+            <div class="hl">por segundo de vídeo</div>
+          </div>
+          <div class="vdiv"></div>
+          <div class="hs-item">
+            <div class="hn">R$0,42</div>
+            <div class="hl">por imagem gerada</div>
+          </div>
+          <div class="vdiv"></div>
+          <div class="hs-item">
+            <div class="hn">R$2,00</div>
+            <div class="hl">por segundo de clone</div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- S3: PRECIFICAÇÃO -->
-  <div class="slide" data-label="Tabela de Preços">
-    <div class="slide-inner">
-      <div class="tag green">Preços ao Cliente</div>
-      <h2>COMO <span class="g">PRECIFICAMOS</span></h2>
-      <p class="lead" style="margin-bottom:0">Modelo por consumo, baseado em créditos — você paga pelo que produz, sem surpresas.</p>
-      <table class="ptable">
-        <thead>
-          <tr><th>Formato</th><th>Unidade</th><th>Preço ao cliente</th><th>Status</th></tr>
-        </thead>
-        <tbody>
-          <tr><td class="b">🎬 Vídeo gerado por IA</td><td>por segundo</td><td class="b">R$ 1,50 / seg</td><td><span class="pill green">Ativo</span></td></tr>
-          <tr><td class="b">🎬 Vídeo 30 segundos</td><td>por peça</td><td class="b">R$ 45,00</td><td><span class="pill green">Ativo</span></td></tr>
-          <tr><td class="b">🎬 Vídeo 2 minutos</td><td>por peça</td><td class="b">R$ 180,00</td><td><span class="pill green">Ativo</span></td></tr>
-          <tr><td class="b">🖼️ Imagem gerada por IA</td><td>por imagem</td><td class="b">R$ 0,42</td><td><span class="pill green">Ativo</span></td></tr>
-          <tr><td class="b">🧬 Clone — Vídeo 30s</td><td>por peça</td><td class="b">R$ 60,00</td><td><span class="pill blue">Clone IA</span></td></tr>
-          <tr><td class="b">🧬 Clone — Vídeo 2 min</td><td>por peça</td><td class="b">R$ 240,00</td><td><span class="pill blue">Clone IA</span></td></tr>
-          <tr><td class="b">🧬 Clone Ultra-realista 30s</td><td>por peça</td><td class="b">R$ 137,00</td><td><span class="pill blue">Premium</span></td></tr>
-          <tr><td class="b">🧬 Clone Ultra-realista 2min</td><td>por peça</td><td class="b">R$ 548,00</td><td><span class="pill blue">Premium</span></td></tr>
-          <tr><td class="b">✂️ Corte & Distribuição</td><td>por CPM</td><td class="b">sob consulta</td><td><span class="pill yellow">Serviço</span></td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- S4: VOLUME -->
-  <div class="slide" data-label="Volume por Investimento">
-    <div class="slide-inner">
-      <div class="tag green">Poder de Produção</div>
-      <h2>QUANTO VOCÊ FAZ COM<br>CADA <span class="g">R$100</span></h2>
-      <p class="lead" style="margin-bottom:0">Volume máximo de cada formato com o total de créditos — escolha onde alocar conforme a estratégia da campanha.</p>
-      <div class="volgrid">
-        <div class="volcol">
-          <div class="vb">Com R$ 100 você produz</div><div class="va">ou...</div>
-          <div class="vitem"><span>Vídeos 30s</span><span class="vn">2 vídeos</span></div>
-          <div class="vitem"><span>Vídeos 2min</span><span class="vn">~0,5 vídeo</span></div>
-          <div class="vitem"><span>Imagens</span><span class="vn">238 imgs</span></div>
-        </div>
-        <div class="volcol" style="border-color:rgba(0,230,118,.25);background:rgba(0,230,118,.04)">
-          <div class="vb">Com R$ 500 você produz</div><div class="va">ou...</div>
-          <div class="vitem"><span>Vídeos 30s</span><span class="vn">11 vídeos</span></div>
-          <div class="vitem"><span>Vídeos 2min</span><span class="vn">~2,7 vídeos</span></div>
-          <div class="vitem"><span>Imagens</span><span class="vn">1.190 imgs</span></div>
-        </div>
-        <div class="volcol">
-          <div class="vb">Com R$ 1.000 você produz</div><div class="va">ou...</div>
-          <div class="vitem"><span>Vídeos 30s</span><span class="vn">22 vídeos</span></div>
-          <div class="vitem"><span>Vídeos 2min</span><span class="vn">~5,5 vídeos</span></div>
-          <div class="vitem"><span>Imagens</span><span class="vn">2.380 imgs</span></div>
-        </div>
-      </div>
-      <div class="hbox green">
-        <div class="hi">💡</div>
-        <p>Créditos não utilizados são <strong>devolvidos integralmente</strong>. Se precisar de mais conteúdo, basta adquirir novos créditos — sem contratos longos, sem desperdício.</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- S5: EXEMPLOS -->
-  <div class="slide" data-label="Exemplos de Conteúdo">
-    <div class="slide-inner">
-      <div class="tag green">Galeria de Exemplos</div>
-      <h2>CONTEÚDO <span class="g">GERADO POR IA</span></h2>
-      <p class="lead" style="margin-bottom:0">Clique nos quadros para adicionar imagens e exemplos de produção.</p>
-      <div class="img-grid">
-        <div class="img-slot" id="slot0"><span class="is-icon">🖼️</span><span class="is-label">Imagem exemplo</span><label for="file0"></label><input type="file" id="file0" accept="image/*" onchange="loadImage(event,0)"></div>
-        <div class="img-slot" id="slot1"><span class="is-icon">🖼️</span><span class="is-label">Imagem exemplo</span><label for="file1"></label><input type="file" id="file1" accept="image/*" onchange="loadImage(event,1)"></div>
-        <div class="img-slot" id="slot2"><span class="is-icon">🖼️</span><span class="is-label">Imagem exemplo</span><label for="file2"></label><input type="file" id="file2" accept="image/*" onchange="loadImage(event,2)"></div>
-        <div class="img-slot" id="slot3"><span class="is-icon">🖼️</span><span class="is-label">Imagem exemplo</span><label for="file3"></label><input type="file" id="file3" accept="image/*" onchange="loadImage(event,3)"></div>
-        <div class="img-slot" id="slot4"><span class="is-icon">🖼️</span><span class="is-label">Imagem exemplo</span><label for="file4"></label><input type="file" id="file4" accept="image/*" onchange="loadImage(event,4)"></div>
-        <div class="img-slot" id="slot5"><span class="is-icon">🎬</span><span class="is-label">Frame de vídeo</span><label for="file5"></label><input type="file" id="file5" accept="image/*" onchange="loadImage(event,5)"></div>
-      </div>
-      <div class="hbox green" style="margin-top:14px">
-        <div class="hi">✏️</div>
-        <p>Insira <strong>exemplos reais de produções feitas com IA</strong> antes de apresentar ao cliente. Clique em qualquer quadro para fazer upload.</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- S6: CANDIDATO IA -->
-  <div class="slide" data-label="Candidato de IA">
-    <div class="slide-inner">
-      <div class="tag blue">Serviço Premium</div>
-      <h2>CANDIDATO <span class="b">GERADO POR IA</span></h2>
-      <p class="lead">Criação completa da <strong>identidade visual e avatar</strong> de um candidato gerado por IA — do zero à campanha ativa, com as mais novas tecnologias disponíveis no mercado.</p>
-      <div class="cand-grid">
-        <div class="cand-block">
-          <h4>🧠 Estratégia & Identidade</h4>
-          <div class="cand-item"><div class="ci-dot"></div><div><strong>Persona do candidato</strong> — nome, história, valores e posicionamento gerados por IA</div></div>
-          <div class="cand-item"><div class="ci-dot"></div><div><strong>Narrativa de campanha</strong> — eixos temáticos, slogan, tom de voz e mensagens-chave</div></div>
-          <div class="cand-item"><div class="ci-dot"></div><div><strong>Mapa de pauta</strong> — pautas por bairro e região baseadas em dados reais</div></div>
-          <div class="cand-item"><div class="ci-dot"></div><div><strong>Calendário editorial</strong> — grade de conteúdo para 90 dias de campanha</div></div>
-        </div>
-        <div class="cand-block">
-          <h4>🎨 Produção Visual</h4>
-          <div class="cand-item"><div class="ci-dot"></div><div><strong>Avatar digital do candidato</strong> — identidade visual completa criada por IA</div></div>
-          <div class="cand-item"><div class="ci-dot"></div><div><strong>Imagens de campanha</strong> — fotos, artes e materiais visuais gerados em escala</div></div>
-          <div class="cand-item"><div class="ci-dot"></div><div><strong>Vídeos com avatar</strong> — produção visual dos vídeos com o candidato de IA</div></div>
-          <div class="cand-item"><div class="ci-dot"></div><div><strong>Identidade gráfica</strong> — paleta, tipografia e visual da campanha</div></div>
-        </div>
-      </div>
-      <div class="hbox blue">
-        <div class="hi">⚡</div>
-        <p>Permite <strong>lançar uma campanha completa em dias</strong>, com volume de conteúdo que equipes tradicionais levariam meses para produzir.</p>
-      </div>
-      <div style="margin-top:14px;background:rgba(255,214,0,0.06);border:1px solid rgba(255,214,0,0.28);border-radius:13px;padding:16px 20px;display:flex;align-items:flex-start;gap:12px;">
-        <span style="font-size:20px;flex-shrink:0;margin-top:2px">⚠️</span>
-        <div>
-          <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.14em;color:var(--yellow);margin-bottom:6px">Responsabilidade Anti Copy Club</div>
-          <p style="font-size:13px;line-height:1.65;color:rgba(245,244,240,.65)">A <strong style="color:var(--white)">Anti Copy Club é responsável pelos materiais visuais</strong> — identidade, avatar, imagens e vídeos. <strong style="color:var(--white)">Estratégia política e redação de roteiros são de responsabilidade do cliente</strong> ou da assessoria de comunicação contratada por ele.</p>
+    <!-- S2: PROBLEMA -->
+    <div class="slide" data-label="O Problema">
+      <div class="slide-inner">
+        <div class="tag">Produção Tradicional vs IA</div>
+        <h2>UM DIA DE ESTÚDIO<br>CUSTA ATÉ <span class="y">R$13.500</span></h2>
+        <div class="compare">
+          <div class="ccol trad">
+            <div class="ccol-head">🎬 Produção Tradicional — São Paulo</div>
+            <div class="citem"><span class="cl">Aluguel de estúdio</span><span class="cv">R$ 3.500</span></div>
+            <div class="citem"><span class="cl">Videomaker (diária)</span><span class="cv">R$ 2.500</span></div>
+            <div class="citem"><span class="cl">Fotógrafo (diária)</span><span class="cv">R$ 2.000</span></div>
+            <div class="citem"><span class="cl">Maquiagem</span><span class="cv">R$ 800</span></div>
+            <div class="citem"><span class="cl">Cenografia</span><span class="cv">R$ 2.000</span></div>
+            <div class="citem"><span class="cl">Áudio / Sonoplastia</span><span class="cv">R$ 1.200</span></div>
+            <div class="citem"><span class="cl">Direção de arte</span><span class="cv">R$ 1.500</span></div>
+            <div class="ctotal"><span class="cl">Total por dia</span><span class="bv">R$ 13.500</span></div>
+          </div>
+          <div class="ccol ai">
+            <div class="ccol-head">🤖 Produção com IA — Anti Copy Club</div>
+            <div class="citem"><span class="cl">10 vídeos de 2min</span><span class="cv">R$ 1.800</span></div>
+            <div class="citem"><span class="cl">50 imagens geradas</span><span class="cv">R$ 21</span></div>
+            <div class="citem"><span class="cl">Corte & distribuição</span><span class="cv">R$ 80</span></div>
+            <div class="citem"><span class="cl">Revisão e entrega</span><span class="cv">incluso</span></div>
+            <div class="citem"><span class="cl">Prazo</span><span class="cv">24–48h</span></div>
+            <div class="citem"><span class="cl">Escala</span><span class="cv">ilimitada</span></div>
+            <div class="ctotal"><span class="cl">Total</span><span class="bv">R$ 1.901</span></div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- S6b: GALERIA CANDIDATO IA -->
-  <div class="slide" data-label="Exemplos — Candidato de IA">
-    <div class="slide-inner">
-      <div class="tag blue">Candidato de IA · Galeria</div>
-      <h2>EXEMPLOS DE <span class="b">IMAGEM & VÍDEO</span><br>DO CANDIDATO</h2>
-      <p class="lead" style="margin-bottom:0">Clique em qualquer mídia para abrir em tela cheia com áudio.</p>
+    <!-- S3: PRECIFICAÇÃO -->
+    <div class="slide" data-label="Tabela de Preços">
+      <div class="slide-inner">
+        <div class="tag green">Preços ao Cliente</div>
+        <h2>COMO <span class="g">PRECIFICAMOS</span></h2>
+        <p class="lead" style="margin-bottom:0">Modelo por consumo, baseado em créditos — você paga pelo que produz, sem
+          surpresas.</p>
+        <table class="ptable">
+          <thead>
+            <tr>
+              <th>Formato</th>
+              <th>Unidade</th>
+              <th>Preço ao cliente</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="b">🎬 Vídeo gerado por IA</td>
+              <td>por segundo</td>
+              <td class="b">R$ 1,50 / seg</td>
+              <td><span class="pill green">Ativo</span></td>
+            </tr>
+            <tr>
+              <td class="b">🎬 Vídeo 30 segundos</td>
+              <td>por peça</td>
+              <td class="b">R$ 45,00</td>
+              <td><span class="pill green">Ativo</span></td>
+            </tr>
+            <tr>
+              <td class="b">🎬 Vídeo 2 minutos</td>
+              <td>por peça</td>
+              <td class="b">R$ 180,00</td>
+              <td><span class="pill green">Ativo</span></td>
+            </tr>
+            <tr>
+              <td class="b">🖼️ Imagem gerada por IA</td>
+              <td>por imagem</td>
+              <td class="b">R$ 0,42</td>
+              <td><span class="pill green">Ativo</span></td>
+            </tr>
+            <tr>
+              <td class="b">🧬 Clone — Vídeo 30s</td>
+              <td>por peça</td>
+              <td class="b">R$ 60,00</td>
+              <td><span class="pill blue">Clone IA</span></td>
+            </tr>
+            <tr>
+              <td class="b">🧬 Clone — Vídeo 2 min</td>
+              <td>por peça</td>
+              <td class="b">R$ 240,00</td>
+              <td><span class="pill blue">Clone IA</span></td>
+            </tr>
+            <tr>
+              <td class="b">🧬 Clone Ultra-realista 30s</td>
+              <td>por peça</td>
+              <td class="b">R$ 137,00</td>
+              <td><span class="pill blue">Premium</span></td>
+            </tr>
+            <tr>
+              <td class="b">🧬 Clone Ultra-realista 2min</td>
+              <td>por peça</td>
+              <td class="b">R$ 548,00</td>
+              <td><span class="pill blue">Premium</span></td>
+            </tr>
+            <tr>
+              <td class="b">✂️ Corte & Distribuição</td>
+              <td>por CPM</td>
+              <td class="b">sob consulta</td>
+              <td><span class="pill yellow">Serviço</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
 
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr;gap:12px;align-items:start;margin-top:22px;">
+    <!-- S4: VOLUME -->
+    <div class="slide" data-label="Volume por Investimento">
+      <div class="slide-inner">
+        <div class="tag green">Poder de Produção</div>
+        <h2>QUANTO VOCÊ FAZ COM<br>CADA <span class="g">R$100</span></h2>
+        <p class="lead" style="margin-bottom:0">Volume máximo de cada formato com o total de créditos — escolha onde
+          alocar conforme a estratégia da campanha.</p>
+        <div class="volgrid">
+          <div class="volcol">
+            <div class="vb">Com R$ 100 você produz</div>
+            <div class="va">ou...</div>
+            <div class="vitem"><span>Vídeos 30s</span><span class="vn">2 vídeos</span></div>
+            <div class="vitem"><span>Vídeos 2min</span><span class="vn">~0,5 vídeo</span></div>
+            <div class="vitem"><span>Imagens</span><span class="vn">238 imgs</span></div>
+          </div>
+          <div class="volcol" style="border-color:rgba(0,230,118,.25);background:rgba(0,230,118,.04)">
+            <div class="vb">Com R$ 500 você produz</div>
+            <div class="va">ou...</div>
+            <div class="vitem"><span>Vídeos 30s</span><span class="vn">11 vídeos</span></div>
+            <div class="vitem"><span>Vídeos 2min</span><span class="vn">~2,7 vídeos</span></div>
+            <div class="vitem"><span>Imagens</span><span class="vn">1.190 imgs</span></div>
+          </div>
+          <div class="volcol">
+            <div class="vb">Com R$ 1.000 você produz</div>
+            <div class="va">ou...</div>
+            <div class="vitem"><span>Vídeos 30s</span><span class="vn">22 vídeos</span></div>
+            <div class="vitem"><span>Vídeos 2min</span><span class="vn">~5,5 vídeos</span></div>
+            <div class="vitem"><span>Imagens</span><span class="vn">2.380 imgs</span></div>
+          </div>
+        </div>
+        <div class="hbox green">
+          <div class="hi">💡</div>
+          <p>Créditos não utilizados são <strong>devolvidos integralmente</strong>. Se precisar de mais conteúdo, basta
+            adquirir novos créditos — sem contratos longos, sem desperdício.</p>
+        </div>
+      </div>
+    </div>
 
-        <!-- vídeo 1 — iframe YT autoplay muted loop 9:16 -->
-        <div class="media-item" data-type="yt" data-id="233QIMNvhuE"
-             style="border-radius:12px;overflow:hidden;aspect-ratio:9/16;background:#000;position:relative;cursor:pointer;">
-          <iframe
-            src="https://www.youtube.com/embed/233QIMNvhuE?autoplay=1&mute=1&loop=1&playlist=233QIMNvhuE&controls=0&rel=0&modestbranding=1&playsinline=1"
-            style="position:absolute;inset:0;width:100%;height:100%;border:none;pointer-events:none;"
-            allow="autoplay; encrypted-media"
-            allowfullscreen
-            title="Vídeo Candidato IA 1">
-          </iframe>
-          <div class="play-overlay" style="background:transparent;">
-            <div class="play-btn" style="opacity:0.7;"></div>
+    <!-- S5: EXEMPLOS -->
+    <div class="slide" data-label="Exemplos de Conteúdo">
+      <div class="slide-inner">
+        <div class="tag green">Galeria de Exemplos</div>
+        <h2>CONTEÚDO <span class="g">GERADO POR IA</span></h2>
+        <p class="lead" style="margin-bottom:0">Clique nos quadros para adicionar imagens e exemplos de produção.</p>
+        <div class="img-grid">
+          <div class="img-slot" id="slot0"><span class="is-icon">🖼️</span><span class="is-label">Imagem
+              exemplo</span><label for="file0"></label><input type="file" id="file0" accept="image/*"
+              onchange="loadImage(event,0)"></div>
+          <div class="img-slot" id="slot1"><span class="is-icon">🖼️</span><span class="is-label">Imagem
+              exemplo</span><label for="file1"></label><input type="file" id="file1" accept="image/*"
+              onchange="loadImage(event,1)"></div>
+          <div class="img-slot" id="slot2"><span class="is-icon">🖼️</span><span class="is-label">Imagem
+              exemplo</span><label for="file2"></label><input type="file" id="file2" accept="image/*"
+              onchange="loadImage(event,2)"></div>
+          <div class="img-slot" id="slot3"><span class="is-icon">🖼️</span><span class="is-label">Imagem
+              exemplo</span><label for="file3"></label><input type="file" id="file3" accept="image/*"
+              onchange="loadImage(event,3)"></div>
+          <div class="img-slot" id="slot4"><span class="is-icon">🖼️</span><span class="is-label">Imagem
+              exemplo</span><label for="file4"></label><input type="file" id="file4" accept="image/*"
+              onchange="loadImage(event,4)"></div>
+          <div class="img-slot" id="slot5"><span class="is-icon">🎬</span><span class="is-label">Frame de
+              vídeo</span><label for="file5"></label><input type="file" id="file5" accept="image/*"
+              onchange="loadImage(event,5)"></div>
+        </div>
+        <div class="hbox green" style="margin-top:14px">
+          <div class="hi">✏️</div>
+          <p>Insira <strong>exemplos reais de produções feitas com IA</strong> antes de apresentar ao cliente. Clique em
+            qualquer quadro para fazer upload.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- S6: CANDIDATO IA -->
+    <div class="slide" data-label="Candidato de IA">
+      <div class="slide-inner">
+        <div class="tag blue">Serviço Premium</div>
+        <h2>CANDIDATO <span class="b">GERADO POR IA</span></h2>
+        <p class="lead">Criação completa da <strong>identidade visual e avatar</strong> de um candidato gerado por IA —
+          do zero à campanha ativa, com as mais novas tecnologias disponíveis no mercado.</p>
+        <div class="cand-grid">
+          <div class="cand-block">
+            <h4>🧠 Estratégia & Identidade</h4>
+            <div class="cand-item">
+              <div class="ci-dot"></div>
+              <div><strong>Persona do candidato</strong> — nome, história, valores e posicionamento gerados por IA</div>
+            </div>
+            <div class="cand-item">
+              <div class="ci-dot"></div>
+              <div><strong>Narrativa de campanha</strong> — eixos temáticos, slogan, tom de voz e mensagens-chave</div>
+            </div>
+            <div class="cand-item">
+              <div class="ci-dot"></div>
+              <div><strong>Mapa de pauta</strong> — pautas por bairro e região baseadas em dados reais</div>
+            </div>
+            <div class="cand-item">
+              <div class="ci-dot"></div>
+              <div><strong>Calendário editorial</strong> — grade de conteúdo para 90 dias de campanha</div>
+            </div>
+          </div>
+          <div class="cand-block">
+            <h4>🎨 Produção Visual</h4>
+            <div class="cand-item">
+              <div class="ci-dot"></div>
+              <div><strong>Avatar digital do candidato</strong> — identidade visual completa criada por IA</div>
+            </div>
+            <div class="cand-item">
+              <div class="ci-dot"></div>
+              <div><strong>Imagens de campanha</strong> — fotos, artes e materiais visuais gerados em escala</div>
+            </div>
+            <div class="cand-item">
+              <div class="ci-dot"></div>
+              <div><strong>Vídeos com avatar</strong> — produção visual dos vídeos com o candidato de IA</div>
+            </div>
+            <div class="cand-item">
+              <div class="ci-dot"></div>
+              <div><strong>Identidade gráfica</strong> — paleta, tipografia e visual da campanha</div>
+            </div>
+          </div>
+        </div>
+        <div class="hbox blue">
+          <div class="hi">⚡</div>
+          <p>Permite <strong>lançar uma campanha completa em dias</strong>, com volume de conteúdo que equipes
+            tradicionais levariam meses para produzir.</p>
+        </div>
+        <div
+          style="margin-top:14px;background:rgba(255,214,0,0.06);border:1px solid rgba(255,214,0,0.28);border-radius:13px;padding:16px 20px;display:flex;align-items:flex-start;gap:12px;">
+          <span style="font-size:20px;flex-shrink:0;margin-top:2px">⚠️</span>
+          <div>
+            <div
+              style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.14em;color:var(--yellow);margin-bottom:6px">
+              Responsabilidade Anti Copy Club</div>
+            <p style="font-size:13px;line-height:1.65;color:rgba(245,244,240,.65)">A <strong
+                style="color:var(--white)">Anti Copy Club é responsável pelos materiais visuais</strong> — identidade,
+              avatar, imagens e vídeos. <strong style="color:var(--white)">Estratégia política e redação de roteiros são
+                de responsabilidade do cliente</strong> ou da assessoria de comunicação contratada por ele.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- S6b: GALERIA CANDIDATO IA -->
+    <div class="slide" data-label="Exemplos — Candidato de IA">
+      <div class="slide-inner">
+        <div class="tag blue">Candidato de IA · Galeria</div>
+        <h2>EXEMPLOS DE <span class="b">IMAGEM & VÍDEO</span><br>DO CANDIDATO</h2>
+        <p class="lead" style="margin-bottom:0">Clique em qualquer mídia para abrir em tela cheia com áudio.</p>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr;gap:12px;align-items:start;margin-top:22px;">
+
+          <!-- vídeo 1 — iframe YT autoplay muted loop 9:16 -->
+          <div class="media-item" data-type="yt" data-id="233QIMNvhuE"
+            style="border-radius:12px;overflow:hidden;aspect-ratio:9/16;background:#000;position:relative;cursor:pointer;">
+            <iframe
+              src="https://www.youtube.com/embed/233QIMNvhuE?autoplay=1&mute=1&loop=1&playlist=233QIMNvhuE&controls=0&rel=0&modestbranding=1&playsinline=1"
+              style="position:absolute;inset:0;width:100%;height:100%;border:none;pointer-events:none;"
+              allow="autoplay; encrypted-media" allowfullscreen title="Vídeo Candidato IA 1">
+            </iframe>
+          </div>
+
+          <!-- vídeo 2 — iframe YT autoplay muted loop 9:16 -->
+          <div class="media-item" data-type="yt" data-id="OY_904pzs1o"
+            style="border-radius:12px;overflow:hidden;aspect-ratio:9/16;background:#000;position:relative;cursor:pointer;">
+            <iframe
+              src="https://www.youtube.com/embed/OY_904pzs1o?autoplay=1&mute=1&loop=1&playlist=OY_904pzs1o&controls=0&rel=0&modestbranding=1&playsinline=1"
+              style="position:absolute;inset:0;width:100%;height:100%;border:none;pointer-events:none;"
+              allow="autoplay; encrypted-media" allowfullscreen title="Vídeo Candidato IA 2">
+            </iframe>
+          </div>
+
+          <!-- imagem 1 — proporção natural da imagem (9:16 aprox) -->
+          <div class="media-item" data-type="img"
+            data-src="https://i.ibb.co/prWLtSq1/freepik-flat-design-storyboard-illustration-a-female-polit-48981.jpg"
+            style="border-radius:12px;overflow:hidden;background:#111;cursor:pointer;position:relative;">
+            <img src="https://i.ibb.co/prWLtSq1/freepik-flat-design-storyboard-illustration-a-female-polit-48981.jpg"
+              style="width:100%;height:auto;display:block;border-radius:12px;" alt="Candidata IA">
+            <div class="play-overlay">
+              <div style="font-size:22px;opacity:.8">🔍</div>
+            </div>
+          </div>
+
+          <!-- imagem 2 — proporção natural da imagem (4:3 aprox) -->
+          <div class="media-item" data-type="img"
+            data-src="https://i.ibb.co/chGD6xHY/freepik-cartoon-deputies-voting-in-the-government-hall-of-48980.jpg"
+            style="border-radius:12px;overflow:hidden;background:#111;cursor:pointer;position:relative;align-self:center;">
+            <img src="https://i.ibb.co/chGD6xHY/freepik-cartoon-deputies-voting-in-the-government-hall-of-48980.jpg"
+              style="width:100%;height:auto;display:block;border-radius:12px;" alt="Cena política IA">
+            <div class="play-overlay">
+              <div style="font-size:22px;opacity:.8">🔍</div>
+            </div>
+          </div>
+
+          <!-- imagem 3 — proporção natural da imagem (4:3 aprox) -->
+          <div class="media-item" data-type="img"
+            data-src="https://i.ibb.co/fzbfPgJS/freepik-flat-design-illustration-of-a-confused-brazilian-c-48979.jpg"
+            style="border-radius:12px;overflow:hidden;background:#111;cursor:pointer;position:relative;align-self:center;">
+            <img src="https://i.ibb.co/fzbfPgJS/freepik-flat-design-illustration-of-a-confused-brazilian-c-48979.jpg"
+              style="width:100%;height:auto;display:block;border-radius:12px;" alt="Ilustração IA">
+            <div class="play-overlay">
+              <div style="font-size:22px;opacity:.8">🔍</div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="hbox blue" style="margin-top:14px">
+          <div class="hi">🎬</div>
+          <p>Vídeos rodam automaticamente sem áudio. <strong>Clique para abrir em tela cheia com áudio ativado.</strong>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- LIGHTBOX -->
+    <div id="lightbox"
+      style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:1000;align-items:center;justify-content:center;backdrop-filter:blur(8px);">
+      <button onclick="closeLightbox()"
+        style="position:absolute;top:20px;right:24px;background:none;border:none;color:#fff;font-size:28px;cursor:pointer;z-index:1001;line-height:1;">✕</button>
+      <button id="lb-prev" onclick="lbNav(-1)"
+        style="position:absolute;left:18px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.25);color:#fff;font-size:28px;cursor:pointer;z-index:1001;border-radius:50%;width:52px;height:52px;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px);transition:background .2s;">‹</button>
+      <button id="lb-next" onclick="lbNav(1)"
+        style="position:absolute;right:18px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.25);color:#fff;font-size:28px;cursor:pointer;z-index:1001;border-radius:50%;width:52px;height:52px;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px);transition:background .2s;">›</button>
+      <div id="lb-counter"
+        style="position:absolute;bottom:18px;left:50%;transform:translateX(-50%);font-size:11px;font-weight:700;color:rgba(255,255,255,.45);letter-spacing:.15em;text-transform:uppercase;z-index:1001;">
+      </div>
+      <div id="lb-content"
+        style="max-width:90vw;max-height:88vh;display:flex;align-items:center;justify-content:center;position:relative;">
+      </div>
+    </div>
+
+    <!-- S7: CLONE -->
+    <div class="slide" data-label="Clone de Avatar IA">
+      <div class="slide-inner">
+        <div class="tag blue">Tecnologia de Ponta</div>
+        <h2>CLONE DO <span class="b">CANDIDATO</span><br>POR INTELIGÊNCIA ARTIFICIAL</h2>
+        <p class="lead" style="margin-bottom:0">Clone de voz e imagem real — o candidato fala <strong>qualquer roteiro,
+            a qualquer hora, sem câmera e sem agenda</strong>. Captação presencial incluída para máxima assertividade.
+        </p>
+        <div class="clone-grid" style="margin-top:24px">
+          <div class="clone-card">
+            <div class="clone-name">Clone Padrão</div>
+            <div class="clone-price">R$ 120</div>
+            <div class="clone-unit">por minuto · R$ 2,00/seg</div>
+            <ul class="clone-feat">
+              <li>Avatar digital em vídeo</li>
+              <li>Alta definição, sem marca d'água</li>
+              <li>Qualquer roteiro e cenário</li>
+              <li>Produção em escala via IA</li>
+              <li>Entrega em horas</li>
+            </ul>
+          </div>
+          <div class="clone-card feat">
+            <div class="clone-name">Clone Premium</div>
+            <div class="clone-price">R$ 274</div>
+            <div class="clone-unit">por minuto · ultra-realista</div>
+            <ul class="clone-feat">
+              <li>Captação presencial do candidato</li>
+              <li>Máxima assertividade e realismo</li>
+              <li>Expressões e gestos naturais</li>
+              <li>Ideal para discursos e spots</li>
+              <li>Clonagem de voz profissional</li>
+            </ul>
+          </div>
+          <div class="clone-card">
+            <div class="clone-name">Tradução & Dublagem</div>
+            <div class="clone-price">R$ 100</div>
+            <div class="clone-unit">por minuto traduzido</div>
+            <ul class="clone-feat">
+              <li>Vídeo existente traduzido</li>
+              <li>Sincronização labial precisa</li>
+              <li>Mais de 175 idiomas</li>
+              <li>Ideal para comunidades locais</li>
+              <li>Entrega em 24h</li>
+            </ul>
+          </div>
+        </div>
+        <div class="hbox blue" style="margin-top:14px">
+          <div class="hi">🧬</div>
+          <p>Utilizamos as <strong>tecnologias de clonagem de avatar mais avançadas do mercado</strong>. A captação
+            presencial no Clone Premium garante maior fidelidade ao candidato real e mais credibilidade perante o
+            eleitor.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- S8: HYPEX — CORTE E DISTRIBUIÇÃO -->
+    <div class="slide" data-label="Corte & Distribuição">
+      <div class="slide-inner">
+        <div class="tag yellow">Serviço Exclusivo</div>
+        <h2>CORTE E <span class="y">DISTRIBUIÇÃO</span><br>DE ALTO IMPACTO</h2>
+        <p class="lead">Um serviço <strong>completamente separado da produção</strong> — especializado em transformar o
+          conteúdo gerado em audiência real, com tecnologia de corte de precisão e distribuição em escala.</p>
+        <div class="credit-box">
+          <h3>Modelo de Distribuição por CPM</h3>
+          <p style="font-size:13px;color:rgba(245,244,240,.55);line-height:1.7">CPM = Custo por Mil Impressões. O
+            investimento em distribuição escala diretamente com o alcance desejado — você escolhe quantas pessoas quer
+            atingir e pagamos exatamente por isso.</p>
+          <div class="hx-stats">
+            <div class="hxs">
+              <div class="hv">R$1,00</div>
+              <div class="hlb">CPM mínimo</div>
+            </div>
+            <div class="hxs">
+              <div class="hv">R$1,50</div>
+              <div class="hlb">CPM máximo</div>
+            </div>
+            <div class="hxs">
+              <div class="hv">1M+</div>
+              <div class="hlb">impressões possíveis</div>
+            </div>
+          </div>
+        </div>
+        <div class="hbox yellow" style="margin-top:16px">
+          <div class="hi">✂️</div>
+          <p>Produção IA + distribuição de precisão = <strong>stack completo para campanhas políticas de alta
+              performance</strong> — sem estúdio, sem equipe técnica, sem desperdício de verba.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- S9: MODELO DE CRÉDITOS -->
+    <div class="slide" data-label="Modelo de Créditos">
+      <div class="slide-inner">
+        <div class="tag green">Como Funciona</div>
+        <h2>SISTEMA DE <span class="g">CRÉDITOS</span><br>FLEXÍVEL E TRANSPARENTE</h2>
+        <p class="lead" style="margin-bottom:0">Compre créditos e use conforme a demanda da campanha. <strong>Sem
+            lock-in, sem surpresas.</strong> Os valores abaixo mostram o que é possível produzir com o total de créditos
+          em cada formato — você escolhe como alocar.</p>
+        <div class="credit-flow">
+          <div class="cf-step">
+            <div class="cf-num">01</div>
+            <div class="cf-title">Compra de Créditos</div>
+            <div class="cf-desc">O cliente adquire um pacote de créditos com a Anti Copy Club conforme o volume previsto
+              da campanha.</div>
+          </div>
+          <div class="cf-step">
+            <div class="cf-num">02</div>
+            <div class="cf-title">Produção e Consumo</div>
+            <div class="cf-desc">Os créditos são consumidos à medida que o conteúdo é gerado — vídeos ou imagens,
+              conforme a necessidade.</div>
+          </div>
+          <div class="cf-step">
+            <div class="cf-num">03</div>
+            <div class="cf-title">Saldo & Recarga</div>
+            <div class="cf-desc">Créditos não utilizados são devolvidos. Se precisar de mais conteúdo, basta recarregar
+              sem burocracia.</div>
           </div>
         </div>
 
-        <!-- vídeo 2 — iframe YT autoplay muted loop 9:16 -->
-        <div class="media-item" data-type="yt" data-id="OY_904pzs1o"
-             style="border-radius:12px;overflow:hidden;aspect-ratio:9/16;background:#000;position:relative;cursor:pointer;">
-          <iframe
-            src="https://www.youtube.com/embed/OY_904pzs1o?autoplay=1&mute=1&loop=1&playlist=OY_904pzs1o&controls=0&rel=0&modestbranding=1&playsinline=1"
-            style="position:absolute;inset:0;width:100%;height:100%;border:none;pointer-events:none;"
-            allow="autoplay; encrypted-media"
-            allowfullscreen
-            title="Vídeo Candidato IA 2">
-          </iframe>
-          <div class="play-overlay" style="background:transparent;">
-            <div class="play-btn" style="opacity:0.7;"></div>
+        <div style="margin-top:20px;display:grid;grid-template-columns:repeat(3,1fr);gap:13px;">
+
+          <!-- R$500 -->
+          <div
+            style="border-radius:13px;border:1px solid rgba(0,230,118,.2);background:rgba(255,255,255,.025);overflow:hidden;">
+            <div style="padding:18px 18px 12px;text-align:center;border-bottom:1px solid rgba(255,255,255,.05);">
+              <div
+                style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--gray);margin-bottom:6px">
+                Pacote Inicial</div>
+              <div style="font-family:'Bebas Neue';font-size:34px;color:var(--green);line-height:1">R$ 500</div>
+            </div>
+            <div style="padding:14px 18px;">
+              <div
+                style="font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.14em;color:var(--gray);margin-bottom:10px">
+                Ou produz...</div>
+              <div
+                style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:12px;color:rgba(245,244,240,.5)">
+                <span>Vídeos 30s</span><span style="font-weight:700;color:var(--white)">11 peças</span></div>
+              <div
+                style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:12px;color:rgba(245,244,240,.5)">
+                <span>Vídeos 2min</span><span style="font-weight:700;color:var(--white)">~2,7 peças</span></div>
+              <div
+                style="display:flex;justify-content:space-between;padding:7px 0;font-size:12px;color:rgba(245,244,240,.5)">
+                <span>Imagens</span><span style="font-weight:700;color:var(--white)">1.190 imgs</span></div>
+            </div>
           </div>
+
+          <!-- R$2.000 -->
+          <div
+            style="border-radius:13px;border:1px solid rgba(0,230,118,.35);background:rgba(0,230,118,.04);overflow:hidden;">
+            <div style="padding:18px 18px 12px;text-align:center;border-bottom:1px solid rgba(255,255,255,.05);">
+              <div
+                style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--green);margin-bottom:6px">
+                Pacote Campanha</div>
+              <div style="font-family:'Bebas Neue';font-size:34px;color:var(--green);line-height:1">R$ 2.000</div>
+            </div>
+            <div style="padding:14px 18px;">
+              <div
+                style="font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.14em;color:var(--gray);margin-bottom:10px">
+                Ou produz...</div>
+              <div
+                style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:12px;color:rgba(245,244,240,.5)">
+                <span>Vídeos 30s</span><span style="font-weight:700;color:var(--white)">44 peças</span></div>
+              <div
+                style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:12px;color:rgba(245,244,240,.5)">
+                <span>Vídeos 2min</span><span style="font-weight:700;color:var(--white)">~11 peças</span></div>
+              <div
+                style="display:flex;justify-content:space-between;padding:7px 0;font-size:12px;color:rgba(245,244,240,.5)">
+                <span>Imagens</span><span style="font-weight:700;color:var(--white)">4.760 imgs</span></div>
+            </div>
+          </div>
+
+          <!-- R$5.000 -->
+          <div
+            style="border-radius:13px;border:1px solid rgba(255,214,0,.25);background:rgba(255,214,0,.04);overflow:hidden;">
+            <div style="padding:18px 18px 12px;text-align:center;border-bottom:1px solid rgba(255,255,255,.05);">
+              <div
+                style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--yellow);margin-bottom:6px">
+                Pacote Premium</div>
+              <div style="font-family:'Bebas Neue';font-size:34px;color:var(--yellow);line-height:1">R$ 5.000</div>
+            </div>
+            <div style="padding:14px 18px;">
+              <div
+                style="font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.14em;color:var(--gray);margin-bottom:10px">
+                Ou produz...</div>
+              <div
+                style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:12px;color:rgba(245,244,240,.5)">
+                <span>Vídeos 30s</span><span style="font-weight:700;color:var(--white)">111 peças</span></div>
+              <div
+                style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:12px;color:rgba(245,244,240,.5)">
+                <span>Vídeos 2min</span><span style="font-weight:700;color:var(--white)">~27 peças</span></div>
+              <div
+                style="display:flex;justify-content:space-between;padding:7px 0;font-size:12px;color:rgba(245,244,240,.5)">
+                <span>Imagens</span><span style="font-weight:700;color:var(--white)">11.900 imgs</span></div>
+            </div>
+          </div>
+
         </div>
 
-        <!-- imagem 1 — proporção natural da imagem (9:16 aprox) -->
-        <div class="media-item" data-type="img"
-             data-src="https://i.ibb.co/prWLtSq1/freepik-flat-design-storyboard-illustration-a-female-polit-48981.jpg"
-             style="border-radius:12px;overflow:hidden;background:#111;cursor:pointer;position:relative;">
-          <img src="https://i.ibb.co/prWLtSq1/freepik-flat-design-storyboard-illustration-a-female-polit-48981.jpg"
-               style="width:100%;height:auto;display:block;border-radius:12px;" alt="Candidata IA">
-          <div class="play-overlay"><div style="font-size:22px;opacity:.8">🔍</div></div>
+        <div class="hbox green" style="margin-top:14px">
+          <div class="hi">🔄</div>
+          <p>Os valores indicam o volume máximo de <strong>cada tipo de conteúdo separadamente</strong>. A combinação
+            entre formatos é definida com a equipe Anti Copy Club conforme a estratégia da campanha.</p>
         </div>
-
-        <!-- imagem 2 — proporção natural da imagem (4:3 aprox) -->
-        <div class="media-item" data-type="img"
-             data-src="https://i.ibb.co/chGD6xHY/freepik-cartoon-deputies-voting-in-the-government-hall-of-48980.jpg"
-             style="border-radius:12px;overflow:hidden;background:#111;cursor:pointer;position:relative;align-self:center;">
-          <img src="https://i.ibb.co/chGD6xHY/freepik-cartoon-deputies-voting-in-the-government-hall-of-48980.jpg"
-               style="width:100%;height:auto;display:block;border-radius:12px;" alt="Cena política IA">
-          <div class="play-overlay"><div style="font-size:22px;opacity:.8">🔍</div></div>
-        </div>
-
-        <!-- imagem 3 — proporção natural da imagem (4:3 aprox) -->
-        <div class="media-item" data-type="img"
-             data-src="https://i.ibb.co/fzbfPgJS/freepik-flat-design-illustration-of-a-confused-brazilian-c-48979.jpg"
-             style="border-radius:12px;overflow:hidden;background:#111;cursor:pointer;position:relative;align-self:center;">
-          <img src="https://i.ibb.co/fzbfPgJS/freepik-flat-design-illustration-of-a-confused-brazilian-c-48979.jpg"
-               style="width:100%;height:auto;display:block;border-radius:12px;" alt="Ilustração IA">
-          <div class="play-overlay"><div style="font-size:22px;opacity:.8">🔍</div></div>
-        </div>
-
-      </div>
-
-      <div class="hbox blue" style="margin-top:14px">
-        <div class="hi">🎬</div>
-        <p>Vídeos rodam automaticamente sem áudio. <strong>Clique para abrir em tela cheia com áudio ativado.</strong></p>
       </div>
     </div>
-  </div>
 
-  <!-- LIGHTBOX -->
-  <div id="lightbox" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:1000;align-items:center;justify-content:center;backdrop-filter:blur(8px);">
-    <button onclick="closeLightbox()" style="position:absolute;top:20px;right:24px;background:none;border:none;color:#fff;font-size:28px;cursor:pointer;z-index:1001;line-height:1;">✕</button>
-    <div id="lb-content" style="max-width:90vw;max-height:88vh;display:flex;align-items:center;justify-content:center;position:relative;"></div>
-  </div>
-
-  <!-- S7: CLONE -->
-  <div class="slide" data-label="Clone de Avatar IA">
-    <div class="slide-inner">
-      <div class="tag blue">Tecnologia de Ponta</div>
-      <h2>CLONE DO <span class="b">CANDIDATO</span><br>POR INTELIGÊNCIA ARTIFICIAL</h2>
-      <p class="lead" style="margin-bottom:0">Clone de voz e imagem real — o candidato fala <strong>qualquer roteiro, a qualquer hora, sem câmera e sem agenda</strong>. Captação presencial incluída para máxima assertividade.</p>
-      <div class="clone-grid" style="margin-top:24px">
-        <div class="clone-card">
-          <div class="clone-name">Clone Padrão</div>
-          <div class="clone-price">R$ 120</div>
-          <div class="clone-unit">por minuto · R$ 2,00/seg</div>
-          <ul class="clone-feat">
-            <li>Avatar digital em vídeo</li>
-            <li>Alta definição, sem marca d'água</li>
-            <li>Qualquer roteiro e cenário</li>
-            <li>Produção em escala via IA</li>
-            <li>Entrega em horas</li>
-          </ul>
+    <!-- S10: CTA -->
+    <div class="slide" data-label="Próximos Passos">
+      <div class="slide-inner" style="justify-content:center;align-items:center">
+        <div class="cta-wrap">
+          <div class="tag green" style="display:inline-block;margin-bottom:22px">Próximos Passos</div>
+          <h1>PRONTO PARA<br>VENCER <span class="g">2026?</span></h1>
+          <p class="lead">Campanhas que produzem <strong>mais conteúdo, com mais velocidade e menos custo</strong>
+            dominam as redes. A janela para montar sua estrutura de IA está aberta.</p>
+          <div class="cta-btns">
+            <button class="btn-big btn-big-green">Solicitar proposta personalizada</button>
+            <button class="btn-big btn-big-outline" onclick="exportPDF()">⬇ Baixar em PDF</button>
+          </div>
+          <p
+            style="margin-top:32px;font-size:12px;color:var(--gray);text-transform:uppercase;letter-spacing:.1em;font-weight:600">
+            Anti Copy Club · Produção com IA · Eleições 2026</p>
         </div>
-        <div class="clone-card feat">
-          <div class="clone-name">Clone Premium</div>
-          <div class="clone-price">R$ 274</div>
-          <div class="clone-unit">por minuto · ultra-realista</div>
-          <ul class="clone-feat">
-            <li>Captação presencial do candidato</li>
-            <li>Máxima assertividade e realismo</li>
-            <li>Expressões e gestos naturais</li>
-            <li>Ideal para discursos e spots</li>
-            <li>Clonagem de voz profissional</li>
-          </ul>
-        </div>
-        <div class="clone-card">
-          <div class="clone-name">Tradução & Dublagem</div>
-          <div class="clone-price">R$ 100</div>
-          <div class="clone-unit">por minuto traduzido</div>
-          <ul class="clone-feat">
-            <li>Vídeo existente traduzido</li>
-            <li>Sincronização labial precisa</li>
-            <li>Mais de 175 idiomas</li>
-            <li>Ideal para comunidades locais</li>
-            <li>Entrega em 24h</li>
-          </ul>
-        </div>
-      </div>
-      <div class="hbox blue" style="margin-top:14px">
-        <div class="hi">🧬</div>
-        <p>Utilizamos as <strong>tecnologias de clonagem de avatar mais avançadas do mercado</strong>. A captação presencial no Clone Premium garante maior fidelidade ao candidato real e mais credibilidade perante o eleitor.</p>
       </div>
     </div>
-  </div>
 
-  <!-- S8: HYPEX — CORTE E DISTRIBUIÇÃO -->
-  <div class="slide" data-label="Corte & Distribuição">
-    <div class="slide-inner">
-      <div class="tag yellow">Serviço Exclusivo</div>
-      <h2>CORTE E <span class="y">DISTRIBUIÇÃO</span><br>DE ALTO IMPACTO</h2>
-      <p class="lead">Um serviço <strong>completamente separado da produção</strong> — especializado em transformar o conteúdo gerado em audiência real, com tecnologia de corte de precisão e distribuição em escala.</p>
-      <div class="credit-box">
-        <h3>Modelo de Distribuição por CPM</h3>
-        <p style="font-size:13px;color:rgba(245,244,240,.55);line-height:1.7">CPM = Custo por Mil Impressões. O investimento em distribuição escala diretamente com o alcance desejado — você escolhe quantas pessoas quer atingir e pagamos exatamente por isso.</p>
-        <div class="hx-stats">
-          <div class="hxs"><div class="hv">R$1,00</div><div class="hlb">CPM mínimo</div></div>
-          <div class="hxs"><div class="hv">R$1,50</div><div class="hlb">CPM máximo</div></div>
-          <div class="hxs"><div class="hv">1M+</div><div class="hlb">impressões possíveis</div></div>
-        </div>
-      </div>
-      <div class="hbox yellow" style="margin-top:16px">
-        <div class="hi">✂️</div>
-        <p>Produção IA + distribuição de precisão = <strong>stack completo para campanhas políticas de alta performance</strong> — sem estúdio, sem equipe técnica, sem desperdício de verba.</p>
-      </div>
-    </div>
-  </div>
+  </div><!-- #stage -->
 
-  <!-- S9: MODELO DE CRÉDITOS -->
-  <div class="slide" data-label="Modelo de Créditos">
-    <div class="slide-inner">
-      <div class="tag green">Como Funciona</div>
-      <h2>SISTEMA DE <span class="g">CRÉDITOS</span><br>FLEXÍVEL E TRANSPARENTE</h2>
-      <p class="lead" style="margin-bottom:0">Compre créditos e use conforme a demanda da campanha. <strong>Sem lock-in, sem surpresas.</strong> Os valores abaixo mostram o que é possível produzir com o total de créditos em cada formato — você escolhe como alocar.</p>
-      <div class="credit-flow">
-        <div class="cf-step">
-          <div class="cf-num">01</div>
-          <div class="cf-title">Compra de Créditos</div>
-          <div class="cf-desc">O cliente adquire um pacote de créditos com a Anti Copy Club conforme o volume previsto da campanha.</div>
-        </div>
-        <div class="cf-step">
-          <div class="cf-num">02</div>
-          <div class="cf-title">Produção e Consumo</div>
-          <div class="cf-desc">Os créditos são consumidos à medida que o conteúdo é gerado — vídeos ou imagens, conforme a necessidade.</div>
-        </div>
-        <div class="cf-step">
-          <div class="cf-num">03</div>
-          <div class="cf-title">Saldo & Recarga</div>
-          <div class="cf-desc">Créditos não utilizados são devolvidos. Se precisar de mais conteúdo, basta recarregar sem burocracia.</div>
-        </div>
-      </div>
+  <footer>
+    <button class="btn btn-outline" id="btnPrev" disabled>← Anterior</button>
+    <span class="footer-label" id="footerLabel">Introdução</span>
+    <button class="btn btn-primary" id="btnNext">Próximo →</button>
+  </footer>
 
-      <div style="margin-top:20px;display:grid;grid-template-columns:repeat(3,1fr);gap:13px;">
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    const btnPrev = document.getElementById('btnPrev');
+    const btnNext = document.getElementById('btnNext');
+    const navCounter = document.getElementById('navCounter');
+    const footerLabel = document.getElementById('footerLabel');
+    const navDotsEl = document.getElementById('navDots');
+    let current = 0;
+    const total = slides.length;
 
-        <!-- R$500 -->
-        <div style="border-radius:13px;border:1px solid rgba(0,230,118,.2);background:rgba(255,255,255,.025);overflow:hidden;">
-          <div style="padding:18px 18px 12px;text-align:center;border-bottom:1px solid rgba(255,255,255,.05);">
-            <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--gray);margin-bottom:6px">Pacote Inicial</div>
-            <div style="font-family:'Bebas Neue';font-size:34px;color:var(--green);line-height:1">R$ 500</div>
-          </div>
-          <div style="padding:14px 18px;">
-            <div style="font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.14em;color:var(--gray);margin-bottom:10px">Ou produz...</div>
-            <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:12px;color:rgba(245,244,240,.5)"><span>Vídeos 30s</span><span style="font-weight:700;color:var(--white)">11 peças</span></div>
-            <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:12px;color:rgba(245,244,240,.5)"><span>Vídeos 2min</span><span style="font-weight:700;color:var(--white)">~2,7 peças</span></div>
-            <div style="display:flex;justify-content:space-between;padding:7px 0;font-size:12px;color:rgba(245,244,240,.5)"><span>Imagens</span><span style="font-weight:700;color:var(--white)">1.190 imgs</span></div>
-          </div>
-        </div>
+    for (let i = 0; i < total; i++) {
+      const b = document.createElement('button');
+      b.className = 'dot-btn' + (i === 0 ? ' active' : '');
+      b.title = slides[i].dataset.label || '';
+      b.addEventListener('click', () => goTo(i));
+      navDotsEl.appendChild(b);
+    }
 
-        <!-- R$2.000 -->
-        <div style="border-radius:13px;border:1px solid rgba(0,230,118,.35);background:rgba(0,230,118,.04);overflow:hidden;">
-          <div style="padding:18px 18px 12px;text-align:center;border-bottom:1px solid rgba(255,255,255,.05);">
-            <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--green);margin-bottom:6px">Pacote Campanha</div>
-            <div style="font-family:'Bebas Neue';font-size:34px;color:var(--green);line-height:1">R$ 2.000</div>
-          </div>
-          <div style="padding:14px 18px;">
-            <div style="font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.14em;color:var(--gray);margin-bottom:10px">Ou produz...</div>
-            <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:12px;color:rgba(245,244,240,.5)"><span>Vídeos 30s</span><span style="font-weight:700;color:var(--white)">44 peças</span></div>
-            <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:12px;color:rgba(245,244,240,.5)"><span>Vídeos 2min</span><span style="font-weight:700;color:var(--white)">~11 peças</span></div>
-            <div style="display:flex;justify-content:space-between;padding:7px 0;font-size:12px;color:rgba(245,244,240,.5)"><span>Imagens</span><span style="font-weight:700;color:var(--white)">4.760 imgs</span></div>
-          </div>
-        </div>
+    function goTo(n) {
+      slides[current].classList.remove('active');
+      navDotsEl.children[current].classList.remove('active');
+      current = n;
+      slides[current].classList.add('active');
+      navDotsEl.children[current].classList.add('active');
+      navCounter.textContent = `${current + 1} / ${total}`;
+      footerLabel.textContent = slides[current].dataset.label || '';
+      btnPrev.disabled = current === 0;
+      btnNext.disabled = current === total - 1;
+      btnNext.textContent = current === total - 1 ? '✓ Fim' : 'Próximo →';
+      slides[current].scrollTop = 0;
+    }
 
-        <!-- R$5.000 -->
-        <div style="border-radius:13px;border:1px solid rgba(255,214,0,.25);background:rgba(255,214,0,.04);overflow:hidden;">
-          <div style="padding:18px 18px 12px;text-align:center;border-bottom:1px solid rgba(255,255,255,.05);">
-            <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--yellow);margin-bottom:6px">Pacote Premium</div>
-            <div style="font-family:'Bebas Neue';font-size:34px;color:var(--yellow);line-height:1">R$ 5.000</div>
-          </div>
-          <div style="padding:14px 18px;">
-            <div style="font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.14em;color:var(--gray);margin-bottom:10px">Ou produz...</div>
-            <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:12px;color:rgba(245,244,240,.5)"><span>Vídeos 30s</span><span style="font-weight:700;color:var(--white)">111 peças</span></div>
-            <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:12px;color:rgba(245,244,240,.5)"><span>Vídeos 2min</span><span style="font-weight:700;color:var(--white)">~27 peças</span></div>
-            <div style="display:flex;justify-content:space-between;padding:7px 0;font-size:12px;color:rgba(245,244,240,.5)"><span>Imagens</span><span style="font-weight:700;color:var(--white)">11.900 imgs</span></div>
-          </div>
-        </div>
+    btnNext.addEventListener('click', () => { if (current < total - 1) goTo(current + 1); });
+    btnPrev.addEventListener('click', () => { if (current > 0) goTo(current - 1); });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { if (current < total - 1) goTo(current + 1); }
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { if (current > 0) goTo(current - 1); }
+    });
 
-      </div>
+    function loadImage(event, slotId) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const slot = typeof slotId === 'number'
+          ? document.getElementById('slot' + slotId)
+          : document.getElementById(slotId);
+        if (!slot) return;
+        slot.querySelectorAll('.is-icon,.is-label').forEach(el => el.style.display = 'none');
+        let img = slot.querySelector('img');
+        if (!img) { img = document.createElement('img'); slot.appendChild(img); }
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
 
-      <div class="hbox green" style="margin-top:14px">
-        <div class="hi">🔄</div>
-        <p>Os valores indicam o volume máximo de <strong>cada tipo de conteúdo separadamente</strong>. A combinação entre formatos é definida com a equipe Anti Copy Club conforme a estratégia da campanha.</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- S10: CTA -->
-  <div class="slide" data-label="Próximos Passos">
-    <div class="slide-inner" style="justify-content:center;align-items:center">
-      <div class="cta-wrap">
-        <div class="tag green" style="display:inline-block;margin-bottom:22px">Próximos Passos</div>
-        <h1>PRONTO PARA<br>VENCER <span class="g">2026?</span></h1>
-        <p class="lead">Campanhas que produzem <strong>mais conteúdo, com mais velocidade e menos custo</strong> dominam as redes. A janela para montar sua estrutura de IA está aberta.</p>
-        <div class="cta-btns">
-          <button class="btn-big btn-big-green">Solicitar proposta personalizada</button>
-          <button class="btn-big btn-big-outline" onclick="exportPDF()">⬇ Baixar em PDF</button>
-        </div>
-        <p style="margin-top:32px;font-size:12px;color:var(--gray);text-transform:uppercase;letter-spacing:.1em;font-weight:600">Anti Copy Club · Produção com IA · Eleições 2026</p>
-      </div>
-    </div>
-  </div>
-
-</div><!-- #stage -->
-
-<footer>
-  <button class="btn btn-outline" id="btnPrev" disabled>← Anterior</button>
-  <span class="footer-label" id="footerLabel">Introdução</span>
-  <button class="btn btn-primary" id="btnNext">Próximo →</button>
-</footer>
-
-<script>
-  const slides = document.querySelectorAll('.slide');
-  const btnPrev = document.getElementById('btnPrev');
-  const btnNext = document.getElementById('btnNext');
-  const navCounter = document.getElementById('navCounter');
-  const footerLabel = document.getElementById('footerLabel');
-  const navDotsEl = document.getElementById('navDots');
-  let current = 0;
-  const total = slides.length;
-
-  for (let i = 0; i < total; i++) {
-    const b = document.createElement('button');
-    b.className = 'dot-btn' + (i === 0 ? ' active' : '');
-    b.title = slides[i].dataset.label || '';
-    b.addEventListener('click', () => goTo(i));
-    navDotsEl.appendChild(b);
-  }
-
-  function goTo(n) {
-    slides[current].classList.remove('active');
-    navDotsEl.children[current].classList.remove('active');
-    current = n;
-    slides[current].classList.add('active');
-    navDotsEl.children[current].classList.add('active');
-    navCounter.textContent = `${current + 1} / ${total}`;
-    footerLabel.textContent = slides[current].dataset.label || '';
-    btnPrev.disabled = current === 0;
-    btnNext.disabled = current === total - 1;
-    btnNext.textContent = current === total - 1 ? '✓ Fim' : 'Próximo →';
-    slides[current].scrollTop = 0;
-  }
-
-  btnNext.addEventListener('click', () => { if (current < total - 1) goTo(current + 1); });
-  btnPrev.addEventListener('click', () => { if (current > 0) goTo(current - 1); });
-  document.addEventListener('keydown', e => {
-    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { if (current < total - 1) goTo(current + 1); }
-    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { if (current > 0) goTo(current - 1); }
-  });
-
-  function loadImage(event, slotId) {
-    const file = event.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = function(e) {
-      const slot = typeof slotId === 'number'
-        ? document.getElementById('slot' + slotId)
-        : document.getElementById(slotId);
-      if (!slot) return;
-      slot.querySelectorAll('.is-icon,.is-label').forEach(el => el.style.display = 'none');
-      let img = slot.querySelector('img');
-      if (!img) { img = document.createElement('img'); slot.appendChild(img); }
-      img.src = e.target.result;
-    };
-    reader.readAsDataURL(file);
-  }
-
-  function exportPDF() {
-    const style = document.createElement('style');
-    style.id = 'pdf-override';
-    style.textContent = `
+    function exportPDF() {
+      const style = document.createElement('style');
+      style.id = 'pdf-override';
+      style.textContent = `
       html, body { overflow: visible !important; height: auto !important; }
       #stage { position: static !important; display: block !important; }
       .slide { display: flex !important; flex-direction: column !important;
@@ -714,82 +1759,86 @@
                page-break-after: always; animation: none !important; }
       nav, footer { display: none !important; }
     `;
-    document.head.appendChild(style);
-    setTimeout(() => {
-      window.print();
-      setTimeout(() => { document.getElementById('pdf-override')?.remove(); }, 800);
-    }, 200);
-  }
-
-  // ── GALLERY: autoplay muted + lightbox ──
-  const YT_IDS = ['233QIMNvhuE', 'OY_904pzs1o'];
-  const lb = document.getElementById('lightbox');
-  const lbContent = document.getElementById('lb-content');
-
-  // Intercept slide change to handle gallery autoplay
-  const originalGoTo = goTo;
-
-  function initGallery() {
-    document.querySelectorAll('.media-item').forEach(item => {
-      item.addEventListener('click', () => openLightbox(item));
-    });
-  }
-
-  function openLightbox(item) {
-    lbContent.innerHTML = '';
-    const type = item.dataset.type;
-    const id = item.dataset.id;
-    const src = item.dataset.src;
-
-    if (type === 'yt') {
-      // embed YouTube with autoplay + sound
-      const iframe = document.createElement('iframe');
-      iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1&mute=0&rel=0&modestbranding=1&playsinline=1`;
-      iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-      iframe.allowFullscreen = true;
-      iframe.style.cssText = 'width:min(400px,80vw);height:min(711px,80vh);border:none;border-radius:14px;';
-      lbContent.appendChild(iframe);
-    } else {
-      const img = document.createElement('img');
-      img.src = src;
-      img.style.cssText = 'max-width:90vw;max-height:85vh;border-radius:14px;object-fit:contain;display:block;';
-      lbContent.appendChild(img);
+      document.head.appendChild(style);
+      setTimeout(() => {
+        window.print();
+        setTimeout(() => { document.getElementById('pdf-override')?.remove(); }, 800);
+      }, 200);
     }
 
-    lb.style.display = 'flex';
-    document.addEventListener('keydown', lbKeyHandler);
-  }
+    // ── GALLERY: lightbox com navegação ──
+    const lb = document.getElementById('lightbox');
+    const lbContent = document.getElementById('lb-content');
+    const lbCounter = document.getElementById('lb-counter');
+    const lbPrev = document.getElementById('lb-prev');
+    const lbNext = document.getElementById('lb-next');
+    let galleryItems = [];
+    let lbIndex = 0;
 
-  function closeLightbox() {
-    lb.style.display = 'none';
-    lbContent.innerHTML = ''; // destroys iframe → stops video/audio
-    document.removeEventListener('keydown', lbKeyHandler);
-  }
+    function initGallery() {
+      galleryItems = Array.from(document.querySelectorAll('.media-item'));
+      galleryItems.forEach((item, i) => {
+        item.addEventListener('click', () => openLightbox(i));
+      });
+    }
 
-  function lbKeyHandler(e) { if (e.key === 'Escape') closeLightbox(); }
+    function renderLbItem(index) {
+      lbContent.innerHTML = '';
+      const item = galleryItems[index];
+      const type = item.dataset.type;
+      const id = item.dataset.id;
+      const src = item.dataset.src;
 
-  lb.addEventListener('click', e => { if (e.target === lb) closeLightbox(); });
+      if (type === 'yt') {
+        const iframe = document.createElement('iframe');
+        iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1&mute=0&rel=0&modestbranding=1&playsinline=1`;
+        iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+        iframe.allowFullscreen = true;
+        iframe.style.cssText = 'width:min(400px,80vw);height:min(711px,80vh);border:none;border-radius:14px;';
+        lbContent.appendChild(iframe);
+      } else {
+        const img = document.createElement('img');
+        img.src = src;
+        img.style.cssText = 'max-width:80vw;max-height:82vh;border-radius:14px;object-fit:contain;display:block;';
+        lbContent.appendChild(img);
+      }
 
-  // YT iframe API for autoplay-muted thumbnails (background)
-  // Since cross-origin video autoplay is blocked in sandboxed envs,
-  // we animate a subtle pulse on the thumbnail instead to signal "live"
-  function animateThumbnails() {
-    document.querySelectorAll('.media-item[data-type="yt"] img').forEach((img, i) => {
-      // subtle zoom-in/out loop to simulate "live" feel
-      img.style.transition = 'transform 4s ease-in-out';
-      img.style.transformOrigin = 'center';
-      let zoomed = false;
-      setInterval(() => {
-        zoomed = !zoomed;
-        img.style.transform = zoomed ? 'scale(1.05)' : 'scale(1)';
-      }, 4000 + i * 1200);
-    });
-  }
+      lbCounter.textContent = `${index + 1} / ${galleryItems.length}`;
+      lbPrev.style.opacity = index === 0 ? '0.25' : '1';
+      lbNext.style.opacity = index === galleryItems.length - 1 ? '0.25' : '1';
+    }
 
-  initGallery();
-  animateThumbnails();
+    function openLightbox(index) {
+      lbIndex = index;
+      renderLbItem(lbIndex);
+      lb.style.display = 'flex';
+      document.addEventListener('keydown', lbKeyHandler);
+    }
 
-  goTo(0);
-</script>
+    function lbNav(dir) {
+      const next = lbIndex + dir;
+      if (next < 0 || next >= galleryItems.length) return;
+      lbIndex = next;
+      renderLbItem(lbIndex);
+    }
+
+    function closeLightbox() {
+      lb.style.display = 'none';
+      lbContent.innerHTML = '';
+      document.removeEventListener('keydown', lbKeyHandler);
+    }
+
+    function lbKeyHandler(e) {
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowRight') lbNav(1);
+      if (e.key === 'ArrowLeft') lbNav(-1);
+    }
+
+    lb.addEventListener('click', e => { if (e.target === lb) closeLightbox(); });
+
+    initGallery();
+    goTo(0);
+  </script>
 </body>
+
 </html>
