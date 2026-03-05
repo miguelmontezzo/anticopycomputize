@@ -39,21 +39,7 @@ import AdminFormResponsesPage from "./pages/AdminFormResponsesPage";
 import PublicPage from "./pages/PublicPage";
 import ClientIAServicePage from "./pages/ClientIAServicePage";
 import ClientAnalysisPage from "./pages/ClientAnalysisPage";
-import ClientCalendarPage from "./pages/ClientCalendarPage";
-import AdminCalendarPage from "./pages/AdminCalendarPage";
-import AdminCalendarsPage from "./pages/AdminCalendarsPage";
-import AdminCalendarEditorPage from "./pages/AdminCalendarEditorPage";
-import AdminClientProfilePage from "./pages/AdminClientProfilePage";
-import AdminSitePagesPage from "./pages/AdminSitePagesPage";
-import AdminSitePageEditorPage from "./pages/AdminSitePageEditorPage";
-import AdminTeamPage from "./pages/AdminTeamPage";
-import AdminTasksPage from "./pages/AdminTasksPage";
-import PortalLayout from "./components/PortalLayout";
-import ClientPortalLoginPage from "./pages/portal/ClientPortalLoginPage";
-import PortalCallbackPage from "./pages/portal/PortalCallbackPage";
-import PortalCalendarPage from "./pages/portal/PortalCalendarPage";
-import PortalNotificationsPage from "./pages/portal/PortalNotificationsPage";
-import PortalMeetingsPage from "./pages/portal/PortalMeetingsPage";
+import EleicaoPage from "./pages/EleicaoPage";
 
 const ComputizePage = () => {
 
@@ -505,33 +491,14 @@ export default function App() {
           <Route path="forms/:id/responses" element={<AdminFormResponsesPage />} />
           <Route path="emp" element={<AdminEmpPage />} />
           <Route path="clientes" element={<AdminClientRoutesPage />} />
-          <Route path="calendarios" element={<AdminCalendarsPage />} />
-          <Route path="calendarios/:id" element={<AdminCalendarEditorPage />} />
-          <Route path="calendario/:slug" element={<AdminCalendarPage />} />
-          <Route path="cliente/:id" element={<AdminClientProfilePage />} />
-          <Route path="site-pages" element={<AdminSitePagesPage />} />
-          <Route path="site-pages/:slug" element={<AdminSitePageEditorPage />} />
-          <Route path="equipe" element={<AdminTeamPage />} />
-          <Route path="tarefas" element={<AdminTasksPage />} />
-        </Route>
-
-        {/* Portal Routes */}
-        <Route path="/portal/login" element={<ClientPortalLoginPage />} />
-        <Route path="/portal/callback" element={<PortalCallbackPage />} />
-        <Route path="/portal/:slug" element={<PortalLayout />}>
-          <Route index element={<Navigate to="calendario" replace />} />
-          <Route path="calendario" element={<PortalCalendarPage />} />
-          <Route path="notificacoes" element={<PortalNotificationsPage />} />
-          <Route path="reunioes" element={<PortalMeetingsPage />} />
         </Route>
 
         <Route path="/ia-service" element={<IAServicePage />} />
         <Route path="/:slug/ia-service" element={<ClientIAServicePage />} />
         <Route path="/:slug/analise" element={<ClientAnalysisPage />} />
-        <Route path="/:slug/calendario" element={<ClientCalendarPage />} />
-        <Route path="/calendario/:slug" element={<ClientCalendarPage />} />
         <Route path="/:slug/emp" element={<EmpPage />} />
         <Route path="/metodoEMP" element={<MetodoEMPPage />} />
+        <Route path="/eleicao" element={<EleicaoPage />} />
         {/* Fallback to home */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
