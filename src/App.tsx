@@ -450,20 +450,36 @@ const ComputizePage = () => {
   );
 };
 
-const HomePage = () => {
-  const [clicks, setClicks] = useState(0);
-  const isBlue = clicks >= 5;
+const HomePage: React.FC = () => {
+  useEffect(() => {
+    document.title = "Anti Copy Club — Hub Criativo com IA";
+    return () => {
+      document.title = "Anti Copy Club";
+    };
+  }, []);
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-black text-white p-6 select-none">
-      <FadeIn>
-        <h1
-          onClick={() => setClicks(prev => prev + 1)}
-          className={`text-6xl md:text-8xl font-bold tracking-tighter text-center cursor-pointer transition-colors duration-700 ${isBlue ? 'text-blue-500 shadow-[0_0_30px_rgba(59,130,246,0.5)]' : 'text-white'}`}
-        >
-          Anti Copy Club
-        </h1>
-      </FadeIn>
+    <div
+      style={{
+        position: "fixed",
+        inset: 0,
+        width: "100%",
+        height: "100%",
+        overflow: "hidden",
+        background: "#0a0a0a",
+      }}
+    >
+      <iframe
+        src="/anticopyclub-v9.html"
+        title="Anti Copy Club — Hub Criativo com IA"
+        style={{
+          width: "100%",
+          height: "100%",
+          border: "none",
+          display: "block",
+        }}
+        allow="autoplay; fullscreen"
+      />
     </div>
   );
 };
