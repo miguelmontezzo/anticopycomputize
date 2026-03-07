@@ -1019,19 +1019,15 @@
             <div class="sim-result">
                 <div class="s-box">
                     <div class="s-val" id="v1">10</div>
-                    <div class="s-lbl">Vídeos Longos</div>
+                    <div class="s-lbl">Vídeos de 1,5 min</div>
                 </div>
                 <div class="s-box">
                     <div class="s-val" id="v2">50</div>
-                    <div class="s-lbl">Cortes Curtos</div>
+                    <div class="s-lbl">Vídeos de 30s</div>
                 </div>
                 <div class="s-box">
                     <div class="s-val" id="v3">120</div>
-                    <div class="s-lbl">Posts / Imagens</div>
-                </div>
-                <div class="s-box">
-                    <div class="s-val" id="v4">3</div>
-                    <div class="s-lbl">Peças Avançadas</div>
+                    <div class="s-lbl">Imagens Geradas</div>
                 </div>
             </div>
         </div>
@@ -1130,17 +1126,16 @@
 
         // SIMULADOR LOGIC
         const vals = [
-            { v1: '2', v2: '10', v3: '20', v4: '1' },         // 1.000
-            { v1: '10', v2: '50', v3: '120', v4: '3' },       // 5.000
-            { v1: '20', v2: '110', v3: '250', v4: '6' },      // 10.000
-            { v1: '40', v2: '220', v3: '500', v4: '12' },     // 20.000
-            { v1: '80', v2: '450', v3: '1.000', v4: '24' },   // 40.000
+            { v1: '2', v2: '10', v3: '20' },         // 1.000
+            { v1: '10', v2: '50', v3: '120' },       // 5.000
+            { v1: '20', v2: '110', v3: '250' },      // 10.000
+            { v1: '40', v2: '220', v3: '500' },     // 20.000
+            { v1: '80', v2: '450', v3: '1.000' },   // 40.000
         ];
         function updSli(idx) {
             document.getElementById('v1').textContent = vals[idx].v1;
             document.getElementById('v2').textContent = vals[idx].v2;
             document.getElementById('v3').textContent = vals[idx].v3;
-            document.getElementById('v4').textContent = vals[idx].v4;
 
             const lbls = document.getElementById('labels').children;
             for (let i = 0; i < lbls.length; i++) lbls[i].classList.remove('active');
