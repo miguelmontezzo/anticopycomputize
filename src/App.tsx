@@ -40,6 +40,10 @@ import PublicPage from "./pages/PublicPage";
 import ClientIAServicePage from "./pages/ClientIAServicePage";
 import ClientAnalysisPage from "./pages/ClientAnalysisPage";
 import EleicaoPage from "./pages/EleicaoPage";
+import AdminCalendarsPage from "./pages/AdminCalendarsPage";
+import AdminCalendarPage from "./pages/AdminCalendarPage";
+import AdminCalendarEditorPage from "./pages/AdminCalendarEditorPage";
+import ClientCalendarPage from "./pages/ClientCalendarPage";
 
 const ComputizePage = () => {
 
@@ -497,6 +501,8 @@ export default function App() {
         <Route path="/p/:slug" element={<PublicPage />} />
         <Route path="/:slug" element={<PublicPage />} />
 
+        <Route path="/calendario/:slug" element={<ClientCalendarPage />} />
+
         {/* Admin Routes */}
         <Route path="/admin/login" element={<AdminLoginPage />} />
         <Route path="/admin" element={<AdminLayout />}>
@@ -508,6 +514,9 @@ export default function App() {
           <Route path="forms/:id/responses" element={<AdminFormResponsesPage />} />
           <Route path="emp" element={<AdminEmpPage />} />
           <Route path="clientes" element={<AdminClientRoutesPage />} />
+          <Route path="calendarios" element={<AdminCalendarsPage />} />
+          <Route path="calendario/:slug" element={<AdminCalendarPage />} />
+          <Route path="calendarios/:id" element={<AdminCalendarEditorPage />} />
         </Route>
 
         <Route path="/ia-service" element={<IAServicePage />} />
