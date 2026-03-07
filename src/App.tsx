@@ -470,7 +470,7 @@ const HomePage: React.FC = () => {
       }}
     >
       <iframe
-        src="/anticopyclub-v9.html"
+        src="/anticopyclub-lp.html"
         title="Anti Copy Club — Hub Criativo com IA"
         style={{
           width: "100%",

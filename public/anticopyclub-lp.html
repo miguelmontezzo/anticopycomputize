@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Anti Copy Club — Hub Criativo com IA</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@300;400;500;700;800&display=swap"
+        rel="stylesheet">
+
+    <style>
+        /* VARIABLES & SETUP */
+        :root {
+            --bg: #030303;
+            --surface: rgba(255, 255, 255, 0.02);
+            --surface-hover: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.06);
+            --border-focus: rgba(255, 255, 255, 0.15);
+
+            --text-main: #f0f0f0;
+            --text-muted: rgba(255, 255, 255, 0.5);
+            --text-dark: #121212;
+
+            --accent: #E8401C;
+            --accent-glow: rgba(232, 64, 28, 0.4);
+            --accent-muted: rgba(232, 64, 28, 0.1);
+
+            --font-display: 'Outfit', sans-serif;
+            --font-body: 'Inter', sans-serif;
+
+            --radius-sm: 8px;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+            --radius-full: 9999px;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            font-family: var(--font-body);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 0 5vw;
+        }
+
+        /* GLOBAL GLOWS (Mac/Defi Vibe) */
+        .glow {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .glow.top {
+            top: -20vh;
+            left: 20vw;
+            width: 60vw;
+            height: 50vh;
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .glow.accent-mid {
+            top: 40vh;
+            right: -10vw;
+            width: 40vw;
+            height: 40vw;
+            background: radial-gradient(circle, var(--accent-muted) 0%, transparent 60%);
+        }
+
+        .glow.bot {
+            bottom: 0;
+            left: 10vw;
+            width: 50vw;
+            height: 30vh;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        /* UTILS & GLASSMORPHISM */
+        .glass {
+            background: var(--surface);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+        }
+
+        .glass-card {
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover {
+            background: var(--surface-hover);
+            border-color: var(--border-focus);
+        }
+
+        /* TYPOGRAPHY */
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-family: var(--font-display);
+            letter-spacing: -0.02em;
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, #fff 30%, rgba(255, 255, 255, 0.4) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .text-accent-gradient {
+            background: linear-gradient(135deg, var(--accent) 0%, #ff7b5c 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-full);
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-main);
+        }
+
+        /* BUTTONS */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 28px;
+            border-radius: var(--radius-full);
+            font-family: var(--font-display);
+            font-weight: 600;
+            font-size: 15px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: #fff;
+            color: var(--text-dark);
+        }
+
+        .btn-primary:hover {
+            background: #e5e5e5;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #fff;
+            border: 1px solid var(--border);
+        }
+
+        .btn-outline:hover {
+            border-color: #fff;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* NAVIGATION */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 24px 0;
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            pointer-events: none;
+        }
+
+        .nav-inner {
+            pointer-events: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            padding: 8px 12px 8px 24px;
+            background: rgba(10, 10, 10, 0.4);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-full);
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+        }
+
+        .nav-logo {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 14px;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .nav-btn {
+            padding: 8px 18px;
+            font-size: 13px;
+            background: #fff;
+            color: #000;
+            border-radius: var(--radius-full);
+            font-weight: 600;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+
+        .nav-btn:hover {
+            opacity: 0.8;
+        }
+
+        /* REVEAL ANIMATIONS */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.2, 1, 0.3, 1);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* SECTIONS */
+        section {
+            padding: 120px 0;
+            position: relative;
+        }
+
+        /* HERO SECTION */
+        header.hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 80px 20px;
+            position: relative;
+        }
+
+        .hero-title {
+            font-size: clamp(48px, 8vw, 84px);
+            line-height: 0.95;
+            font-weight: 700;
+            margin-bottom: 24px;
+            max-width: 900px;
+        }
+
+        .hero-desc {
+            font-size: clamp(16px, 2vw, 20px);
+            color: var(--text-muted);
+            max-width: 600px;
+            line-height: 1.6;
+            margin-bottom: 40px;
+        }
+
+        .hero-metrics {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 64px;
+        }
+
+        .metric {
+            padding: 16px 32px;
+            border-radius: var(--radius-full);
+            background: var(--surface);
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .metric span.v {
+            font-size: 24px;
+            font-weight: 700;
+            font-family: var(--font-display);
+            color: #fff;
+        }
+
+        .metric span.l {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* BENTO GRID (Videos & Produção) */
+        .grid-bento {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 16px;
+            grid-auto-rows: minmax(100px, auto);
+        }
+
+        .bento-box {
+            position: relative;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            padding: 32px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .bento-box:hover {
+            border-color: rgba(255, 255, 255, 0.15);
+            background: var(--surface-hover);
+        }
+
+        /* Mídias no Bento */
+        .media-card {
+            position: relative;
+            padding: 0;
+            /* sem padding, full content */
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        .media-card video {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.6;
+            transition: opacity 0.4s ease;
+            z-index: 1;
+        }
+
+        .media-card:hover video {
+            opacity: 0.9;
+        }
+
+        .media-info {
+            position: relative;
+            z-index: 2;
+            padding: 24px;
+            background: linear-gradient(0deg, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
+        }
+
+        /* Layout da Grade Bento Mídias */
+        .media-1 {
+            grid-column: span 12;
+            aspect-ratio: 16/7;
+        }
+
+        .media-2 {
+            grid-column: span 6;
+            aspect-ratio: 4/5;
+        }
+
+        .media-3 {
+            grid-column: span 6;
+            aspect-ratio: 4/5;
+        }
+
+        @media (min-width: 900px) {
+            .media-1 {
+                grid-column: span 8;
+                grid-row: span 2;
+                aspect-ratio: auto;
+            }
+
+            .media-2 {
+                grid-column: span 4;
+                grid-row: span 1;
+                aspect-ratio: 1/1;
+            }
+
+            .media-3 {
+                grid-column: span 4;
+                grid-row: span 1;
+                aspect-ratio: 1/1;
+            }
+        }
+
+        /* MÉTODO EMP & SOLUÇÕES */
+        .sol-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+            margin-top: 40px;
+        }
+
+        @media (min-width: 768px) {
+            .sol-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .sol-card {
+            padding: 40px 32px;
+        }
+
+        .sol-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin-bottom: 24px;
+        }
+
+        .sol-title {
+            font-size: 20px;
+            font-weight: 500;
+            margin-bottom: 12px;
+            color: #fff;
+        }
+
+        .sol-desc {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .sol-price {
+            margin-top: 24px;
+            font-family: var(--font-display);
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .sol-tag {
+            display: inline-block;
+            background: var(--accent-muted);
+            color: var(--accent);
+            font-size: 11px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            margin-top: 8px;
+            font-weight: 600;
+        }
+
+        /* PLANOS */
+        .plans-wrapper {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+            margin-top: 48px;
+        }
+
+        @media (min-width: 900px) {
+            .plans-wrapper {
+                grid-template-columns: repeat(3, 1fr);
+                align-items: stretch;
+            }
+
+            .plan-highlight {
+                transform: scale(1.03);
+            }
+        }
+
+        .plan {
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .plan.plan-highlight {
+            border-color: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .p-name {
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 0.1em;
+        }
+
+        .p-price {
+            font-size: 42px;
+            font-weight: 700;
+            font-family: var(--font-display);
+            margin: 12px 0 4px;
+            color: #fff;
+        }
+
+        .p-price span {
+            font-size: 16px;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .p-desc {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+
+        .p-list {
+            list-style: none;
+            margin-top: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            flex: 1;
+        }
+
+        .p-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 14px;
+            color: #d0d0d0;
+        }
+
+        .p-list li::before {
+            content: '✦';
+            color: var(--accent);
+            font-size: 12px;
+            margin-top: 2px;
+        }
+
+        /* SIMULADOR / SLIDER */
+        .sim-wrap {
+            padding: 60px;
+            background: radial-gradient(circle at center, rgba(255, 255, 255, 0.03) 0%, transparent 100%);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            margin-top: 60px;
+        }
+
+        .slider-container {
+            margin: 40px 0;
+        }
+
+        .range-sli {
+            width: 100%;
+            -webkit-appearance: none;
+            height: 4px;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            outline: none;
+        }
+
+        .range-sli::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #fff;
+            cursor: pointer;
+            border: 4px solid var(--bg);
+            box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.2), 0 0 20px rgba(255, 255, 255, 0.2);
+        }
+
+        .labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 16px;
+            color: var(--text-muted);
+            font-size: 12px;
+        }
+
+        .labels span.active {
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .sim-result {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-top: 32px;
+            padding-top: 32px;
+            border-top: 1px solid var(--border);
+        }
+
+        @media (min-width: 600px) {
+            .sim-result {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .s-box {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .s-val {
+            font-size: 32px;
+            font-weight: 700;
+            font-family: var(--font-display);
+            color: var(--accent);
+        }
+
+        .s-lbl {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 500;
+        }
+
+        /* QUIZ COMPACTO NO FINAL */
+        .quiz-section {
+            text-align: center;
+        }
+
+        .quiz-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-top: 40px;
+            text-align: left;
+        }
+
+        .q-item {
+            padding: 16px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.01);
+        }
+
+        .q-item:hover {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .q-item.active {
+            border-color: #fff;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .q-check {
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .q-item.active .q-check {
+            background: #fff;
+        }
+
+        .q-item.active .q-check::after {
+            content: '✓';
+            color: #000;
+            font-size: 10px;
+            font-weight: 900;
+        }
+
+        footer {
+            padding: 40px;
+            text-align: center;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 12px;
+            margin-top: 80px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="glow top"></div>
+    <div class="glow accent-mid"></div>
+    <div class="glow bot"></div>
+
+    <!-- NAVBAR -->
+    <nav>
+        <div class="nav-inner">
+            <a href="#" class="nav-logo">ANTI COPY CLUB</a>
+            <a href="#planos" class="nav-btn">Ativar HUB</a>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <header class="hero container">
+        <div class="reveal">
+            <div class="pill mb-6 mx-auto" style="margin-bottom:24px;">
+                <span
+                    style="display:inline-block;width:6px;height:6px;background:var(--accent);border-radius:50%;box-shadow:0 0 8px var(--accent);"></span>
+                Hub Criativo com IA
+            </div>
+            <h1 class="hero-title pt-4">One-click for<br><span class="text-gradient">Brand Evolution</span></h1>
+            <p class="hero-desc mx-auto">Embarque na produção criativa massiva onde Inteligência Artificial e método se
+                encontram para entregar resultados incríveis.</p>
+
+            <div class="hero-btn-group" style="display:flex;gap:16px;justify-content:center;">
+                <a href="#galeria" class="btn btn-primary">Ver em Ação</a>
+                <a href="#method" class="btn btn-outline">O Método EMP</a>
+            </div>
+        </div>
+
+        <!-- METRICS -->
+        <div class="hero-metrics reveal">
+            <div class="metric">
+                <span class="v">-70%</span>
+                <span class="l">Custo vs Tradicional</span>
+            </div>
+            <div class="metric">
+                <span class="v">10x</span>
+                <span class="l">Volume de Escala</span>
+            </div>
+            <div class="metric">
+                <span class="v">48h</span>
+                <span class="l">Turnaround Médio</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- PRODUÇÃO EM AÇÃO (BENTO GRID) -->
+    <section id="galeria" class="container">
+        <div class="reveal" style="margin-bottom:40px; text-align:center;">
+            <h2 style="font-size:36px;font-weight:600;margin-bottom:12px;">Produção na Prática</h2>
+            <p style="color:var(--text-muted);font-size:16px;">O que o Hub entrega todos os dias, com alta fidelidade e
+                hiper-realismo.</p>
+        </div>
+
+        <div class="grid-bento reveal">
+            <!-- Media 1 -->
+            <div class="bento-box glass-card media-card media-1">
+                <video src="https://antiplanos.com.br/backend/uploads/1771626122_1771557580_9.mp4" autoplay loop muted
+                    playsinline></video>
+                <div class="media-info">
+                    <span class="label" style="color:#fff;">Produção Automatizada</span>
+                    <h3 style="font-size:24px;font-weight:600;color:#fff;">Clone Estratégico</h3>
+                </div>
+            </div>
+            <!-- Media 2 -->
+            <div class="bento-box glass-card media-card media-2">
+                <video src="https://antiplanos.com.br/backend/uploads/1771626173_1771557430_10.mp4" autoplay loop muted
+                    playsinline></video>
+                <div class="media-info">
+                    <span class="label" style="color:#fff;">Mídia Dinâmica</span>
+                    <h3 style="font-size:20px;font-weight:600;color:#fff;">Direção Visual</h3>
+                </div>
+            </div>
+            <!-- Media 3 -->
+            <div class="bento-box glass-card media-card media-3">
+                <video src="https://antiplano.com.br/uploads/media_699751cc03513.mp4" autoplay loop muted
+                    playsinline></video>
+                <div class="media-info">
+                    <span class="label" style="color:#fff;">Lifestyle e Setup</span>
+                    <h3 style="font-size:20px;font-weight:600;color:#fff;">Avatar Premium</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- METODO EMP -->
+    <section id="method" class="container reveal">
+        <div
+            style="text-align:center; max-width:800px; margin:0 auto; padding:60px; border:1px solid var(--border); border-radius:24px; background:radial-gradient(circle at top, rgba(255,255,255,0.03) 0%, transparent 80%);">
+            <span class="pill" style="margin-bottom:24px;">Método Proprietário</span>
+            <h2 style="font-size:48px;font-weight:600;margin-bottom:16px;">E <span
+                    style="opacity:0.3;font-weight:300;">→</span> Mas <span
+                    style="opacity:0.3;font-weight:300;">→</span> Por Isso</h2>
+            <p style="font-size:18px; line-height:1.6; color:var(--text-muted);">
+                "Toda empresa tem uma história. Toda história tem um estado atual, um conflito e uma virada. O
+                <strong>Método EMP</strong> é o sistema operacional usado pela Anti Copy Club, inspirado em Pixar e
+                South Park, para transformar visibilidade em conversão real."
+            </p>
+        </div>
+    </section>
+
+    <!-- SOLUÇÕES DIGITAIS & APRESENTACAO -->
+    <section id="digital" class="container reveal">
+        <div style="display:flex; flex-direction:column; gap:8px;">
+            <h2 style="font-size:40px;font-weight:600;">Soluções Digitais <span
+                    class="text-accent-gradient">Premium</span></h2>
+            <p style="color:var(--text-muted);font-size:16px;max-width:500px;">
+                Além do conteúdo em redes — automatizamos pontas e fechamos novos funis interativos pro seu negócio.
+            </p>
+        </div>
+
+        <div class="sol-grid">
+            <div class="glass glass-card sol-card">
+                <div class="sol-icon">🚀</div>
+                <h3 class="sol-title">Landing Page VIP</h3>
+                <p class="sol-desc">Desenhada para tração instantânea e altíssima escaneabilidade. Escrita com persuasão
+                    analítica.</p>
+                <div class="sol-price">R$ 4.500 <span
+                        style="font-size:12px;color:var(--text-muted);font-weight:400;">/projeto</span></div>
+            </div>
+
+            <div class="glass glass-card sol-card">
+                <div class="sol-icon">🌐</div>
+                <h3 class="sol-title">Site Empresarial Premium</h3>
+                <p class="sol-desc">Sua presença institucional construída com as métricas de performance e estética de
+                    padrão internacional.</p>
+                <div class="sol-price">R$ 12.000 <span
+                        style="font-size:12px;color:var(--text-muted);font-weight:400;">/projeto</span></div>
+            </div>
+
+            <div class="glass glass-card sol-card"
+                style="border-color:rgba(232, 64, 28, 0.3); background:rgba(232, 64, 28, 0.02);">
+                <div class="sol-icon">📊</div>
+                <h3 class="sol-title">Apresentação Web</h3>
+                <p class="sol-desc">Pitch interativo entregue por link, otimizado para que o cliente retenha sua
+                    autoridade instantaneamente.</p>
+                <div class="sol-tag">Você sai na frente</div>
+                <div class="sol-price">R$ 7.500 <span
+                        style="font-size:12px;color:var(--text-muted);font-weight:400;">/projeto</span></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PLANOS E CORTES -->
+    <section id="planos" class="container reveal">
+        <div style="text-align:center;margin-bottom:16px;">
+            <h2 style="font-size:40px;font-weight:600;">Hub Ativo</h2>
+            <p style="color:var(--text-muted);font-size:16px;">Mensalidade base + Geração sob demanda</p>
+        </div>
+
+        <div class="plans-wrapper">
+            <div class="glass glass-card plan">
+                <div class="p-name">Starter</div>
+                <div class="p-price">R$ 5.000<span>/mês</span></div>
+                <div class="p-desc">Primeiros passos com o Hub Ativo e Inteligência real embarcada.</div>
+                <ul class="p-list">
+                    <li>Briefing via WhatsApp</li>
+                    <li>Aprovação de conteúdo via workflow</li>
+                    <li>Entrega documentada via nuvem</li>
+                </ul>
+            </div>
+
+            <div class="glass glass-card plan plan-highlight">
+                <div
+                    style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:#fff;color:#000;font-size:10px;font-weight:700;padding:6px 14px;border-radius:20px;text-transform:uppercase;">
+                    Mais Escolhido</div>
+                <div class="p-name" style="color:#fff;">Growth</div>
+                <div class="p-price text-accent-gradient">R$ 10.000<span>/mês</span></div>
+                <div class="p-desc">Foco em estruturação robusta e alinhamento tático impecável.</div>
+                <ul class="p-list">
+                    <li>Tudo do Starter</li>
+                    <li>Estruturação editorial inclusa</li>
+                    <li>Dashboard de acompanhamento online</li>
+                    <li>Relatórios práticos de consumo</li>
+                </ul>
+            </div>
+
+            <div class="glass glass-card plan">
+                <div class="p-name">Scale</div>
+                <div class="p-price">R$ 20.000<span>/mês</span></div>
+                <div class="p-desc">Dominância máxima. Sem fricção, com todas esferas abordadas.</div>
+                <ul class="p-list">
+                    <li>Tudo do Growth</li>
+                    <li>Clone de avatar custom exclusivo</li>
+                    <li>Aplicações de tradução on-the-fly</li>
+                    <li>Sincronia multiplataforma de marca</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Corte e Distribuicao (Separado) -->
+        <div class="glass"
+            style="margin-top:24px; padding:32px; display:flex; flex-direction:column; gap:16px; align-items:flex-start; background:radial-gradient(circle at left, rgba(255,255,255,0.04) 0%, transparent 100%);">
+            <span class="label" style="color:var(--accent);">Serviço Complementar e Essencial</span>
+            <h3 style="font-size:24px;">Corte & Distribuição por escala Massiva</h3>
+            <p style="font-size:15px; color:var(--text-muted); max-width:800px; line-height:1.6;">Acelere ao extremo sua
+                abrangência: serviço especializado em extrair os pedaços que prendem a atenção e aplicar distribuição em
+                tráfego pago nas redes. CPM Mensal investido diretamente na escala de audiência.</p>
+            <div style="display:flex; gap:12px; margin-top:8px;">
+                <div class="pill border">Media de R$ 1,50 a R$ 2,50 CPM</div>
+                <div class="pill border">Escala em até 1Milhão+ impressions</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SIMULADOR INTERATIVO -->
+    <section class="container reveal">
+        <div class="sim-wrap">
+            <h2 style="font-size:32px; font-weight:600; text-align:center;">Simule seu Saldo de Geração Mensal</h2>
+            <p style="text-align:center; color:var(--text-muted); margin-top:8px;">Créditos provisionados não utilizados
+                viram rollover pro próximo mês.</p>
+
+            <div class="slider-container">
+                <input type="range" class="range-sli" id="sli" min="0" max="4" step="1" value="1"
+                    oninput="updSli(this.value)">
+                <div class="labels" id="labels">
+                    <span data-i="0">R$ 1.000</span>
+                    <span data-i="1" class="active">R$ 5.000</span>
+                    <span data-i="2">R$ 10.000</span>
+                    <span data-i="3">R$ 20.000</span>
+                    <span data-i="4">R$ 40.000</span>
+                </div>
+            </div>
+
+            <div class="sim-result">
+                <div class="s-box">
+                    <div class="s-val" id="v1">3.333</div>
+                    <div class="s-lbl">Segundos IA</div>
+                </div>
+                <div class="s-box">
+                    <div class="s-val" id="v2">55</div>
+                    <div class="s-lbl">Mins de Clone</div>
+                </div>
+                <div class="s-box">
+                    <div class="s-val" id="v3">11.904</div>
+                    <div class="s-lbl">Imagens / Fotos</div>
+                </div>
+                <div class="s-box">
+                    <div class="s-val" id="v4">3</div>
+                    <div class="s-lbl">Peças Avançadas</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER / CTA -->
+    <footer class="reveal">
+        <h2 style="font-size:40px; color:#fff; font-family:var(--font-display); margin-bottom:24px;">Pronto para ativar
+            <span style="opacity:0.5">o futuro da sua marca?</span></h2>
+        <a href="#" class="btn btn-primary" onclick="alert('Solicitação de contato via Whatsapp aberta.')">Ativar
+            Conversa Agora</a>
+        <p style="margin-top:40px; color:rgba(255,255,255,0.2);">© 2026 Anti Copy Club. Desenvolvido com inteligência e
+            rigor tático.</p>
+    </footer>
+
+    <script>
+        // INICIAR REVEAL
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    e.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // SIMULADOR LOGIC
+        const vals = [
+            { v1: '666', v2: '11', v3: '2.380', v4: '1' },
+            { v1: '3.333', v2: '55', v3: '11.904', v4: '3' },
+            { v1: '6.666', v2: '111', v3: '23.809', v4: '6' },
+            { v1: '13.333', v2: '222', v3: '47.619', v4: '12' },
+            { v1: '26.666', v2: '444', v3: '95.238', v4: '24' },
+        ];
+        function updSli(idx) {
+            document.getElementById('v1').textContent = vals[idx].v1;
+            document.getElementById('v2').textContent = vals[idx].v2;
+            document.getElementById('v3').textContent = vals[idx].v3;
+            document.getElementById('v4').textContent = vals[idx].v4;
+
+            const lbls = document.getElementById('labels').children;
+            for (let i = 0; i < lbls.length; i++) lbls[i].classList.remove('active');
+            lbls[idx].classList.add('active');
+        }
+    </script>
+</body>
+
+</html>
