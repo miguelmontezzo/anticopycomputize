@@ -622,9 +622,11 @@
         }
 
         .sim-result {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 24px;
             margin-top: 32px;
             padding-top: 32px;
             border-top: 1px solid var(--border);
@@ -632,13 +634,26 @@
 
         @media (min-width: 600px) {
             .sim-result {
-                grid-template-columns: repeat(4, 1fr);
+                flex-direction: row;
+                gap: 32px;
             }
+        }
+
+        .s-or {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-muted);
+            background: rgba(255, 255, 255, 0.05);
+            padding: 6px 12px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
         }
 
         .s-box {
             display: flex;
             flex-direction: column;
+            align-items: center;
+            text-align: center;
             gap: 4px;
         }
 
@@ -720,6 +735,46 @@
             color: var(--text-muted);
             font-size: 12px;
             margin-top: 80px;
+        }
+
+        /* TABELA DE PRECOS (Importada) */
+        .ptable {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .ptable th {
+            text-align: left;
+            padding: 16px;
+            border-bottom: 1px solid var(--border);
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .ptable td {
+            padding: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .ptable tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .ptable td.b {
+            color: #fff;
+            font-weight: 500;
+        }
+
+        .pill.green {
+            border-color: rgba(34, 197, 94, 0.4);
+            color: #22c55e;
+        }
+
+        .pill.blue {
+            border-color: rgba(59, 130, 246, 0.4);
+            color: #3b82f6;
         }
     </style>
 </head>
@@ -1016,20 +1071,103 @@
                 </div>
             </div>
 
+            <p style="text-align:center; color:var(--text-muted); margin-top:24px; font-size:14px;">
+                <strong>Atenção:</strong> Estes valores representam o uso total do saldo em uma única modalidade. Você
+                pode misturar os formatos como quiser.
+            </p>
             <div class="sim-result">
                 <div class="s-box">
                     <div class="s-val" id="v1">10</div>
                     <div class="s-lbl">Vídeos de 1,5 min</div>
                 </div>
+                <div class="s-or">OU</div>
                 <div class="s-box">
                     <div class="s-val" id="v2">50</div>
                     <div class="s-lbl">Vídeos de 30s</div>
                 </div>
+                <div class="s-or">OU</div>
                 <div class="s-box">
                     <div class="s-val" id="v3">120</div>
                     <div class="s-lbl">Imagens Geradas</div>
                 </div>
             </div>
+
+            <!-- TABELA DE PREÇOS IMPORTADA -->
+            <div style="margin-top:80px; text-align:left; overflow-x:auto;">
+                <h3 style="font-size:24px; font-weight:600; color:#fff; margin-bottom:8px;">Tabela de Consumo / Preços
+                    Base</h3>
+                <p style="color:var(--text-muted); font-size:14px; margin-bottom:24px;">Esta é a tabela unitária que
+                    abate seus créditos. Os valores são válidos tanto para pacotes quanto serviços sob demanda.</p>
+                <table class="ptable" style="min-width:600px;">
+                    <thead>
+                        <tr>
+                            <th>Formato</th>
+                            <th>Unidade</th>
+                            <th>Preço Abatido (Créditos)</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="b">🎬 Vídeo gerado por IA</td>
+                            <td>por segundo</td>
+                            <td class="b">R$ 1,50 / seg</td>
+                            <td><span class="pill green" style="font-size:11px; padding:4px 8px;">Ativo</span></td>
+                        </tr>
+                        <tr>
+                            <td class="b">🎬 Vídeo 30 segundos</td>
+                            <td>por peça</td>
+                            <td class="b">R$ 45,00</td>
+                            <td><span class="pill green" style="font-size:11px; padding:4px 8px;">Ativo</span></td>
+                        </tr>
+                        <tr>
+                            <td class="b">🎬 Vídeo 2 minutos</td>
+                            <td>por peça</td>
+                            <td class="b">R$ 180,00</td>
+                            <td><span class="pill green" style="font-size:11px; padding:4px 8px;">Ativo</span></td>
+                        </tr>
+                        <tr>
+                            <td class="b">🖼️ Imagem gerada por IA</td>
+                            <td>por imagem</td>
+                            <td class="b">R$ 0,42</td>
+                            <td><span class="pill green" style="font-size:11px; padding:4px 8px;">Ativo</span></td>
+                        </tr>
+                        <tr>
+                            <td class="b">🧬 Clone — Vídeo 30s</td>
+                            <td>por peça</td>
+                            <td class="b">R$ 60,00</td>
+                            <td><span class="pill blue" style="font-size:11px; padding:4px 8px;">Clone IA</span></td>
+                        </tr>
+                        <tr>
+                            <td class="b">🧬 Clone — Vídeo 2 min</td>
+                            <td>por peça</td>
+                            <td class="b">R$ 240,00</td>
+                            <td><span class="pill blue" style="font-size:11px; padding:4px 8px;">Clone IA</span></td>
+                        </tr>
+                        <tr>
+                            <td class="b">🧬 Clone Ultra-realista 30s</td>
+                            <td>por peça</td>
+                            <td class="b">R$ 137,00</td>
+                            <td><span class="pill blue" style="font-size:11px; padding:4px 8px;">Premium</span></td>
+                        </tr>
+                        <tr>
+                            <td class="b">🧬 Clone Ultra-realista 2min</td>
+                            <td>por peça</td>
+                            <td class="b">R$ 548,00</td>
+                            <td><span class="pill blue" style="font-size:11px; padding:4px 8px;">Premium</span></td>
+                        </tr>
+                        <tr>
+                            <td class="b">✂️ Corte & Distribuição</td>
+                            <td>por CPM</td>
+                            <td class="b">sob consulta</td>
+                            <td><span class="pill"
+                                    style="font-size:11px; padding:4px 8px; border-color:var(--accent); color:var(--accent);">Serviço
+                                    Extra</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
         </div>
     </section>
 
