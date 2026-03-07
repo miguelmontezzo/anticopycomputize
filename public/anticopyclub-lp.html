@@ -877,522 +877,642 @@
             .bento-box.row-span-1 {
                 grid-row: span 1 / span 1;
             }
+
+            .grid-bento-port {
+                grid-template-columns: repeat(1, 1fr) !important;
+            }
+        }
+
+        /* PORTFOLIO BENTO GRID */
+        .grid-bento-port {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            grid-auto-rows: minmax(300px, auto);
+        }
+
+        .port-card {
+            background: rgba(30, 30, 30, 0.5);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            padding: 32px;
+            min-height: 400px;
+            transition: all 0.3s ease;
+            background-size: cover;
+            background-position: top center;
+        }
+
+        .port-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.2) 50%, transparent 100%);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .port-info {
+            position: relative;
+            z-index: 2;
         }
     </style>
 </head>
 
 <body>
-    <div class="glow top"></div>
-    <div class="glow accent-mid"></div>
-    <div class="glow bot"></div>
+    <div class="site-wrapper" style="overflow-x: hidden; width: 100%; position: relative;">
+        <div class="glow top"></div>
+        <div class="glow accent-mid"></div>
+        <div class="glow bot"></div>
 
-    <!-- NAVBAR -->
-    <nav>
-        <div class="nav-inner">
-            <a href="#" class="nav-logo">ANTI COPY CLUB</a>
-            <a href="#planos" class="nav-btn">Ativar HUB</a>
-        </div>
-    </nav>
-
-    <!-- HERO VIDEO -->
-    <header class="hero container"
-        style="max-width:100% !important; padding:120px 20px 80px; position:relative; overflow:hidden;">
-        <!-- Fundo de Vídeo Minimalista c/ Degrade/Overlay -->
-        <video src="https://antiplano.com.br/uploads/media_6997511ba1d6f.mp4" autoplay loop muted playsinline
-            style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:-2; opacity:0.15; filter:grayscale(80%);"></video>
-        <div
-            style="position:absolute; inset:0; background:radial-gradient(ellipse at center, transparent 0%, var(--bg) 90%); z-index:-1;">
-        </div>
-
-        <div class="reveal">
-            <div class="pill mb-6 mx-auto" style="margin-bottom:24px;">
-                <span
-                    style="display:inline-block;width:6px;height:6px;background:var(--accent);border-radius:50%;box-shadow:0 0 8px var(--accent);"></span>
-                Hub Criativo com IA
+        <!-- NAVBAR -->
+        <nav>
+            <div class="nav-inner">
+                <a href="#" class="nav-logo">ANTI COPY CLUB</a>
+                <a href="#planos" class="nav-btn">Ativar HUB</a>
             </div>
-            <h1 class="hero-title pt-4">One-click for<br><span class="text-gradient">Brand Evolution</span></h1>
-            <p class="hero-desc mx-auto">O Hub Criativo funciona como uma linha de montagem premium e in-house para a
-                sua marca. Foco completo em extrema velocidade — peças solicitadas via WhatsApp e entregues em prazo
-                relâmpago (48h). Sem intermediários.</p>
+        </nav>
 
-            <div class="hero-btn-group" style="display:flex;gap:16px;justify-content:center;">
-                <a href="#galeria" class="btn btn-primary">Ver em Ação</a>
-                <a href="#method" class="btn btn-outline">O Método EMP</a>
+        <!-- HERO VIDEO -->
+        <header class="hero container"
+            style="max-width:100% !important; padding:120px 20px 80px; position:relative; overflow:hidden;">
+            <!-- Fundo de Vídeo Minimalista c/ Degrade/Overlay -->
+            <video src="https://antiplano.com.br/uploads/media_6997511ba1d6f.mp4" autoplay loop muted playsinline
+                style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:-2; opacity:0.15; filter:grayscale(80%);"></video>
+            <div
+                style="position:absolute; inset:0; background:radial-gradient(ellipse at center, transparent 0%, var(--bg) 90%); z-index:-1;">
             </div>
-        </div>
 
-        <!-- METRICS -->
-        <div class="hero-metrics reveal">
-            <div class="metric">
-                <span class="v">-70%</span>
-                <span class="l">Custo vs Tradicional</span>
-            </div>
-            <div class="metric">
-                <span class="v">10x</span>
-                <span class="l">Volume de Escala</span>
-            </div>
-            <div class="metric">
-                <span class="v">48h</span>
-                <span class="l">Turnaround Médio</span>
-            </div>
-        </div>
-    </header>
+            <div class="reveal">
+                <div class="pill mb-6 mx-auto" style="margin-bottom:24px;">
+                    <span
+                        style="display:inline-block;width:6px;height:6px;background:var(--accent);border-radius:50%;box-shadow:0 0 8px var(--accent);"></span>
+                    Hub Criativo com IA
+                </div>
+                <h1 class="hero-title pt-4">One-click for<br><span class="text-gradient">Brand Evolution</span></h1>
+                <p class="hero-desc mx-auto">O Hub Criativo funciona como uma linha de montagem premium e in-house para
+                    a
+                    sua marca. Foco completo em extrema velocidade — peças solicitadas via WhatsApp e entregues em prazo
+                    relâmpago (48h). Sem intermediários.</p>
 
-    <!-- PRODUÇÃO EM AÇÃO (BENTO GRID) -->
-    <section id="galeria" class="container">
-        <div class="reveal" style="margin-bottom:40px; text-align:center;">
-            <h2 style="font-size:36px;font-weight:600;margin-bottom:12px;">Produção na Prática</h2>
-            <p style="color:var(--text-muted);font-size:16px;">O que o Hub entrega todos os dias, com alta fidelidade e
-                hiper-realismo.</p>
-        </div>
-
-        <div class="grid-bento reveal">
-            <!-- Item 1 -->
-            <div class="bento-box glass-card media-card col-span-2 row-span-2 bento-media-item">
-                <video src="https://antiplanos.com.br/backend/uploads/1771626122_1771557580_9.mp4" autoplay loop muted
-                    playsinline></video>
-                <div class="media-info">
-                    <span class="label" style="color:#fff;">Produção Automatizada</span>
-                    <h3 style="font-size:24px;font-weight:600;color:#fff;">Clone Estratégico</h3>
+                <div class="hero-btn-group" style="display:flex;gap:16px;justify-content:center;">
+                    <a href="#galeria" class="btn btn-primary">Ver em Ação</a>
+                    <a href="#method" class="btn btn-outline">O Método EMP</a>
                 </div>
             </div>
 
-            <!-- Item 2 -->
-            <div class="bento-box glass-card media-card col-span-1 row-span-2 bento-media-item">
-                <video src="https://antiplanos.com.br/backend/uploads/1771626173_1771557430_10.mp4" autoplay loop muted
-                    playsinline></video>
-                <div class="media-info">
-                    <span class="label" style="color:#fff;">Mídia Dinâmica</span>
-                    <h3 style="font-size:18px;font-weight:600;color:#fff;">Direção Visual</h3>
+            <!-- METRICS -->
+            <div class="hero-metrics reveal">
+                <div class="metric">
+                    <span class="v">-70%</span>
+                    <span class="l">Custo vs Tradicional</span>
+                </div>
+                <div class="metric">
+                    <span class="v">10x</span>
+                    <span class="l">Volume de Escala</span>
+                </div>
+                <div class="metric">
+                    <span class="v">48h</span>
+                    <span class="l">Turnaround Médio</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- PRODUÇÃO EM AÇÃO (BENTO GRID) -->
+        <section id="galeria" class="container">
+            <div class="reveal" style="margin-bottom:40px; text-align:center;">
+                <h2 style="font-size:36px;font-weight:600;margin-bottom:12px;">Produção na Prática</h2>
+                <p style="color:var(--text-muted);font-size:16px;">O que o Hub entrega todos os dias, com alta
+                    fidelidade e
+                    hiper-realismo.</p>
+            </div>
+
+            <div class="grid-bento reveal">
+                <!-- Item 1 -->
+                <div class="bento-box glass-card media-card col-span-2 row-span-2 bento-media-item">
+                    <video src="https://antiplanos.com.br/backend/uploads/1771626122_1771557580_9.mp4" autoplay loop
+                        muted playsinline></video>
+                    <div class="media-info">
+                        <span class="label" style="color:#fff;">Produção Automatizada</span>
+                        <h3 style="font-size:24px;font-weight:600;color:#fff;">Clone Estratégico</h3>
+                    </div>
+                </div>
+
+                <!-- Item 2 -->
+                <div class="bento-box glass-card media-card col-span-1 row-span-2 bento-media-item">
+                    <video src="https://antiplanos.com.br/backend/uploads/1771626173_1771557430_10.mp4" autoplay loop
+                        muted playsinline></video>
+                    <div class="media-info">
+                        <span class="label" style="color:#fff;">Mídia Dinâmica</span>
+                        <h3 style="font-size:18px;font-weight:600;color:#fff;">Direção Visual</h3>
+                    </div>
+                </div>
+
+                <!-- Item 3 -->
+                <div class="bento-box glass-card media-card col-span-1 row-span-1 bento-media-item">
+                    <video src="https://antiplano.com.br/uploads/media_699751cc03513.mp4" autoplay loop muted
+                        playsinline></video>
+                </div>
+
+                <!-- Item 4 -->
+                <div class="bento-box glass-card media-card col-span-1 row-span-1 bento-media-item">
+                    <video src="https://antiplano.com.br/uploads/media_6997511ba1d6f.mp4" autoplay loop muted
+                        playsinline></video>
+                </div>
+
+                <!-- Item 5 -->
+                <div class="bento-box glass-card media-card col-span-2 row-span-2 bento-media-item">
+                    <video
+                        src="https://nthfbwootpzgpsjnerdw.supabase.co/storage/v1/object/sign/digital/03_02.mp4?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9iMDM3Y2M3My1iMWUxLTQwYmQtODVjNS1lNjk1ZGM3ZmU1YzUiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJkaWdpdGFsLzAzXzAyLm1wNCIsImlhdCI6MTc3MTk3MjgyNCwiZXhwIjoxODAzNTA4ODI0fQ.wtMmZdMg3orz7ymNjm_7PJiuXqBEga27uXk_oz5Btd8"
+                        autoplay loop muted playsinline></video>
+                    <div class="media-info">
+                        <span class="label" style="color:#fff;">Avatar High-End</span>
+                        <h3 style="font-size:24px;font-weight:600;color:#fff;">Criação de Identidade</h3>
+                    </div>
+                </div>
+
+                <!-- Item 6 -->
+                <div class="bento-box glass-card media-card col-span-1 row-span-2 bento-media-item">
+                    <video
+                        src="https://nthfbwootpzgpsjnerdw.supabase.co/storage/v1/object/sign/digital/freepik_closeup-de-uma-jovem-mulher-com-cabelo-rosa-vibran_kling-25_720p_9-16_24fps_44246.mp4?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9iMDM3Y2M3My1iMWUxLTQwYmQtODVjNS1lNjk1ZGM3ZmU1YzUiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJkaWdpdGFsL2ZyZWVwaWtfY2xvc2V1cC1kZS11bWEtam92ZW0tbXVsaGVyLWNvbS1jYWJlbG8tcm9zYS12aWJyYW5fa2xpbmctMjVfNzIwcF85LTE2XzI0ZnBzXzQ0MjQ2Lm1wNCIsImlhdCI6MTc3MTk3Mjg0MiwiZXhwIjoxODAzNTA4ODQyfQ.eafiQVfX9Z51RyrugnVrXfyMhg3-tFbe4u82ND2_lGQ"
+                        autoplay loop muted playsinline></video>
+                </div>
+
+                <!-- Item 7 -->
+                <div class="bento-box glass-card media-card col-span-1 row-span-2 bento-media-item">
+                    <video
+                        src="https://nthfbwootpzgpsjnerdw.supabase.co/storage/v1/object/sign/digital/hf_20260120_013820_8ba7202c-f442-4eb5-9b82-dcc2919596a0.mp4?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9iMDM3Y2M3My1iMWUxLTQwYmQtODVjNS1lNjk1ZGM3ZmU1YzUiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJkaWdpdGFsL2hmXzIwMjYwMTIwXzAxMzgyMF84YmE3MjAyYy1mNDQyLTRlYjUtOWI4Mi1kY2MyOTE5NTk2YTAubXA0IiwiaWF0IjoxNzcxOTcyODUyLCJleHAiOjE4MDM1MDg4NTJ9.ZV77gJE1dHX_wpSSRl-guYblC-y31gzE3GOw8A1Yiho"
+                        autoplay loop muted playsinline></video>
+                </div>
+            </div>
+        </section>
+
+        <!-- METODO EMP COMPLETO -->
+        <section id="method" class="container reveal">
+            <div
+                style="text-align:center; max-width:800px; margin:0 auto; padding:60px 40px; border:1px solid var(--border); border-radius:32px; background:radial-gradient(circle at top, rgba(232, 64, 28, 0.05) 0%, transparent 60%);">
+                <span class="pill" style="margin-bottom:24px;">Metodologia Base</span>
+                <h2 style="font-size:48px;font-weight:600;margin-bottom:16px;">E <span
+                        style="opacity:0.3;font-weight:300;">→</span> Mas <span
+                        style="opacity:0.3;font-weight:300;">→</span> Por Isso</h2>
+                <p style="font-size:18px; line-height:1.6; color:var(--text-muted);">
+                    "Toda empresa tem uma história. Toda história tem um estado atual, um conflito e uma virada. O
+                    <strong>Método EMP</strong> é o sistema operacional usado pela Anti Copy Club para transformar
+                    visibilidade em conversão real e veloz, adaptado em todas as etapas."
+                </p>
+            </div>
+
+            <!-- Aplicações do Método em Grade -->
+            <div
+                style="margin-top:40px; display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap:16px;">
+                <div class="glass glass-card" style="padding:32px; display:flex; flex-direction:column; gap:16px;">
+                    <div style="font-size:24px;">🎯</div>
+                    <h4 style="font-size:18px; font-weight:600;">Diagnóstico</h4>
+                    <ul
+                        style="list-style:none; display:flex; flex-direction:column; gap:10px; font-size:14px; color:var(--text-muted); line-height:1.5;">
+                        <li><strong>E:</strong> O que a marca já possui hoje.</li>
+                        <li><strong style="color:var(--accent);">Mas:</strong> O funil ou engajamento que trava.</li>
+                        <li><strong>Por Isso:</strong> Nossa rota estratégica acionável.</li>
+                    </ul>
+                </div>
+
+                <div class="glass glass-card" style="padding:32px; display:flex; flex-direction:column; gap:16px;">
+                    <div style="font-size:24px;">🎬</div>
+                    <h4 style="font-size:18px; font-weight:600;">Roteirização</h4>
+                    <ul
+                        style="list-style:none; display:flex; flex-direction:column; gap:10px; font-size:14px; color:var(--text-muted); line-height:1.5;">
+                        <li><strong>E:</strong> Gancho e familiaridade imediata.</li>
+                        <li><strong style="color:var(--accent);">Mas:</strong> Quebra de padrão, agitação do problema.
+                        </li>
+                        <li><strong>Por Isso:</strong> Resolução rápida focada no CTA.</li>
+                    </ul>
+                </div>
+
+                <div class="glass glass-card" style="padding:32px; display:flex; flex-direction:column; gap:16px;">
+                    <div style="font-size:24px;">📈</div>
+                    <h4 style="font-size:18px; font-weight:600;">Otimização (Growth)</h4>
+                    <ul
+                        style="list-style:none; display:flex; flex-direction:column; gap:10px; font-size:14px; color:var(--text-muted); line-height:1.5;">
+                        <li><strong>E:</strong> A entrega da quinzena atingida.</li>
+                        <li><strong style="color:var(--accent);">Mas:</strong> Variações não exploradas em testes A/B.
+                        </li>
+                        <li><strong>Por Isso:</strong> Iteração inteligente de recortes gerados.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- SOLUÇÕES DIGITAIS & APRESENTACAO -->
+        <section id="digital" class="container reveal"
+            style="padding-top:100px; padding-bottom:100px; border-top:1px solid rgba(255,255,255,0.05); margin-top:80px;">
+            <div
+                style="display:flex; flex-direction:column; gap:8px; align-items:center; text-align:center; margin-bottom:48px;">
+                <span class="pill" style="margin-bottom:8px;">Sob Demanda</span>
+                <h2 style="font-size:40px;font-weight:600;">Soluções Digitais <span
+                        class="text-accent-gradient">Premium</span></h2>
+                <p style="color:var(--text-muted);font-size:16px;max-width:500px;">
+                    Além do conteúdo em redes — automatizamos pontas e fechamos novos funis interativos pro seu negócio.
+                </p>
+            </div>
+
+            <div class="sol-grid">
+                <div class="glass glass-card sol-card">
+                    <div class="sol-icon">🚀</div>
+                    <h3 class="sol-title">Landing Page VIP</h3>
+                    <p class="sol-desc">Desenhada para tração instantânea e altíssima escaneabilidade. Escrita com
+                        persuasão
+                        analítica.</p>
+                    <div class="sol-price">R$ 4.500 <span
+                            style="font-size:12px;color:var(--text-muted);font-weight:400;">/projeto</span></div>
+                </div>
+
+                <div class="glass glass-card sol-card">
+                    <div class="sol-icon">🌐</div>
+                    <h3 class="sol-title">Site Empresarial Premium</h3>
+                    <p class="sol-desc">Sua presença institucional construída com as métricas de performance e estética
+                        de
+                        padrão internacional.</p>
+                    <div class="sol-price">R$ 12.000 <span
+                            style="font-size:12px;color:var(--text-muted);font-weight:400;">/projeto</span></div>
+                </div>
+
+                <div class="glass glass-card sol-card"
+                    style="border-color:rgba(232, 64, 28, 0.3); background:rgba(232, 64, 28, 0.02);">
+                    <div class="sol-icon">📊</div>
+                    <h3 class="sol-title">Apresentação Web</h3>
+                    <p class="sol-desc">Pitch interativo entregue por link, focado no fechamento veloz. Mesclamos o
+                        visual
+                        premium da LP com roteiro dinâmico.</p>
+                    <div class="sol-tag">Você sai na frente</div>
+                    <div class="sol-price">R$ 4.500 <span
+                            style="font-size:12px;color:var(--text-muted);font-weight:400;">/projeto</span></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PORTFOLIO / APLICACOES WEB -->
+        <section id="portfolio" class="container reveal" style="padding-bottom:100px; padding-top:40px;">
+            <div style="text-align:center;margin-bottom:48px;">
+                <h2 style="font-size:36px;font-weight:600;">Portfólio & Aplicações em Site</h2>
+                <p style="color:var(--text-muted);font-size:16px;max-width:600px;margin:12px auto 0;">
+                    Veja as estruturas de alta conversão entregues a partir de R$ 4.500,00. Landings e Pitchs que vendem
+                    por
+                    você.
+                </p>
+            </div>
+
+            <div class="grid-bento-port reveal">
+                <!-- Port 1 -->
+                <div class="port-card glass-card"
+                    style="background-image: url('https://antiplano.com.br/backend/uploads/placeholder1.jpg');">
+                    <div class="port-info">
+                        <span class="pill"
+                            style="margin-bottom:12px; font-size:10px; padding:4px 8px; border-color:var(--border);">Tecnologia
+                            Web</span>
+                        <h3 style="font-size:24px;font-weight:600;color:#fff;margin-bottom:8px;">Landing Page C-Level
+                        </h3>
+                        <p style="font-size:14px;color:var(--text-muted);line-height:1.5;">Mockup focado em
+                            escaneabilidade.
+                            (Substitua a imagem).</p>
+                    </div>
+                </div>
+
+                <!-- Port 2 -->
+                <div class="port-card glass-card"
+                    style="background-image: url('https://antiplano.com.br/backend/uploads/placeholder2.jpg');  background-position: left center;">
+                    <div class="port-info">
+                        <span class="pill"
+                            style="margin-bottom:12px; font-size:10px; padding:4px 8px; border-color:var(--border);">Apresentação
+                            Digital</span>
+                        <h3 style="font-size:24px;font-weight:600;color:#fff;margin-bottom:8px;">Pitch Deck Interativo
+                        </h3>
+                        <p style="font-size:14px;color:var(--text-muted);line-height:1.5;">O roteiro vendedor adaptado
+                            para
+                            envio na DM. (Substitua a imagem).</p>
+                    </div>
+                </div>
+
+                <!-- Port 3 -->
+                <div class="port-card glass-card"
+                    style="grid-column: 1 / -1; min-height: 500px; background-image: url('https://antiplano.com.br/backend/uploads/placeholder3.jpg'); background-position: center;">
+                    <div class="port-info">
+                        <span class="pill"
+                            style="margin-bottom:12px; font-size:10px; padding:4px 8px; border-color:var(--accent); color: var(--accent);">Escala
+                            Suprema</span>
+                        <h3 style="font-size:32px;font-weight:700;color:#fff;margin-bottom:12px;">Página Corporativa 3D
+                        </h3>
+                        <p style="font-size:16px;color:var(--text-muted);line-height:1.5;max-width:500px;">Institucional
+                            multimídia com avatares e experiência WebGL embutida. Mude o link de background.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- HUB ATIVO & PLANOS -->
+        <section id="planos" class="container reveal"
+            style="padding-top:100px; padding-bottom:100px; border-top:1px solid rgba(255,255,255,0.05); margin-top:80px;">
+            <div style="text-align:center;margin-bottom:48px;">
+                <span class="pill" style="margin-bottom:12px;">Assinatura Contínua</span>
+                <h2 style="font-size:40px;font-weight:600;">Hub Ativo Mensal + Créditos</h2>
+                <p style="color:var(--text-muted);font-size:16px;">Sua agência in-house focada em inteligência sob
+                    demanda,
+                    zero atrito.</p>
+            </div>
+
+            <div class="plans-wrapper">
+                <div class="glass glass-card plan">
+                    <div class="p-name">Starter</div>
+                    <div class="p-price">R$ 5.000<span>/mês</span></div>
+                    <div class="p-desc">Organização básica para impulsionar a linha editorial.</div>
+                    <ul class="p-list">
+                        <li>Gestão e Organização</li>
+                        <li>Briefing estruturado</li>
+                        <li>Entrega documentada</li>
+                    </ul>
+                </div>
+
+                <div class="glass glass-card plan plan-highlight">
+                    <div
+                        style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:#fff;color:#000;font-size:10px;font-weight:700;padding:6px 14px;border-radius:20px;text-transform:uppercase;">
+                        Mais Escolhido</div>
+                    <div class="p-name" style="color:#fff;">Growth</div>
+                    <div class="p-price text-accent-gradient">R$ 9.000<span>/mês</span></div>
+                    <div class="p-desc">Foco em estruturação robusta e alinhamento tático impecável.</div>
+                    <ul class="p-list">
+                        <li>Tudo do Starter</li>
+                        <li>Estruturação editorial inclusa</li>
+                        <li>Dashboard de acompanhamento online</li>
+                        <li>Relatórios práticos de consumo</li>
+                    </ul>
+                </div>
+
+                <div class="glass glass-card plan">
+                    <div class="p-name">Scale</div>
+                    <div class="p-price">R$ 12.000<span>/mês</span></div>
+                    <div class="p-desc">Dominância máxima. Sem fricção, com todas esferas abordadas.</div>
+                    <ul class="p-list">
+                        <li>Tudo do Growth</li>
+                        <li>Clone de avatar custom exclusivo</li>
+                        <li>Aplicações de tradução on-the-fly</li>
+                        <li>Sincronia multiplataforma de marca</li>
+                    </ul>
                 </div>
             </div>
 
-            <!-- Item 3 -->
-            <div class="bento-box glass-card media-card col-span-1 row-span-1 bento-media-item">
-                <video src="https://antiplano.com.br/uploads/media_699751cc03513.mp4" autoplay loop muted
-                    playsinline></video>
-            </div>
+            <!-- SIMULADOR INTERATIVO (Créditos) -->
+            <div class="sim-wrap"
+                style="margin-top:80px; padding:60px 40px; background:rgba(255,255,255,0.02); border:1px solid var(--border); border-radius:32px;">
+                <h2 style="font-size:32px; font-weight:600; text-align:center;">Simule seu Saldo de Geração Mensal</h2>
+                <p style="text-align:center; color:var(--text-muted); margin-top:8px;">Créditos provisionados não
+                    utilizados
+                    no Hub viram rollover automático pro próximo mês.</p>
 
-            <!-- Item 4 -->
-            <div class="bento-box glass-card media-card col-span-1 row-span-1 bento-media-item">
-                <video src="https://antiplano.com.br/uploads/media_6997511ba1d6f.mp4" autoplay loop muted
-                    playsinline></video>
-            </div>
-
-            <!-- Item 5 -->
-            <div class="bento-box glass-card media-card col-span-2 row-span-2 bento-media-item">
-                <video
-                    src="https://nthfbwootpzgpsjnerdw.supabase.co/storage/v1/object/sign/digital/03_02.mp4?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9iMDM3Y2M3My1iMWUxLTQwYmQtODVjNS1lNjk1ZGM3ZmU1YzUiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJkaWdpdGFsLzAzXzAyLm1wNCIsImlhdCI6MTc3MTk3MjgyNCwiZXhwIjoxODAzNTA4ODI0fQ.wtMmZdMg3orz7ymNjm_7PJiuXqBEga27uXk_oz5Btd8"
-                    autoplay loop muted playsinline></video>
-                <div class="media-info">
-                    <span class="label" style="color:#fff;">Avatar High-End</span>
-                    <h3 style="font-size:24px;font-weight:600;color:#fff;">Criação de Identidade</h3>
+                <div class="slider-container" style="margin-top:40px;">
+                    <input type="range" class="range-sli" id="sli" min="0" max="4" step="1" value="1"
+                        oninput="updSli(this.value)">
+                    <div class="labels" id="labels">
+                        <span data-i="0">R$ 5.000</span>
+                        <span data-i="1" class="active">R$ 9.000</span>
+                        <span data-i="2">R$ 12.000</span>
+                        <span data-i="3">R$ 20.000</span>
+                        <span data-i="4">R$ 40.000</span>
+                    </div>
                 </div>
+
+                <p style="text-align:center; color:var(--text-muted); margin-top:24px; font-size:14px;">
+                    <strong>Atenção:</strong> Estes valores representam o uso total do saldo em uma única modalidade.
+                    Você
+                    pode misturar os formatos como quiser.
+                </p>
+                <div class="sim-result">
+                    <div class="s-box">
+                        <div class="s-val" id="v1">10</div>
+                        <div class="s-lbl">Vídeos de 1,5 min</div>
+                    </div>
+                    <div class="s-or">OU</div>
+                    <div class="s-box">
+                        <div class="s-val" id="v2">50</div>
+                        <div class="s-lbl">Vídeos de 30s</div>
+                    </div>
+                    <div class="s-or">OU</div>
+                    <div class="s-box">
+                        <div class="s-val" id="v3">120</div>
+                        <div class="s-lbl">Imagens Geradas</div>
+                    </div>
+                </div>
+
+                <!-- TABELA DE PREÇOS IMPORTADA -->
+                <div style="margin-top:80px; text-align:left; overflow-x:auto;">
+                    <h3 style="font-size:24px; font-weight:600; color:#fff; margin-bottom:8px;">Tabela de Consumo /
+                        Preços
+                        Base</h3>
+                    <p style="color:var(--text-muted); font-size:14px; margin-bottom:24px;">Esta é a tabela unitária que
+                        abate seus créditos. Os valores são válidos tanto para pacotes quanto serviços sob demanda.</p>
+                    <table class="ptable">
+                        <thead>
+                            <tr>
+                                <th>Formato</th>
+                                <th>Unidade</th>
+                                <th>Preço Abatido (Créditos)</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td data-label="Formato" class="b">🎬 Vídeo gerado por IA</td>
+                                <td data-label="Unidade">por segundo</td>
+                                <td data-label="Preço" class="b">R$ 1,50 / seg</td>
+                                <td data-label="Status"><span class="pill green"
+                                        style="font-size:11px; padding:4px 8px;">Ativo</span></td>
+                            </tr>
+                            <tr>
+                                <td data-label="Formato" class="b">🎬 Vídeo 30 segundos</td>
+                                <td data-label="Unidade">por peça</td>
+                                <td data-label="Preço" class="b">R$ 45,00</td>
+                                <td data-label="Status"><span class="pill green"
+                                        style="font-size:11px; padding:4px 8px;">Ativo</span></td>
+                            </tr>
+                            <tr>
+                                <td data-label="Formato" class="b">🎬 Vídeo 2 minutos</td>
+                                <td data-label="Unidade">por peça</td>
+                                <td data-label="Preço" class="b">R$ 180,00</td>
+                                <td data-label="Status"><span class="pill green"
+                                        style="font-size:11px; padding:4px 8px;">Ativo</span></td>
+                            </tr>
+                            <tr>
+                                <td data-label="Formato" class="b">🖼️ Imagem gerada por IA</td>
+                                <td data-label="Unidade">por imagem</td>
+                                <td data-label="Preço" class="b">R$ 0,42</td>
+                                <td data-label="Status"><span class="pill green"
+                                        style="font-size:11px; padding:4px 8px;">Ativo</span></td>
+                            </tr>
+                            <tr>
+                                <td data-label="Formato" class="b">🧬 Clone — Vídeo 30s</td>
+                                <td data-label="Unidade">por peça</td>
+                                <td data-label="Preço" class="b">R$ 60,00</td>
+                                <td data-label="Status"><span class="pill blue"
+                                        style="font-size:11px; padding:4px 8px;">Clone IA</span></td>
+                            </tr>
+                            <tr>
+                                <td data-label="Formato" class="b">🧬 Clone — Vídeo 2 min</td>
+                                <td data-label="Unidade">por peça</td>
+                                <td data-label="Preço" class="b">R$ 240,00</td>
+                                <td data-label="Status"><span class="pill blue"
+                                        style="font-size:11px; padding:4px 8px;">Clone IA</span></td>
+                            </tr>
+                            <tr>
+                                <td data-label="Formato" class="b">🧬 Clone Ultra-realista 30s</td>
+                                <td data-label="Unidade">por peça</td>
+                                <td data-label="Preço" class="b">R$ 137,00</td>
+                                <td data-label="Status"><span class="pill blue"
+                                        style="font-size:11px; padding:4px 8px;">Premium</span></td>
+                            </tr>
+                            <tr>
+                                <td data-label="Formato" class="b">🧬 Clone Ultra-realista 2min</td>
+                                <td data-label="Unidade">por peça</td>
+                                <td data-label="Preço" class="b">R$ 548,00</td>
+                                <td data-label="Status"><span class="pill blue"
+                                        style="font-size:11px; padding:4px 8px;">Premium</span></td>
+                            </tr>
+                            <tr>
+                                <td data-label="Formato" class="b">✂️ Corte & Distribuição</td>
+                                <td data-label="Unidade">por 1000 views (CPMV)</td>
+                                <td data-label="Preço" class="b">R$ 1,00 - 1,50</td>
+                                <td data-label="Status"><span class="pill"
+                                        style="font-size:11px; padding:4px 8px; border-color:var(--accent); color:var(--accent);">Serviço
+                                        Extra</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
             </div>
+        </section>
 
-            <!-- Item 6 -->
-            <div class="bento-box glass-card media-card col-span-1 row-span-2 bento-media-item">
-                <video
-                    src="https://nthfbwootpzgpsjnerdw.supabase.co/storage/v1/object/sign/digital/freepik_closeup-de-uma-jovem-mulher-com-cabelo-rosa-vibran_kling-25_720p_9-16_24fps_44246.mp4?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9iMDM3Y2M3My1iMWUxLTQwYmQtODVjNS1lNjk1ZGM3ZmU1YzUiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJkaWdpdGFsL2ZyZWVwaWtfY2xvc2V1cC1kZS11bWEtam92ZW0tbXVsaGVyLWNvbS1jYWJlbG8tcm9zYS12aWJyYW5fa2xpbmctMjVfNzIwcF85LTE2XzI0ZnBzXzQ0MjQ2Lm1wNCIsImlhdCI6MTc3MTk3Mjg0MiwiZXhwIjoxODAzNTA4ODQyfQ.eafiQVfX9Z51RyrugnVrXfyMhg3-tFbe4u82ND2_lGQ"
-                    autoplay loop muted playsinline></video>
-            </div>
+        <!-- CORTE & DISTRIBUIÇÃO -->
+        <section id="cortes" class="container reveal"
+            style="padding-top:100px; padding-bottom:100px; border-top:1px solid rgba(255,255,255,0.05); margin-top:80px;">
+            <div class="glass"
+                style="padding:60px 40px; text-align:center; background:radial-gradient(circle at center, rgba(232, 64, 28, 0.08) 0%, transparent 70%); border-radius:32px;">
 
-            <!-- Item 7 -->
-            <div class="bento-box glass-card media-card col-span-1 row-span-2 bento-media-item">
-                <video
-                    src="https://nthfbwootpzgpsjnerdw.supabase.co/storage/v1/object/sign/digital/hf_20260120_013820_8ba7202c-f442-4eb5-9b82-dcc2919596a0.mp4?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9iMDM3Y2M3My1iMWUxLTQwYmQtODVjNS1lNjk1ZGM3ZmU1YzUiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJkaWdpdGFsL2hmXzIwMjYwMTIwXzAxMzgyMF84YmE3MjAyYy1mNDQyLTRlYjUtOWI4Mi1kY2MyOTE5NTk2YTAubXA0IiwiaWF0IjoxNzcxOTcyODUyLCJleHAiOjE4MDM1MDg4NTJ9.ZV77gJE1dHX_wpSSRl-guYblC-y31gzE3GOw8A1Yiho"
-                    autoplay loop muted playsinline></video>
-            </div>
-        </div>
-    </section>
+                <span class="pill border"
+                    style="margin-bottom:24px; font-size:14px; font-weight:600; color:#fff; border-color:var(--accent);">Estratégia
+                    Separada e Autônoma</span>
 
-    <!-- METODO EMP COMPLETO -->
-    <section id="method" class="container reveal">
-        <div
-            style="text-align:center; max-width:800px; margin:0 auto; padding:60px 40px; border:1px solid var(--border); border-radius:32px; background:radial-gradient(circle at top, rgba(232, 64, 28, 0.05) 0%, transparent 60%);">
-            <span class="pill" style="margin-bottom:24px;">Metodologia Base</span>
-            <h2 style="font-size:48px;font-weight:600;margin-bottom:16px;">E <span
-                    style="opacity:0.3;font-weight:300;">→</span> Mas <span
-                    style="opacity:0.3;font-weight:300;">→</span> Por Isso</h2>
-            <p style="font-size:18px; line-height:1.6; color:var(--text-muted);">
-                "Toda empresa tem uma história. Toda história tem um estado atual, um conflito e uma virada. O
-                <strong>Método EMP</strong> é o sistema operacional usado pela Anti Copy Club para transformar
-                visibilidade em conversão real e veloz, adaptado em todas as etapas."
-            </p>
-        </div>
+                <h3 style="font-size:48px; font-weight:700; margin-bottom:16px; font-family:var(--font-display);">Cortes
+                    &
+                    Tráfego</h3>
 
-        <!-- Aplicações do Método em Grade -->
-        <div
-            style="margin-top:40px; display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap:16px;">
-            <div class="glass glass-card" style="padding:32px; display:flex; flex-direction:column; gap:16px;">
-                <div style="font-size:24px;">🎯</div>
-                <h4 style="font-size:18px; font-weight:600;">Diagnóstico</h4>
-                <ul
-                    style="list-style:none; display:flex; flex-direction:column; gap:10px; font-size:14px; color:var(--text-muted); line-height:1.5;">
-                    <li><strong>E:</strong> O que a marca já possui hoje.</li>
-                    <li><strong style="color:var(--accent);">Mas:</strong> O funil ou engajamento que trava.</li>
-                    <li><strong>Por Isso:</strong> Nossa rota estratégica acionável.</li>
-                </ul>
-            </div>
+                <p
+                    style="font-size:18px; color:var(--text-muted); line-height:1.6; max-width:800px; margin:0 auto 40px;">
+                    Corte e Distribuição funcionam de forma independente da produção orgânica. Transformamos seus
+                    melhores
+                    vídeos (produzidos pelo Hub ou não) em recortes cirúrgicos magnéticos para escalar vendas via
+                    anúncios
+                    curtos. Um funil validado de 1 Milhão de visualizações focadas.
+                </p>
 
-            <div class="glass glass-card" style="padding:32px; display:flex; flex-direction:column; gap:16px;">
-                <div style="font-size:24px;">🎬</div>
-                <h4 style="font-size:18px; font-weight:600;">Roteirização</h4>
-                <ul
-                    style="list-style:none; display:flex; flex-direction:column; gap:10px; font-size:14px; color:var(--text-muted); line-height:1.5;">
-                    <li><strong>E:</strong> Gancho e familiaridade imediata.</li>
-                    <li><strong style="color:var(--accent);">Mas:</strong> Quebra de padrão, agitação do problema.</li>
-                    <li><strong>Por Isso:</strong> Resolução rápida focada no CTA.</li>
-                </ul>
-            </div>
-
-            <div class="glass glass-card" style="padding:32px; display:flex; flex-direction:column; gap:16px;">
-                <div style="font-size:24px;">📈</div>
-                <h4 style="font-size:18px; font-weight:600;">Otimização (Growth)</h4>
-                <ul
-                    style="list-style:none; display:flex; flex-direction:column; gap:10px; font-size:14px; color:var(--text-muted); line-height:1.5;">
-                    <li><strong>E:</strong> A entrega da quinzena atingida.</li>
-                    <li><strong style="color:var(--accent);">Mas:</strong> Variações não exploradas em testes A/B.</li>
-                    <li><strong>Por Isso:</strong> Iteração inteligente de recortes gerados.</li>
-                </ul>
-            </div>
-        </div>
-    </section>
-
-    <!-- SOLUÇÕES DIGITAIS & APRESENTACAO -->
-    <section id="digital" class="container reveal"
-        style="padding-top:100px; padding-bottom:100px; border-top:1px solid rgba(255,255,255,0.05); margin-top:80px;">
-        <div
-            style="display:flex; flex-direction:column; gap:8px; align-items:center; text-align:center; margin-bottom:48px;">
-            <span class="pill" style="margin-bottom:8px;">Sob Demanda</span>
-            <h2 style="font-size:40px;font-weight:600;">Soluções Digitais <span
-                    class="text-accent-gradient">Premium</span></h2>
-            <p style="color:var(--text-muted);font-size:16px;max-width:500px;">
-                Além do conteúdo em redes — automatizamos pontas e fechamos novos funis interativos pro seu negócio.
-            </p>
-        </div>
-
-        <div class="sol-grid">
-            <div class="glass glass-card sol-card">
-                <div class="sol-icon">🚀</div>
-                <h3 class="sol-title">Landing Page VIP</h3>
-                <p class="sol-desc">Desenhada para tração instantânea e altíssima escaneabilidade. Escrita com persuasão
-                    analítica.</p>
-                <div class="sol-price">R$ 4.500 <span
-                        style="font-size:12px;color:var(--text-muted);font-weight:400;">/projeto</span></div>
-            </div>
-
-            <div class="glass glass-card sol-card">
-                <div class="sol-icon">🌐</div>
-                <h3 class="sol-title">Site Empresarial Premium</h3>
-                <p class="sol-desc">Sua presença institucional construída com as métricas de performance e estética de
-                    padrão internacional.</p>
-                <div class="sol-price">R$ 12.000 <span
-                        style="font-size:12px;color:var(--text-muted);font-weight:400;">/projeto</span></div>
-            </div>
-
-            <div class="glass glass-card sol-card"
-                style="border-color:rgba(232, 64, 28, 0.3); background:rgba(232, 64, 28, 0.02);">
-                <div class="sol-icon">📊</div>
-                <h3 class="sol-title">Apresentação Web</h3>
-                <p class="sol-desc">Pitch interativo entregue por link, focado no fechamento veloz. Mesclamos o visual
-                    premium da LP com roteiro dinâmico.</p>
-                <div class="sol-tag">Você sai na frente</div>
-                <div class="sol-price">R$ 4.500 <span
-                        style="font-size:12px;color:var(--text-muted);font-weight:400;">/projeto</span></div>
-            </div>
-        </div>
-    </section>
-
-    <!-- HUB ATIVO & PLANOS -->
-    <section id="planos" class="container reveal"
-        style="padding-top:100px; padding-bottom:100px; border-top:1px solid rgba(255,255,255,0.05); margin-top:80px;">
-        <div style="text-align:center;margin-bottom:48px;">
-            <span class="pill" style="margin-bottom:12px;">Assinatura Contínua</span>
-            <h2 style="font-size:40px;font-weight:600;">Hub Ativo Mensal + Créditos</h2>
-            <p style="color:var(--text-muted);font-size:16px;">Sua agência in-house focada em inteligência sob demanda,
-                zero atrito.</p>
-        </div>
-
-        <div class="plans-wrapper">
-            <div class="glass glass-card plan">
-                <div class="p-name">Starter</div>
-                <div class="p-price">R$ 5.000<span>/mês</span></div>
-                <div class="p-desc">Organização básica para impulsionar a linha editorial.</div>
-                <ul class="p-list">
-                    <li>Gestão e Organização</li>
-                    <li>Briefing estruturado</li>
-                    <li>Entrega documentada</li>
-                </ul>
-            </div>
-
-            <div class="glass glass-card plan plan-highlight">
                 <div
-                    style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:#fff;color:#000;font-size:10px;font-weight:700;padding:6px 14px;border-radius:20px;text-transform:uppercase;">
-                    Mais Escolhido</div>
-                <div class="p-name" style="color:#fff;">Growth</div>
-                <div class="p-price text-accent-gradient">R$ 9.000<span>/mês</span></div>
-                <div class="p-desc">Foco em estruturação robusta e alinhamento tático impecável.</div>
-                <ul class="p-list">
-                    <li>Tudo do Starter</li>
-                    <li>Estruturação editorial inclusa</li>
-                    <li>Dashboard de acompanhamento online</li>
-                    <li>Relatórios práticos de consumo</li>
-                </ul>
-            </div>
+                    style="display:flex; flex-wrap:wrap; gap:16px; justify-content:center; max-width:900px; margin:0 auto;">
+                    <div class="glass glass-card"
+                        style="padding:32px 24px; flex:1; min-width:250px; background:rgba(0,0,0,0.4); border-top:2px solid var(--accent); display:flex; flex-direction:column; justify-content:center; align-items:center;">
+                        <div
+                            style="font-size:32px; color:var(--accent); font-weight:800; font-family:var(--font-display); line-height:1; white-space:nowrap;">
+                            R$ 1,00 a 1,50</div>
+                        <div
+                            style="font-size:13px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; margin-top:12px; font-weight:600; text-align:center;">
+                            CPMV (Custo p/ 1000 Views)</div>
+                        <div
+                            style="font-size:11px; color:var(--text-muted); margin-top:8px; opacity:0.8; text-align:center;">
+                            *(vs Mín. R$ 6,00 no Meta Ads)*</div>
+                    </div>
 
-            <div class="glass glass-card plan">
-                <div class="p-name">Scale</div>
-                <div class="p-price">R$ 12.000<span>/mês</span></div>
-                <div class="p-desc">Dominância máxima. Sem fricção, com todas esferas abordadas.</div>
-                <ul class="p-list">
-                    <li>Tudo do Growth</li>
-                    <li>Clone de avatar custom exclusivo</li>
-                    <li>Aplicações de tradução on-the-fly</li>
-                    <li>Sincronia multiplataforma de marca</li>
-                </ul>
-            </div>
-        </div>
+                    <div class="glass glass-card"
+                        style="padding:32px 24px; flex:1; min-width:250px; background:rgba(0,0,0,0.4); border-top:2px solid var(--accent); display:flex; flex-direction:column; justify-content:center; align-items:center;">
+                        <div
+                            style="font-size:40px; color:var(--accent); font-weight:800; font-family:var(--font-display); line-height:1;">
+                            12h</div>
+                        <div
+                            style="font-size:13px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; margin-top:12px; font-weight:600;">
+                            Ciclo Rápido de Feedback</div>
+                    </div>
 
-        <!-- SIMULADOR INTERATIVO (Créditos) -->
-        <div class="sim-wrap"
-            style="margin-top:80px; padding:60px 40px; background:rgba(255,255,255,0.02); border:1px solid var(--border); border-radius:32px;">
-            <h2 style="font-size:32px; font-weight:600; text-align:center;">Simule seu Saldo de Geração Mensal</h2>
-            <p style="text-align:center; color:var(--text-muted); margin-top:8px;">Créditos provisionados não utilizados
-                no Hub viram rollover automático pro próximo mês.</p>
+                    <div class="glass glass-card"
+                        style="padding:32px 24px; flex:1; min-width:250px; background:rgba(0,0,0,0.4); border-top:2px solid var(--accent); display:flex; flex-direction:column; justify-content:center; align-items:center;">
+                        <div
+                            style="font-size:40px; color:var(--accent); font-weight:800; font-family:var(--font-display); line-height:1;">
+                            1M+</div>
+                        <div
+                            style="font-size:13px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; margin-top:12px; font-weight:600;">
+                            Views Direcionadas / Mês</div>
+                    </div>
+                </div>
 
-            <div class="slider-container" style="margin-top:40px;">
-                <input type="range" class="range-sli" id="sli" min="0" max="4" step="1" value="1"
-                    oninput="updSli(this.value)">
-                <div class="labels" id="labels">
-                    <span data-i="0">R$ 5.000</span>
-                    <span data-i="1" class="active">R$ 9.000</span>
-                    <span data-i="2">R$ 12.000</span>
-                    <span data-i="3">R$ 20.000</span>
-                    <span data-i="4">R$ 40.000</span>
+                <div style="margin-top:40px;">
+                    <a href="#digital" class="btn btn-primary"
+                        style="background:var(--accent); color:#fff; border:none; padding:16px 32px; font-size:16px; border-radius:12px; font-weight:600;">Quero
+                        Orçar Escala</a>
                 </div>
             </div>
+        </section>
 
-            <p style="text-align:center; color:var(--text-muted); margin-top:24px; font-size:14px;">
-                <strong>Atenção:</strong> Estes valores representam o uso total do saldo em uma única modalidade. Você
-                pode misturar os formatos como quiser.
-            </p>
-            <div class="sim-result">
-                <div class="s-box">
-                    <div class="s-val" id="v1">10</div>
-                    <div class="s-lbl">Vídeos de 1,5 min</div>
-                </div>
-                <div class="s-or">OU</div>
-                <div class="s-box">
-                    <div class="s-val" id="v2">50</div>
-                    <div class="s-lbl">Vídeos de 30s</div>
-                </div>
-                <div class="s-or">OU</div>
-                <div class="s-box">
-                    <div class="s-val" id="v3">120</div>
-                    <div class="s-lbl">Imagens Geradas</div>
-                </div>
-            </div>
-
-            <!-- TABELA DE PREÇOS IMPORTADA -->
-            <div style="margin-top:80px; text-align:left; overflow-x:auto;">
-                <h3 style="font-size:24px; font-weight:600; color:#fff; margin-bottom:8px;">Tabela de Consumo / Preços
-                    Base</h3>
-                <p style="color:var(--text-muted); font-size:14px; margin-bottom:24px;">Esta é a tabela unitária que
-                    abate seus créditos. Os valores são válidos tanto para pacotes quanto serviços sob demanda.</p>
-                <table class="ptable">
-                    <thead>
-                        <tr>
-                            <th>Formato</th>
-                            <th>Unidade</th>
-                            <th>Preço Abatido (Créditos)</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td data-label="Formato" class="b">🎬 Vídeo gerado por IA</td>
-                            <td data-label="Unidade">por segundo</td>
-                            <td data-label="Preço" class="b">R$ 1,50 / seg</td>
-                            <td data-label="Status"><span class="pill green"
-                                    style="font-size:11px; padding:4px 8px;">Ativo</span></td>
-                        </tr>
-                        <tr>
-                            <td data-label="Formato" class="b">🎬 Vídeo 30 segundos</td>
-                            <td data-label="Unidade">por peça</td>
-                            <td data-label="Preço" class="b">R$ 45,00</td>
-                            <td data-label="Status"><span class="pill green"
-                                    style="font-size:11px; padding:4px 8px;">Ativo</span></td>
-                        </tr>
-                        <tr>
-                            <td data-label="Formato" class="b">🎬 Vídeo 2 minutos</td>
-                            <td data-label="Unidade">por peça</td>
-                            <td data-label="Preço" class="b">R$ 180,00</td>
-                            <td data-label="Status"><span class="pill green"
-                                    style="font-size:11px; padding:4px 8px;">Ativo</span></td>
-                        </tr>
-                        <tr>
-                            <td data-label="Formato" class="b">🖼️ Imagem gerada por IA</td>
-                            <td data-label="Unidade">por imagem</td>
-                            <td data-label="Preço" class="b">R$ 0,42</td>
-                            <td data-label="Status"><span class="pill green"
-                                    style="font-size:11px; padding:4px 8px;">Ativo</span></td>
-                        </tr>
-                        <tr>
-                            <td data-label="Formato" class="b">🧬 Clone — Vídeo 30s</td>
-                            <td data-label="Unidade">por peça</td>
-                            <td data-label="Preço" class="b">R$ 60,00</td>
-                            <td data-label="Status"><span class="pill blue"
-                                    style="font-size:11px; padding:4px 8px;">Clone IA</span></td>
-                        </tr>
-                        <tr>
-                            <td data-label="Formato" class="b">🧬 Clone — Vídeo 2 min</td>
-                            <td data-label="Unidade">por peça</td>
-                            <td data-label="Preço" class="b">R$ 240,00</td>
-                            <td data-label="Status"><span class="pill blue"
-                                    style="font-size:11px; padding:4px 8px;">Clone IA</span></td>
-                        </tr>
-                        <tr>
-                            <td data-label="Formato" class="b">🧬 Clone Ultra-realista 30s</td>
-                            <td data-label="Unidade">por peça</td>
-                            <td data-label="Preço" class="b">R$ 137,00</td>
-                            <td data-label="Status"><span class="pill blue"
-                                    style="font-size:11px; padding:4px 8px;">Premium</span></td>
-                        </tr>
-                        <tr>
-                            <td data-label="Formato" class="b">🧬 Clone Ultra-realista 2min</td>
-                            <td data-label="Unidade">por peça</td>
-                            <td data-label="Preço" class="b">R$ 548,00</td>
-                            <td data-label="Status"><span class="pill blue"
-                                    style="font-size:11px; padding:4px 8px;">Premium</span></td>
-                        </tr>
-                        <tr>
-                            <td data-label="Formato" class="b">✂️ Corte & Distribuição</td>
-                            <td data-label="Unidade">por 1000 views (CPMV)</td>
-                            <td data-label="Preço" class="b">R$ 1,00 - 1,50</td>
-                            <td data-label="Status"><span class="pill"
-                                    style="font-size:11px; padding:4px 8px; border-color:var(--accent); color:var(--accent);">Serviço
-                                    Extra</span></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-        </div>
-    </section>
-
-    <!-- CORTE & DISTRIBUIÇÃO -->
-    <section id="cortes" class="container reveal"
-        style="padding-top:100px; padding-bottom:100px; border-top:1px solid rgba(255,255,255,0.05); margin-top:80px;">
-        <div class="glass"
-            style="padding:60px 40px; text-align:center; background:radial-gradient(circle at center, rgba(232, 64, 28, 0.08) 0%, transparent 70%); border-radius:32px;">
-
-            <span class="pill border"
-                style="margin-bottom:24px; font-size:14px; font-weight:600; color:#fff; border-color:var(--accent);">Estratégia
-                Separada e Autônoma</span>
-
-            <h3 style="font-size:48px; font-weight:700; margin-bottom:16px; font-family:var(--font-display);">Cortes &
-                Tráfego</h3>
-
-            <p style="font-size:18px; color:var(--text-muted); line-height:1.6; max-width:800px; margin:0 auto 40px;">
-                Corte e Distribuição funcionam de forma independente da produção orgânica. Transformamos seus melhores
-                vídeos (produzidos pelo Hub ou não) em recortes cirúrgicos magnéticos para escalar vendas via anúncios
-                curtos. Um funil validado de 1 Milhão de visualizações focadas.
-            </p>
+        <!-- FOOTER / CTA -->
+        <footer class="container reveal" style="padding-top:100px; padding-bottom:60px; text-align:center;">
+            <h2
+                style="font-size:40px; color:#fff; font-family:var(--font-display); margin-bottom:24px; font-weight:700;">
+                Pronto para ativar
+                <span style="opacity:0.5; display:block;">o futuro da sua marca?</span>
+            </h2>
+            <a href="#" class="btn btn-primary"
+                style="margin-bottom:60px; font-size:16px; padding:16px 40px; border-radius:12px;"
+                onclick="alert('Solicitação de contato via Whatsapp aberta.')">Ativar
+                Conversa Agora</a>
 
             <div
-                style="display:flex; flex-wrap:wrap; gap:16px; justify-content:center; max-width:900px; margin:0 auto;">
-                <div class="glass glass-card"
-                    style="padding:32px 24px; flex:1; min-width:250px; background:rgba(0,0,0,0.4); border-top:2px solid var(--accent); display:flex; flex-direction:column; justify-content:center; align-items:center;">
-                    <div
-                        style="font-size:32px; color:var(--accent); font-weight:800; font-family:var(--font-display); line-height:1; white-space:nowrap;">
-                        R$ 1,00 a 1,50</div>
-                    <div
-                        style="font-size:13px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; margin-top:12px; font-weight:600; text-align:center;">
-                        CPMV (Custo p/ 1000 Views)</div>
-                    <div
-                        style="font-size:11px; color:var(--text-muted); margin-top:8px; opacity:0.8; text-align:center;">
-                        *(vs Mín. R$ 6,00 no Meta Ads)*</div>
-                </div>
-
-                <div class="glass glass-card"
-                    style="padding:32px 24px; flex:1; min-width:250px; background:rgba(0,0,0,0.4); border-top:2px solid var(--accent); display:flex; flex-direction:column; justify-content:center; align-items:center;">
-                    <div
-                        style="font-size:40px; color:var(--accent); font-weight:800; font-family:var(--font-display); line-height:1;">
-                        12h</div>
-                    <div
-                        style="font-size:13px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; margin-top:12px; font-weight:600;">
-                        Ciclo Rápido de Feedback</div>
-                </div>
-
-                <div class="glass glass-card"
-                    style="padding:32px 24px; flex:1; min-width:250px; background:rgba(0,0,0,0.4); border-top:2px solid var(--accent); display:flex; flex-direction:column; justify-content:center; align-items:center;">
-                    <div
-                        style="font-size:40px; color:var(--accent); font-weight:800; font-family:var(--font-display); line-height:1;">
-                        1M+</div>
-                    <div
-                        style="font-size:13px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; margin-top:12px; font-weight:600;">
-                        Views Direcionadas / Mês</div>
-                </div>
+                style="border-top:1px solid var(--border); padding-top:40px; margin-top:60px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;">
+                <div style="font-size:24px; font-weight:900; letter-spacing:-1px;">A.C.C.</div>
+                <p style="color:var(--text-muted); font-size:14px; margin:0;">© 2026 Anti Copy Club. Desenvolvido com
+                    inteligência e
+                    rigor tático.</p>
             </div>
+        </footer>
 
-            <div style="margin-top:40px;">
-                <a href="#digital" class="btn btn-primary"
-                    style="background:var(--accent); color:#fff; border:none; padding:16px 32px; font-size:16px; border-radius:12px; font-weight:600;">Quero
-                    Orçar Escala</a>
-            </div>
-        </div>
-    </section>
+        <script>
+            // INICIAR REVEAL
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(e => {
+                    if (e.isIntersecting) {
+                        e.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-    <!-- FOOTER / CTA -->
-    <footer class="container reveal" style="padding-top:100px; padding-bottom:60px; text-align:center;">
-        <h2 style="font-size:40px; color:#fff; font-family:var(--font-display); margin-bottom:24px; font-weight:700;">
-            Pronto para ativar
-            <span style="opacity:0.5; display:block;">o futuro da sua marca?</span>
-        </h2>
-        <a href="#" class="btn btn-primary"
-            style="margin-bottom:60px; font-size:16px; padding:16px 40px; border-radius:12px;"
-            onclick="alert('Solicitação de contato via Whatsapp aberta.')">Ativar
-            Conversa Agora</a>
+            // SIMULADOR LOGIC
+            const vals = [
+                { v1: '10', v2: '50', v3: '120' },       // 5.000
+                { v1: '18', v2: '90', v3: '215' },       // 9.000
+                { v1: '24', v2: '120', v3: '290' },      // 12.000
+                { v1: '40', v2: '200', v3: '475' },     // 20.000
+                { v1: '80', v2: '400', v3: '950' },   // 40.000
+            ];
+            function updSli(idx) {
+                document.getElementById('v1').textContent = vals[idx].v1;
+                document.getElementById('v2').textContent = vals[idx].v2;
+                document.getElementById('v3').textContent = vals[idx].v3;
 
-        <div
-            style="border-top:1px solid var(--border); padding-top:40px; margin-top:60px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;">
-            <div style="font-size:24px; font-weight:900; letter-spacing:-1px;">A.C.C.</div>
-            <p style="color:var(--text-muted); font-size:14px; margin:0;">© 2026 Anti Copy Club. Desenvolvido com
-                inteligência e
-                rigor tático.</p>
-        </div>
-    </footer>
-
-    <script>
-        // INICIAR REVEAL
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(e => {
-                if (e.isIntersecting) {
-                    e.target.classList.add('visible');
-                }
-            });
-        }, { threshold: 0.1 });
-        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-        // SIMULADOR LOGIC
-        const vals = [
-            { v1: '10', v2: '50', v3: '120' },       // 5.000
-            { v1: '18', v2: '90', v3: '215' },       // 9.000
-            { v1: '24', v2: '120', v3: '290' },      // 12.000
-            { v1: '40', v2: '200', v3: '475' },     // 20.000
-            { v1: '80', v2: '400', v3: '950' },   // 40.000
-        ];
-        function updSli(idx) {
-            document.getElementById('v1').textContent = vals[idx].v1;
-            document.getElementById('v2').textContent = vals[idx].v2;
-            document.getElementById('v3').textContent = vals[idx].v3;
-
-            const lbls = document.getElementById('labels').children;
-            for (let i = 0; i < lbls.length; i++) lbls[i].classList.remove('active');
-            lbls[idx].classList.add('active');
-        }
-    </script>
+                const lbls = document.getElementById('labels').children;
+                for (let i = 0; i < lbls.length; i++) lbls[i].classList.remove('active');
+                lbls[idx].classList.add('active');
+            }
+        </script>
+    </div> <!-- /site-wrapper -->
 </body>
 
 </html>
