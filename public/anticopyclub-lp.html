@@ -354,10 +354,11 @@
         .media-card {
             position: relative;
             padding: 0;
-            /* sem padding, full content */
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
+            border-radius: 0 !important;
+            /* Retirar bordas arredondadas nos vídeos como pedido pelo cliente */
         }
 
         .media-card video {
@@ -382,39 +383,50 @@
             background: linear-gradient(0deg, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
         }
 
-        /* Layout da Grade Bento Mídias */
-        .media-1 {
+        /* Layout Util - Grade Bento Mídias */
+        .col-span-1 {
+            grid-column: span 6;
+        }
+
+        .col-span-2 {
             grid-column: span 12;
-            aspect-ratio: 16/7;
         }
 
-        .media-2 {
-            grid-column: span 6;
-            aspect-ratio: 4/5;
+        .row-span-1 {
+            grid-row: span 1;
+            aspect-ratio: 1/1;
         }
 
-        .media-3 {
-            grid-column: span 6;
-            aspect-ratio: 4/5;
+        .row-span-2 {
+            grid-row: span 2;
+        }
+
+        .bento-media-item {
+            min-height: 250px;
         }
 
         @media (min-width: 900px) {
-            .media-1 {
-                grid-column: span 8;
-                grid-row: span 2;
+            .grid-bento {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 16px;
+            }
+
+            .col-span-1 {
+                grid-column: span 1;
+            }
+
+            .col-span-2 {
+                grid-column: span 2;
+            }
+
+            .row-span-1 {
+                grid-row: span 1;
                 aspect-ratio: auto;
             }
 
-            .media-2 {
-                grid-column: span 4;
-                grid-row: span 1;
-                aspect-ratio: 1/1;
-            }
-
-            .media-3 {
-                grid-column: span 4;
-                grid-row: span 1;
-                aspect-ratio: 1/1;
+            .row-span-2 {
+                grid-row: span 2;
+                aspect-ratio: auto;
             }
         }
 
@@ -778,8 +790,8 @@
         </div>
 
         <div class="grid-bento reveal">
-            <!-- Media 1 -->
-            <div class="bento-box glass-card media-card media-1">
+            <!-- Item 1 -->
+            <div class="bento-box glass-card media-card col-span-2 row-span-2 bento-media-item">
                 <video src="https://antiplanos.com.br/backend/uploads/1771626122_1771557580_9.mp4" autoplay loop muted
                     playsinline></video>
                 <div class="media-info">
@@ -787,23 +799,52 @@
                     <h3 style="font-size:24px;font-weight:600;color:#fff;">Clone Estratégico</h3>
                 </div>
             </div>
-            <!-- Media 2 -->
-            <div class="bento-box glass-card media-card media-2">
+
+            <!-- Item 2 -->
+            <div class="bento-box glass-card media-card col-span-1 row-span-2 bento-media-item">
                 <video src="https://antiplanos.com.br/backend/uploads/1771626173_1771557430_10.mp4" autoplay loop muted
                     playsinline></video>
                 <div class="media-info">
                     <span class="label" style="color:#fff;">Mídia Dinâmica</span>
-                    <h3 style="font-size:20px;font-weight:600;color:#fff;">Direção Visual</h3>
+                    <h3 style="font-size:18px;font-weight:600;color:#fff;">Direção Visual</h3>
                 </div>
             </div>
-            <!-- Media 3 -->
-            <div class="bento-box glass-card media-card media-3">
+
+            <!-- Item 3 -->
+            <div class="bento-box glass-card media-card col-span-1 row-span-1 bento-media-item">
                 <video src="https://antiplano.com.br/uploads/media_699751cc03513.mp4" autoplay loop muted
                     playsinline></video>
+            </div>
+
+            <!-- Item 4 -->
+            <div class="bento-box glass-card media-card col-span-1 row-span-1 bento-media-item">
+                <video src="https://antiplano.com.br/uploads/media_6997511ba1d6f.mp4" autoplay loop muted
+                    playsinline></video>
+            </div>
+
+            <!-- Item 5 -->
+            <div class="bento-box glass-card media-card col-span-2 row-span-2 bento-media-item">
+                <video
+                    src="https://nthfbwootpzgpsjnerdw.supabase.co/storage/v1/object/sign/digital/03_02.mp4?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9iMDM3Y2M3My1iMWUxLTQwYmQtODVjNS1lNjk1ZGM3ZmU1YzUiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJkaWdpdGFsLzAzXzAyLm1wNCIsImlhdCI6MTc3MTk3MjgyNCwiZXhwIjoxODAzNTA4ODI0fQ.wtMmZdMg3orz7ymNjm_7PJiuXqBEga27uXk_oz5Btd8"
+                    autoplay loop muted playsinline></video>
                 <div class="media-info">
-                    <span class="label" style="color:#fff;">Lifestyle e Setup</span>
-                    <h3 style="font-size:20px;font-weight:600;color:#fff;">Avatar Premium</h3>
+                    <span class="label" style="color:#fff;">Avatar High-End</span>
+                    <h3 style="font-size:24px;font-weight:600;color:#fff;">Criação de Identidade</h3>
                 </div>
+            </div>
+
+            <!-- Item 6 -->
+            <div class="bento-box glass-card media-card col-span-1 row-span-2 bento-media-item">
+                <video
+                    src="https://nthfbwootpzgpsjnerdw.supabase.co/storage/v1/object/sign/digital/freepik_closeup-de-uma-jovem-mulher-com-cabelo-rosa-vibran_kling-25_720p_9-16_24fps_44246.mp4?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9iMDM3Y2M3My1iMWUxLTQwYmQtODVjNS1lNjk1ZGM3ZmU1YzUiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJkaWdpdGFsL2ZyZWVwaWtfY2xvc2V1cC1kZS11bWEtam92ZW0tbXVsaGVyLWNvbS1jYWJlbG8tcm9zYS12aWJyYW5fa2xpbmctMjVfNzIwcF85LTE2XzI0ZnBzXzQ0MjQ2Lm1wNCIsImlhdCI6MTc3MTk3Mjg0MiwiZXhwIjoxODAzNTA4ODQyfQ.eafiQVfX9Z51RyrugnVrXfyMhg3-tFbe4u82ND2_lGQ"
+                    autoplay loop muted playsinline></video>
+            </div>
+
+            <!-- Item 7 -->
+            <div class="bento-box glass-card media-card col-span-1 row-span-2 bento-media-item">
+                <video
+                    src="https://nthfbwootpzgpsjnerdw.supabase.co/storage/v1/object/sign/digital/hf_20260120_013820_8ba7202c-f442-4eb5-9b82-dcc2919596a0.mp4?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9iMDM3Y2M3My1iMWUxLTQwYmQtODVjNS1lNjk1ZGM3ZmU1YzUiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJkaWdpdGFsL2hmXzIwMjYwMTIwXzAxMzgyMF84YmE3MjAyYy1mNDQyLTRlYjUtOWI4Mi1kY2MyOTE5NTk2YTAubXA0IiwiaWF0IjoxNzcxOTcyODUyLCJleHAiOjE4MDM1MDg4NTJ9.ZV77gJE1dHX_wpSSRl-guYblC-y31gzE3GOw8A1Yiho"
+                    autoplay loop muted playsinline></video>
             </div>
         </div>
     </section>
@@ -862,8 +903,11 @@
     </section>
 
     <!-- SOLUÇÕES DIGITAIS & APRESENTACAO -->
-    <section id="digital" class="container reveal">
-        <div style="display:flex; flex-direction:column; gap:8px;">
+    <section id="digital" class="container reveal"
+        style="padding-top:100px; padding-bottom:100px; border-top:1px solid rgba(255,255,255,0.05); margin-top:80px;">
+        <div
+            style="display:flex; flex-direction:column; gap:8px; align-items:center; text-align:center; margin-bottom:48px;">
+            <span class="pill" style="margin-bottom:8px;">Sob Demanda</span>
             <h2 style="font-size:40px;font-weight:600;">Soluções Digitais <span
                     class="text-accent-gradient">Premium</span></h2>
             <p style="color:var(--text-muted);font-size:16px;max-width:500px;">
@@ -903,11 +947,14 @@
         </div>
     </section>
 
-    <!-- PLANOS E CORTES -->
-    <section id="planos" class="container reveal">
-        <div style="text-align:center;margin-bottom:16px;">
-            <h2 style="font-size:40px;font-weight:600;">Hub Ativo</h2>
-            <p style="color:var(--text-muted);font-size:16px;">Mensalidade base + Geração sob demanda</p>
+    <!-- HUB ATIVO & PLANOS -->
+    <section id="planos" class="container reveal"
+        style="padding-top:100px; padding-bottom:100px; border-top:1px solid rgba(255,255,255,0.05); margin-top:80px;">
+        <div style="text-align:center;margin-bottom:48px;">
+            <span class="pill" style="margin-bottom:12px;">Assinatura Contínua</span>
+            <h2 style="font-size:40px;font-weight:600;">Hub Ativo Mensal + Créditos</h2>
+            <p style="color:var(--text-muted);font-size:16px;">Sua agência in-house focada em inteligência sob demanda,
+                zero atrito.</p>
         </div>
 
         <div class="plans-wrapper">
@@ -950,69 +997,14 @@
             </div>
         </div>
 
-        <!-- Corte e Distribuicao (Separado) -->
-        <!-- Corte e Distribuicao (Separado) -->
-        <div class="glass"
-            style="margin-top:24px; padding:60px 40px; text-align:center; background:radial-gradient(circle at center, rgba(232, 64, 28, 0.08) 0%, transparent 70%);">
-
-            <span class="pill border"
-                style="margin-bottom:24px; font-size:14px; font-weight:600; color:#fff; border-color:var(--accent);">Serviço
-                Complementar e Altamente Recomendado</span>
-
-            <h3 style="font-size:40px; font-weight:700; margin-bottom:16px; font-family:var(--font-display);">O
-                Multiplicador de 1 Milhão</h3>
-
-            <p style="font-size:18px; color:var(--text-muted); line-height:1.6; max-width:800px; margin:0 auto 32px;">
-                Não adianta fabricar ouro se ninguém vê. Nós garimpamos os melhores pedaços super-virais do que já foi
-                fabricado na sua cota mensal, fazemos edições magnéticas (cortes) e injetamos o seu verba em
-                <strong>tráfego pago pesado e otimizado.</strong> O resultado? Clientes implorando pelo seu serviço.
-            </p>
-
-            <div
-                style="display:flex; flex-wrap:wrap; gap:16px; justify-content:center; max-width:900px; margin:0 auto;">
-                <div class="glass glass-card"
-                    style="padding:24px; flex:1; min-width:250px; background:rgba(0,0,0,0.4); border-top:2px solid var(--accent);">
-                    <div style="font-size:32px; color:var(--accent); font-weight:800; font-family:var(--font-display);">
-                        R$ 1,50</div>
-                    <div
-                        style="font-size:14px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; margin-top:8px;">
-                        CPM Médio Registrado</div>
-                </div>
-
-                <div class="glass glass-card"
-                    style="padding:24px; flex:1; min-width:250px; background:rgba(0,0,0,0.4); border-top:2px solid var(--accent);">
-                    <div style="font-size:32px; color:var(--accent); font-weight:800; font-family:var(--font-display);">
-                        12h</div>
-                    <div
-                        style="font-size:14px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; margin-top:8px;">
-                        Ciclo de Feedback</div>
-                </div>
-
-                <div class="glass glass-card"
-                    style="padding:24px; flex:1; min-width:250px; background:rgba(0,0,0,0.4); border-top:2px solid var(--accent);">
-                    <div style="font-size:32px; color:var(--accent); font-weight:800; font-family:var(--font-display);">
-                        1 Milhão+</div>
-                    <div
-                        style="font-size:14px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; margin-top:8px;">
-                        Views Mapeadas na Escala</div>
-                </div>
-            </div>
-
-            <div style="margin-top:40px;">
-                <a href="#digital" class="btn btn-primary"
-                    style="background:var(--accent); color:#fff; border:none;">Entender Escala Agora</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- SIMULADOR INTERATIVO -->
-    <section class="container reveal">
-        <div class="sim-wrap">
+        <!-- SIMULADOR INTERATIVO (Créditos) -->
+        <div class="sim-wrap"
+            style="margin-top:80px; padding:60px 40px; background:rgba(255,255,255,0.02); border:1px solid var(--border); border-radius:32px;">
             <h2 style="font-size:32px; font-weight:600; text-align:center;">Simule seu Saldo de Geração Mensal</h2>
             <p style="text-align:center; color:var(--text-muted); margin-top:8px;">Créditos provisionados não utilizados
-                viram rollover pro próximo mês.</p>
+                no Hub viram rollover automático pro próximo mês.</p>
 
-            <div class="slider-container">
+            <div class="slider-container" style="margin-top:40px;">
                 <input type="range" class="range-sli" id="sli" min="0" max="4" step="1" value="1"
                     oninput="updSli(this.value)">
                 <div class="labels" id="labels">
@@ -1026,16 +1018,16 @@
 
             <div class="sim-result">
                 <div class="s-box">
-                    <div class="s-val" id="v1">3.333</div>
-                    <div class="s-lbl">Segundos IA</div>
+                    <div class="s-val" id="v1">10</div>
+                    <div class="s-lbl">Vídeos Longos</div>
                 </div>
                 <div class="s-box">
-                    <div class="s-val" id="v2">55</div>
-                    <div class="s-lbl">Mins de Clone</div>
+                    <div class="s-val" id="v2">50</div>
+                    <div class="s-lbl">Cortes Curtos</div>
                 </div>
                 <div class="s-box">
-                    <div class="s-val" id="v3">11.904</div>
-                    <div class="s-lbl">Imagens / Fotos</div>
+                    <div class="s-val" id="v3">120</div>
+                    <div class="s-lbl">Posts / Imagens</div>
                 </div>
                 <div class="s-box">
                     <div class="s-val" id="v4">3</div>
@@ -1045,15 +1037,84 @@
         </div>
     </section>
 
+    <!-- CORTE & DISTRIBUIÇÃO -->
+    <section id="cortes" class="container reveal"
+        style="padding-top:100px; padding-bottom:100px; border-top:1px solid rgba(255,255,255,0.05); margin-top:80px;">
+        <div class="glass"
+            style="padding:60px 40px; text-align:center; background:radial-gradient(circle at center, rgba(232, 64, 28, 0.08) 0%, transparent 70%); border-radius:32px;">
+
+            <span class="pill border"
+                style="margin-bottom:24px; font-size:14px; font-weight:600; color:#fff; border-color:var(--accent);">Estratégia
+                Separada e Autônoma</span>
+
+            <h3 style="font-size:48px; font-weight:700; margin-bottom:16px; font-family:var(--font-display);">Cortes &
+                Tráfego</h3>
+
+            <p style="font-size:18px; color:var(--text-muted); line-height:1.6; max-width:800px; margin:0 auto 40px;">
+                Corte e Distribuição funcionam de forma independente da produção orgânica. Transformamos seus melhores
+                vídeos (produzidos pelo Hub ou não) em recortes cirúrgicos magnéticos para escalar vendas via anúncios
+                curtos. Um funil validado de 1 Milhão de visualizações focadas.
+            </p>
+
+            <div
+                style="display:flex; flex-wrap:wrap; gap:16px; justify-content:center; max-width:900px; margin:0 auto;">
+                <div class="glass glass-card"
+                    style="padding:32px 24px; flex:1; min-width:250px; background:rgba(0,0,0,0.4); border-top:2px solid var(--accent); display:flex; flex-direction:column; justify-content:center; align-items:center;">
+                    <div
+                        style="font-size:40px; color:var(--accent); font-weight:800; font-family:var(--font-display); line-height:1;">
+                        R$ 1,50</div>
+                    <div
+                        style="font-size:13px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; margin-top:12px; font-weight:600;">
+                        CPM Médio Em Tráfego</div>
+                </div>
+
+                <div class="glass glass-card"
+                    style="padding:32px 24px; flex:1; min-width:250px; background:rgba(0,0,0,0.4); border-top:2px solid var(--accent); display:flex; flex-direction:column; justify-content:center; align-items:center;">
+                    <div
+                        style="font-size:40px; color:var(--accent); font-weight:800; font-family:var(--font-display); line-height:1;">
+                        12h</div>
+                    <div
+                        style="font-size:13px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; margin-top:12px; font-weight:600;">
+                        Ciclo Rápido de Feedback</div>
+                </div>
+
+                <div class="glass glass-card"
+                    style="padding:32px 24px; flex:1; min-width:250px; background:rgba(0,0,0,0.4); border-top:2px solid var(--accent); display:flex; flex-direction:column; justify-content:center; align-items:center;">
+                    <div
+                        style="font-size:40px; color:var(--accent); font-weight:800; font-family:var(--font-display); line-height:1;">
+                        1M+</div>
+                    <div
+                        style="font-size:13px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; margin-top:12px; font-weight:600;">
+                        Views Direcionadas / Mês</div>
+                </div>
+            </div>
+
+            <div style="margin-top:40px;">
+                <a href="#digital" class="btn btn-primary"
+                    style="background:var(--accent); color:#fff; border:none; padding:16px 32px; font-size:16px; border-radius:12px; font-weight:600;">Quero
+                    Orçar Escala</a>
+            </div>
+        </div>
+    </section>
+
     <!-- FOOTER / CTA -->
-    <footer class="reveal">
-        <h2 style="font-size:40px; color:#fff; font-family:var(--font-display); margin-bottom:24px;">Pronto para ativar
-            <span style="opacity:0.5">o futuro da sua marca?</span>
+    <footer class="container reveal" style="padding-top:100px; padding-bottom:60px; text-align:center;">
+        <h2 style="font-size:40px; color:#fff; font-family:var(--font-display); margin-bottom:24px; font-weight:700;">
+            Pronto para ativar
+            <span style="opacity:0.5; display:block;">o futuro da sua marca?</span>
         </h2>
-        <a href="#" class="btn btn-primary" onclick="alert('Solicitação de contato via Whatsapp aberta.')">Ativar
+        <a href="#" class="btn btn-primary"
+            style="margin-bottom:60px; font-size:16px; padding:16px 40px; border-radius:12px;"
+            onclick="alert('Solicitação de contato via Whatsapp aberta.')">Ativar
             Conversa Agora</a>
-        <p style="margin-top:40px; color:rgba(255,255,255,0.2);">© 2026 Anti Copy Club. Desenvolvido com inteligência e
-            rigor tático.</p>
+
+        <div
+            style="border-top:1px solid var(--border); padding-top:40px; margin-top:60px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;">
+            <div style="font-size:24px; font-weight:900; letter-spacing:-1px;">A.C.C.</div>
+            <p style="color:var(--text-muted); font-size:14px; margin:0;">© 2026 Anti Copy Club. Desenvolvido com
+                inteligência e
+                rigor tático.</p>
+        </div>
     </footer>
 
     <script>
@@ -1069,11 +1130,11 @@
 
         // SIMULADOR LOGIC
         const vals = [
-            { v1: '666', v2: '11', v3: '2.380', v4: '1' },
-            { v1: '3.333', v2: '55', v3: '11.904', v4: '3' },
-            { v1: '6.666', v2: '111', v3: '23.809', v4: '6' },
-            { v1: '13.333', v2: '222', v3: '47.619', v4: '12' },
-            { v1: '26.666', v2: '444', v3: '95.238', v4: '24' },
+            { v1: '2', v2: '10', v3: '20', v4: '1' },         // 1.000
+            { v1: '10', v2: '50', v3: '120', v4: '3' },       // 5.000
+            { v1: '20', v2: '110', v3: '250', v4: '6' },      // 10.000
+            { v1: '40', v2: '220', v3: '500', v4: '12' },     // 20.000
+            { v1: '80', v2: '450', v3: '1.000', v4: '24' },   // 40.000
         ];
         function updSli(idx) {
             document.getElementById('v1').textContent = vals[idx].v1;
