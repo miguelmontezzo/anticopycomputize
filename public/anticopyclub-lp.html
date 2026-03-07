@@ -725,8 +725,16 @@
         </div>
     </nav>
 
-    <!-- HERO -->
-    <header class="hero container">
+    <!-- HERO VIDEO -->
+    <header class="hero container"
+        style="max-width:100% !important; padding:120px 20px 80px; position:relative; overflow:hidden;">
+        <!-- Fundo de Vídeo Minimalista c/ Degrade/Overlay -->
+        <video src="https://antiplano.com.br/uploads/media_6997511ba1d6f.mp4" autoplay loop muted playsinline
+            style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:-2; opacity:0.15; filter:grayscale(80%);"></video>
+        <div
+            style="position:absolute; inset:0; background:radial-gradient(ellipse at center, transparent 0%, var(--bg) 90%); z-index:-1;">
+        </div>
+
         <div class="reveal">
             <div class="pill mb-6 mx-auto" style="margin-bottom:24px;">
                 <span
@@ -736,7 +744,7 @@
             <h1 class="hero-title pt-4">One-click for<br><span class="text-gradient">Brand Evolution</span></h1>
             <p class="hero-desc mx-auto">O Hub Criativo funciona como uma linha de montagem premium e in-house para a
                 sua marca. Foco completo em extrema velocidade — peças solicitadas via WhatsApp e entregues em prazo
-                relâmpago (48h). Chega de esperar meses por uma produtora tradicional.</p>
+                relâmpago (48h). Sem intermediários.</p>
 
             <div class="hero-btn-group" style="display:flex;gap:16px;justify-content:center;">
                 <a href="#galeria" class="btn btn-primary">Ver em Ação</a>
@@ -800,19 +808,56 @@
         </div>
     </section>
 
-    <!-- METODO EMP -->
+    <!-- METODO EMP COMPLETO -->
     <section id="method" class="container reveal">
         <div
-            style="text-align:center; max-width:800px; margin:0 auto; padding:60px; border:1px solid var(--border); border-radius:24px; background:radial-gradient(circle at top, rgba(255,255,255,0.03) 0%, transparent 80%);">
-            <span class="pill" style="margin-bottom:24px;">Método Proprietário</span>
+            style="text-align:center; max-width:800px; margin:0 auto; padding:60px 40px; border:1px solid var(--border); border-radius:32px; background:radial-gradient(circle at top, rgba(232, 64, 28, 0.05) 0%, transparent 60%);">
+            <span class="pill" style="margin-bottom:24px;">Metodologia Base</span>
             <h2 style="font-size:48px;font-weight:600;margin-bottom:16px;">E <span
                     style="opacity:0.3;font-weight:300;">→</span> Mas <span
                     style="opacity:0.3;font-weight:300;">→</span> Por Isso</h2>
             <p style="font-size:18px; line-height:1.6; color:var(--text-muted);">
                 "Toda empresa tem uma história. Toda história tem um estado atual, um conflito e uma virada. O
-                <strong>Método EMP</strong> é o sistema operacional usado pela Anti Copy Club, inspirado em Pixar e
-                South Park, para transformar visibilidade em conversão real."
+                <strong>Método EMP</strong> é o sistema operacional usado pela Anti Copy Club para transformar
+                visibilidade em conversão real e veloz, adaptado em todas as etapas."
             </p>
+        </div>
+
+        <!-- Aplicações do Método em Grade -->
+        <div
+            style="margin-top:40px; display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:16px;">
+            <div class="glass glass-card" style="padding:32px; display:flex; flex-direction:column; gap:16px;">
+                <div style="font-size:24px;">🎯</div>
+                <h4 style="font-size:18px; font-weight:600;">Diagnóstico</h4>
+                <ul
+                    style="list-style:none; display:flex; flex-direction:column; gap:10px; font-size:14px; color:var(--text-muted); line-height:1.5;">
+                    <li><strong>E:</strong> O que a marca já possui hoje.</li>
+                    <li><strong style="color:var(--accent);">Mas:</strong> O funil ou engajamento que trava.</li>
+                    <li><strong>Por Isso:</strong> Nossa rota estratégica acionável.</li>
+                </ul>
+            </div>
+
+            <div class="glass glass-card" style="padding:32px; display:flex; flex-direction:column; gap:16px;">
+                <div style="font-size:24px;">🎬</div>
+                <h4 style="font-size:18px; font-weight:600;">Roteirização</h4>
+                <ul
+                    style="list-style:none; display:flex; flex-direction:column; gap:10px; font-size:14px; color:var(--text-muted); line-height:1.5;">
+                    <li><strong>E:</strong> Gancho e familiaridade imediata.</li>
+                    <li><strong style="color:var(--accent);">Mas:</strong> Quebra de padrão, agitação do problema.</li>
+                    <li><strong>Por Isso:</strong> Resolução rápida focada no CTA.</li>
+                </ul>
+            </div>
+
+            <div class="glass glass-card" style="padding:32px; display:flex; flex-direction:column; gap:16px;">
+                <div style="font-size:24px;">📈</div>
+                <h4 style="font-size:18px; font-weight:600;">Otimização (Growth)</h4>
+                <ul
+                    style="list-style:none; display:flex; flex-direction:column; gap:10px; font-size:14px; color:var(--text-muted); line-height:1.5;">
+                    <li><strong>E:</strong> A entrega da quinzena atingida.</li>
+                    <li><strong style="color:var(--accent);">Mas:</strong> Variações não exploradas em testes A/B.</li>
+                    <li><strong>Por Isso:</strong> Iteração inteligente de recortes gerados.</li>
+                </ul>
+            </div>
         </div>
     </section>
 
