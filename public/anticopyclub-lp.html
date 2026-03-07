@@ -1100,11 +1100,11 @@
             <div class="glass glass-card plan">
                 <div class="p-name">Starter</div>
                 <div class="p-price">R$ 5.000<span>/mês</span></div>
-                <div class="p-desc">Primeiros passos com o Hub Ativo e Inteligência real embarcada.</div>
+                <div class="p-desc">Organização básica para impulsionar a linha editorial.</div>
                 <ul class="p-list">
-                    <li>Briefing via WhatsApp</li>
-                    <li>Aprovação de conteúdo via workflow</li>
-                    <li>Entrega documentada via nuvem</li>
+                    <li>Gestão e Organização</li>
+                    <li>Briefing estruturado</li>
+                    <li>Entrega documentada</li>
                 </ul>
             </div>
 
@@ -1113,7 +1113,7 @@
                     style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:#fff;color:#000;font-size:10px;font-weight:700;padding:6px 14px;border-radius:20px;text-transform:uppercase;">
                     Mais Escolhido</div>
                 <div class="p-name" style="color:#fff;">Growth</div>
-                <div class="p-price text-accent-gradient">R$ 10.000<span>/mês</span></div>
+                <div class="p-price text-accent-gradient">R$ 9.000<span>/mês</span></div>
                 <div class="p-desc">Foco em estruturação robusta e alinhamento tático impecável.</div>
                 <ul class="p-list">
                     <li>Tudo do Starter</li>
@@ -1125,7 +1125,7 @@
 
             <div class="glass glass-card plan">
                 <div class="p-name">Scale</div>
-                <div class="p-price">R$ 20.000<span>/mês</span></div>
+                <div class="p-price">R$ 12.000<span>/mês</span></div>
                 <div class="p-desc">Dominância máxima. Sem fricção, com todas esferas abordadas.</div>
                 <ul class="p-list">
                     <li>Tudo do Growth</li>
@@ -1147,9 +1147,9 @@
                 <input type="range" class="range-sli" id="sli" min="0" max="4" step="1" value="1"
                     oninput="updSli(this.value)">
                 <div class="labels" id="labels">
-                    <span data-i="0">R$ 1.000</span>
-                    <span data-i="1" class="active">R$ 5.000</span>
-                    <span data-i="2">R$ 10.000</span>
+                    <span data-i="0">R$ 5.000</span>
+                    <span data-i="1" class="active">R$ 9.000</span>
+                    <span data-i="2">R$ 12.000</span>
                     <span data-i="3">R$ 20.000</span>
                     <span data-i="4">R$ 40.000</span>
                 </div>
@@ -1356,11 +1356,11 @@
 
         // SIMULADOR LOGIC
         const vals = [
-            { v1: '2', v2: '10', v3: '20' },         // 1.000
             { v1: '10', v2: '50', v3: '120' },       // 5.000
-            { v1: '20', v2: '110', v3: '250' },      // 10.000
-            { v1: '40', v2: '220', v3: '500' },     // 20.000
-            { v1: '80', v2: '450', v3: '1.000' },   // 40.000
+            { v1: '18', v2: '90', v3: '215' },       // 9.000
+            { v1: '24', v2: '120', v3: '290' },      // 12.000
+            { v1: '40', v2: '200', v3: '475' },     // 20.000
+            { v1: '80', v2: '400', v3: '950' },   // 40.000
         ];
         function updSli(idx) {
             document.getElementById('v1').textContent = vals[idx].v1;
