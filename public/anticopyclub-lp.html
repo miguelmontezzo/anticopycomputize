@@ -74,27 +74,27 @@
         }
 
         .glow.top {
-            top: -20vh;
-            left: 20vw;
-            width: 60vw;
-            height: 50vh;
-            background: rgba(255, 255, 255, 0.04);
+            top: -10vh;
+            left: 10vw;
+            width: 80vw;
+            height: 60vh;
+            background: radial-gradient(circle, rgba(232, 64, 28, 0.08) 0%, transparent 70%);
         }
 
         .glow.accent-mid {
-            top: 40vh;
-            right: -10vw;
-            width: 40vw;
-            height: 40vw;
-            background: radial-gradient(circle, var(--accent-muted) 0%, transparent 60%);
+            top: 30vh;
+            right: -20vw;
+            width: 60vw;
+            height: 60vw;
+            background: radial-gradient(circle, rgba(232, 64, 28, 0.12) 0%, transparent 60%);
         }
 
         .glow.bot {
-            bottom: 0;
-            left: 10vw;
-            width: 50vw;
-            height: 30vh;
-            background: rgba(255, 255, 255, 0.02);
+            bottom: -10vh;
+            left: 0;
+            width: 100vw;
+            height: 50vh;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, transparent 70%);
         }
 
         /* UTILS & GLASSMORPHISM */
@@ -263,7 +263,7 @@
 
         /* SECTIONS */
         section {
-            padding: 120px 0;
+            padding: 160px 0;
             position: relative;
         }
 
@@ -734,8 +734,9 @@
                 Hub Criativo com IA
             </div>
             <h1 class="hero-title pt-4">One-click for<br><span class="text-gradient">Brand Evolution</span></h1>
-            <p class="hero-desc mx-auto">Embarque na produção criativa massiva onde Inteligência Artificial e método se
-                encontram para entregar resultados incríveis.</p>
+            <p class="hero-desc mx-auto">O Hub Criativo funciona como uma linha de montagem premium e in-house para a
+                sua marca. Foco completo em extrema velocidade — peças solicitadas via WhatsApp e entregues em prazo
+                relâmpago (48h). Chega de esperar meses por uma produtora tradicional.</p>
 
             <div class="hero-btn-group" style="display:flex;gap:16px;justify-content:center;">
                 <a href="#galeria" class="btn btn-primary">Ver em Ação</a>
@@ -848,10 +849,10 @@
                 style="border-color:rgba(232, 64, 28, 0.3); background:rgba(232, 64, 28, 0.02);">
                 <div class="sol-icon">📊</div>
                 <h3 class="sol-title">Apresentação Web</h3>
-                <p class="sol-desc">Pitch interativo entregue por link, otimizado para que o cliente retenha sua
-                    autoridade instantaneamente.</p>
+                <p class="sol-desc">Pitch interativo entregue por link, focado no fechamento veloz. Mesclamos o visual
+                    premium da LP com roteiro dinâmico.</p>
                 <div class="sol-tag">Você sai na frente</div>
-                <div class="sol-price">R$ 7.500 <span
+                <div class="sol-price">R$ 4.500 <span
                         style="font-size:12px;color:var(--text-muted);font-weight:400;">/projeto</span></div>
             </div>
         </div>
@@ -905,16 +906,72 @@
         </div>
 
         <!-- Corte e Distribuicao (Separado) -->
+        <!-- Corte e Distribuicao (Separado) -->
         <div class="glass"
-            style="margin-top:24px; padding:32px; display:flex; flex-direction:column; gap:16px; align-items:flex-start; background:radial-gradient(circle at left, rgba(255,255,255,0.04) 0%, transparent 100%);">
-            <span class="label" style="color:var(--accent);">Serviço Complementar e Essencial</span>
-            <h3 style="font-size:24px;">Corte & Distribuição por escala Massiva</h3>
-            <p style="font-size:15px; color:var(--text-muted); max-width:800px; line-height:1.6;">Acelere ao extremo sua
-                abrangência: serviço especializado em extrair os pedaços que prendem a atenção e aplicar distribuição em
-                tráfego pago nas redes. CPM Mensal investido diretamente na escala de audiência.</p>
-            <div style="display:flex; gap:12px; margin-top:8px;">
-                <div class="pill border">Media de R$ 1,50 a R$ 2,50 CPM</div>
-                <div class="pill border">Escala em até 1Milhão+ impressions</div>
+            style="margin-top:24px; padding:48px; display:flex; flex-direction:column; gap:24px; background:radial-gradient(circle at right, rgba(232, 64, 28, 0.04) 0%, transparent 80%);">
+
+            <div style="display:flex; flex-wrap:wrap; gap:40px; align-items:center;">
+                <div style="flex:1; min-width:300px;">
+                    <span class="pill" style="margin-bottom:16px; border-color:var(--accent);">Serviço Complementar e
+                        Altamente Especializado</span>
+                    <h3 style="font-size:32px; font-weight:700; margin-bottom:12px;">Corte & Distribuição de Curto
+                        Formato</h3>
+                    <p style="font-size:16px; color:var(--text-muted); line-height:1.6; margin-bottom:24px;">A produção
+                        farta vira caixa com alta entrega. Nós garimpamos os melhores recortes virais de longo alcance
+                        do que já foi fabricado pelo Hub e montamos a injeção em tráfego de ponta nas redes, trabalhando
+                        em escala massificada.</p>
+                    <div style="display:flex; gap:12px; flex-wrap:wrap;">
+                        <div class="pill border" style="font-size:14px;"><strong>R$ 1,50 a 2,50</strong> CPM Médio</div>
+                        <div class="pill border text-accent-gradient"
+                            style="font-size:14px; border-color:rgba(232,64,28,0.3);">Escala: 1M+ Views / Mês</div>
+                    </div>
+                </div>
+
+                <!-- Gráfico de Engajamento via CSS -->
+                <div
+                    style="flex:0.8; min-width:300px; background:var(--surface); padding:32px; border-radius:16px; border:1px solid var(--border);">
+                    <div
+                        style="font-size:11px; text-transform:uppercase; letter-spacing:0.1em; color:var(--text-muted); margin-bottom:24px; font-weight:600;">
+                        Projeção de Engajamento vs Tradicional</div>
+
+                    <div
+                        style="display:flex; align-items:flex-end; gap:20px; height:180px; padding-bottom:12px; border-bottom:1px solid var(--border);">
+                        <div
+                            style="flex:1; display:flex; flex-direction:column; justify-content:flex-end; align-items:center; gap:8px;">
+                            <div
+                                style="width:100%; max-width:40px; height:20%; background:rgba(255,255,255,0.1); border-radius:4px 4px 0 0;">
+                            </div>
+                            <span style="font-size:10px; color:var(--text-muted);">Mês 1</span>
+                        </div>
+                        <div
+                            style="flex:1; display:flex; flex-direction:column; justify-content:flex-end; align-items:center; gap:8px;">
+                            <div
+                                style="width:100%; max-width:40px; height:35%; background:rgba(255,255,255,0.2); border-radius:4px 4px 0 0;">
+                            </div>
+                            <span style="font-size:10px; color:var(--text-muted);">Mês 2</span>
+                        </div>
+                        <div
+                            style="flex:1; display:flex; flex-direction:column; justify-content:flex-end; align-items:center; gap:8px;">
+                            <div
+                                style="width:100%; max-width:40px; height:60%; background:var(--accent-muted); border:1px solid var(--accent); border-bottom:none; border-radius:4px 4px 0 0; position:relative;">
+                                <div
+                                    style="position:absolute; top:-25px; left:50%; transform:translateX(-50%); background:var(--accent); color:#fff; font-size:10px; font-weight:700; padding:4px 8px; border-radius:4px;">
+                                    CORTES</div>
+                            </div>
+                            <span style="font-size:10px; color:var(--text-muted);">Mês 3</span>
+                        </div>
+                        <div
+                            style="flex:1; display:flex; flex-direction:column; justify-content:flex-end; align-items:center; gap:8px;">
+                            <div
+                                style="width:100%; max-width:40px; height:100%; background:var(--accent); box-shadow:0 0 16px var(--accent-glow); border-radius:4px 4px 0 0; position:relative;">
+                                <div
+                                    style="position:absolute; top:-25px; left:50%; transform:translateX(-50%); background:#fff; color:#000; font-size:10px; font-weight:700; padding:4px 8px; border-radius:4px;">
+                                    ESCALA</div>
+                            </div>
+                            <span style="font-size:10px; color:var(--text-muted);">Mês 4</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -962,7 +1019,8 @@
     <!-- FOOTER / CTA -->
     <footer class="reveal">
         <h2 style="font-size:40px; color:#fff; font-family:var(--font-display); margin-bottom:24px;">Pronto para ativar
-            <span style="opacity:0.5">o futuro da sua marca?</span></h2>
+            <span style="opacity:0.5">o futuro da sua marca?</span>
+        </h2>
         <a href="#" class="btn btn-primary" onclick="alert('Solicitação de contato via Whatsapp aberta.')">Ativar
             Conversa Agora</a>
         <p style="margin-top:40px; color:rgba(255,255,255,0.2);">© 2026 Anti Copy Club. Desenvolvido com inteligência e
