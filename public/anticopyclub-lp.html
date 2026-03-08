@@ -897,30 +897,34 @@
             border-radius: var(--radius-lg);
             overflow: hidden;
             position: relative;
-            display: flex;
-            align-items: flex-end;
-            padding: 32px;
+            display: block;
+            /* Modified for pure browser look */
             min-height: 400px;
             transition: all 0.3s ease;
             background-size: cover;
             background-position: top center;
         }
 
-        .port-card::before {
-            content: '';
+        .browser-header {
+            height: 32px;
+            background: rgba(20, 20, 20, 0.85);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            gap: 6px;
             position: absolute;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.2) 50%, transparent 100%);
-            z-index: 1;
-            pointer-events: none;
+            right: 0;
+            z-index: 2;
         }
 
-        .port-info {
-            position: relative;
-            z-index: 2;
+        .b-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
         }
     </style>
 </head>
@@ -1168,49 +1172,38 @@
             </div>
 
             <div class="grid-bento-port reveal">
-                <!-- Port 1 -->
-                <div class="port-card glass-card"
-                    style="background-image: url('https://antiplano.com.br/backend/uploads/placeholder1.jpg');">
-                    <div class="port-info">
-                        <span class="pill"
-                            style="margin-bottom:12px; font-size:10px; padding:4px 8px; border-color:var(--border);">Tecnologia
-                            Web</span>
-                        <h3 style="font-size:24px;font-weight:600;color:#fff;margin-bottom:8px;">Landing Page C-Level
-                        </h3>
-                        <p style="font-size:14px;color:var(--text-muted);line-height:1.5;">Mockup focado em
-                            escaneabilidade.
-                            (Substitua a imagem).</p>
+                <!-- Port 1: Medical ZM0X -->
+                <a href="https://antiplanos.com.br/#/medical-zm0x" target="_blank" rel="noopener noreferrer"
+                    class="port-card glass-card hover:scale-[1.02] transition-transform"
+                    style="text-decoration:none; background-image: url('/port-medical.jpg');">
+                    <div class="browser-header">
+                        <div class="b-dot" style="background:#ff5f56;"></div>
+                        <div class="b-dot" style="background:#ffbd2e;"></div>
+                        <div class="b-dot" style="background:#27c93f;"></div>
                     </div>
-                </div>
+                </a>
 
-                <!-- Port 2 -->
-                <div class="port-card glass-card"
-                    style="background-image: url('https://antiplano.com.br/backend/uploads/placeholder2.jpg');  background-position: left center;">
-                    <div class="port-info">
-                        <span class="pill"
-                            style="margin-bottom:12px; font-size:10px; padding:4px 8px; border-color:var(--border);">Apresentação
-                            Digital</span>
-                        <h3 style="font-size:24px;font-weight:600;color:#fff;margin-bottom:8px;">Pitch Deck Interativo
-                        </h3>
-                        <p style="font-size:14px;color:var(--text-muted);line-height:1.5;">O roteiro vendedor adaptado
-                            para
-                            envio na DM. (Substitua a imagem).</p>
+                <!-- Port 2: Maiko -->
+                <a href="https://antiplano.com.br/maiko" target="_blank" rel="noopener noreferrer"
+                    class="port-card glass-card hover:scale-[1.02] transition-transform"
+                    style="text-decoration:none; background-image: url('/port-maiko.jpg');">
+                    <div class="browser-header">
+                        <div class="b-dot" style="background:#ff5f56;"></div>
+                        <div class="b-dot" style="background:#ffbd2e;"></div>
+                        <div class="b-dot" style="background:#27c93f;"></div>
                     </div>
-                </div>
+                </a>
 
-                <!-- Port 3 -->
-                <div class="port-card glass-card"
-                    style="grid-column: 1 / -1; min-height: 500px; background-image: url('https://antiplano.com.br/backend/uploads/placeholder3.jpg'); background-position: center;">
-                    <div class="port-info">
-                        <span class="pill"
-                            style="margin-bottom:12px; font-size:10px; padding:4px 8px; border-color:var(--accent); color: var(--accent);">Escala
-                            Suprema</span>
-                        <h3 style="font-size:32px;font-weight:700;color:#fff;margin-bottom:12px;">Página Corporativa 3D
-                        </h3>
-                        <p style="font-size:16px;color:var(--text-muted);line-height:1.5;max-width:500px;">Institucional
-                            multimídia com avatares e experiência WebGL embutida. Mude o link de background.</p>
+                <!-- Port 3: Metodo EMP -->
+                <a href="https://anticopyai.com.br/metodoEMP" target="_blank" rel="noopener noreferrer"
+                    class="port-card glass-card hover:scale-[1.01] transition-transform"
+                    style="grid-column: 1 / -1; text-decoration:none; background-image: url('/port-metodoemp.jpg');">
+                    <div class="browser-header">
+                        <div class="b-dot" style="background:#ff5f56;"></div>
+                        <div class="b-dot" style="background:#ffbd2e;"></div>
+                        <div class="b-dot" style="background:#27c93f;"></div>
                     </div>
-                </div>
+                </a>
             </div>
         </section>
 
