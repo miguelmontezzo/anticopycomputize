@@ -1446,7 +1446,8 @@
           <div class="cmp">
             <div class="cmp-tag"><span class="cdot"></span>Claude Normal</div>
             <div class="cmp-txt">É como perguntar para um amigo especialista. Ele te diz o que fazer, mas
-              <strong>você</strong> que tem que fazer.</div>
+              <strong>você</strong> que tem que fazer.
+            </div>
           </div>
           <div class="cmp hi">
             <div class="cmp-tag"><span class="cdot"></span>Claude Code</div>
@@ -2073,7 +2074,7 @@
     // ── Supabase Init ──
     const SUPABASE_URL = "https://oeuogaoixspwdusqisqy.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9ldW9nYW9peHNwd2R1c3Fpc3F5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIwNTk4MDAsImV4cCI6MjA4NzYzNTgwMH0.GPj0FTvXd7aAIIZibyPpGaZF6hlDHxbzd8s7mcHUkRA";
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     // ── Step 1: check email ──
     async function checkEmail() {
@@ -2090,7 +2091,7 @@
       btn.disabled = true;
 
       try {
-        const { data, error } = await supabase
+        const { data, error } = await supabaseClient
           .from('cadastros_guiaclaude')
           .select('nome')
           .eq('email', email)
@@ -2136,7 +2137,7 @@
       btn.disabled = true;
 
       try {
-        const { error } = await supabase
+        const { error } = await supabaseClient
           .from('cadastros_guiaclaude')
           .insert([{ email: email, nome: name, whatsapp: wpp }]);
 
