@@ -21,7 +21,7 @@ const GuiaClaudePage: React.FC = () => {
             }}
         >
             <iframe
-                src="/guia-claude-code.html"
+                src="/guia-claude-code.html?v=2"
                 title="Anti Copy Club — Guia Claude Code"
                 style={{
                     width: "100%",
