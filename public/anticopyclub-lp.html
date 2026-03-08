@@ -877,20 +877,9 @@
             .bento-box.row-span-1 {
                 grid-row: span 1 / span 1;
             }
-
-            .grid-bento-port {
-                grid-template-columns: repeat(1, 1fr) !important;
-            }
         }
 
         /* PORTFOLIO BENTO GRID */
-        .grid-bento-port {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 16px;
-            grid-auto-rows: minmax(300px, auto);
-        }
-
         .port-card {
             background: rgba(30, 30, 30, 0.5);
             border: 1px solid var(--border);
@@ -1033,7 +1022,7 @@
                 <!-- Item 5 -->
                 <div class="bento-box glass-card media-card col-span-2 row-span-2 bento-media-item">
                     <video
-                        src="https://nthfbwootpzgpsjnerdw.supabase.co/storage/v1/object/sign/digital/03_02.mp4?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9iMDM3Y2M3My1iMWUxLTQwYmQtODVjNS1lNjk1ZGM3ZmU1YzUiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJkaWdpdGFsLzAzXzAyLm1wNCIsImlhdCI6MTc3MTk3MjgyNCwiZXhwIjoxODAzNTA4ODI0fQ.wtMmZdMg3orz7ymNjm_7PJiuXqBEga27uXk_oz5Btd8"
+                        src="https://nthfbwootpzgpsjnerdw.supabase.co/storage/v1/object/sign/digital/03_02.mp4?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9iMDM3Y2M3My1iMWUxLTQwYmQtODVjNS1lNjk1ZGM3ZmU1YzUiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJkaWdpdGFsLzAzXzAyLm1wNCIsImlhdCI6MTc3MTk3MjgyNCwiZXhwIjoxODAzNTA4ODI0fQ.wtMmZdMg3orz7ymNjm_7PJiuXqBEga27uXk_oz5Btd3"
                         autoplay loop muted playsinline></video>
                     <div class="media-info">
                         <span class="label" style="color:#fff;">Avatar High-End</span>
@@ -1160,52 +1149,6 @@
             </div>
         </section>
 
-        <!-- PORTFOLIO / APLICACOES WEB -->
-        <section id="portfolio" class="container reveal" style="padding-bottom:100px; padding-top:40px;">
-            <div style="text-align:center;margin-bottom:48px;">
-                <h2 style="font-size:36px;font-weight:600;">Portfólio & Aplicações em Site</h2>
-                <p style="color:var(--text-muted);font-size:16px;max-width:600px;margin:12px auto 0;">
-                    Veja as estruturas de alta conversão entregues a partir de R$ 4.500,00. Landings e Pitchs que vendem
-                    por
-                    você.
-                </p>
-            </div>
-
-            <div class="grid-bento-port reveal">
-                <!-- Port 1: Medical ZM0X -->
-                <a href="https://antiplanos.com.br/#/medical-zm0x" target="_blank" rel="noopener noreferrer"
-                    class="port-card glass-card hover:scale-[1.02] transition-transform"
-                    style="text-decoration:none; background-image: url('/port-medical.jpg');">
-                    <div class="browser-header">
-                        <div class="b-dot" style="background:#ff5f56;"></div>
-                        <div class="b-dot" style="background:#ffbd2e;"></div>
-                        <div class="b-dot" style="background:#27c93f;"></div>
-                    </div>
-                </a>
-
-                <!-- Port 2: Maiko -->
-                <a href="https://antiplano.com.br/maiko" target="_blank" rel="noopener noreferrer"
-                    class="port-card glass-card hover:scale-[1.02] transition-transform"
-                    style="text-decoration:none; background-image: url('/port-maiko.jpg');">
-                    <div class="browser-header">
-                        <div class="b-dot" style="background:#ff5f56;"></div>
-                        <div class="b-dot" style="background:#ffbd2e;"></div>
-                        <div class="b-dot" style="background:#27c93f;"></div>
-                    </div>
-                </a>
-
-                <!-- Port 3: Metodo EMP -->
-                <a href="https://anticopyai.com.br/metodoEMP" target="_blank" rel="noopener noreferrer"
-                    class="port-card glass-card hover:scale-[1.01] transition-transform"
-                    style="grid-column: 1 / -1; text-decoration:none; background-image: url('/port-metodoemp.jpg');">
-                    <div class="browser-header">
-                        <div class="b-dot" style="background:#ff5f56;"></div>
-                        <div class="b-dot" style="background:#ffbd2e;"></div>
-                        <div class="b-dot" style="background:#27c93f;"></div>
-                    </div>
-                </a>
-            </div>
-        </section>
 
         <!-- HUB ATIVO & PLANOS -->
         <section id="planos" class="container reveal"

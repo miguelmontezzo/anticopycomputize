@@ -1,0 +1,2204 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Guia Definitivo de Claude Code — miguelito.ai</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
+
+    :root {
+      --bg: #0a0b0f;
+      --bg-card: #111318;
+      --bg-card2: #16181f;
+      --border: #1e2028;
+      --fg: #e8eaf0;
+      --muted: #636578;
+      --muted2: #888a9e;
+      --green: #2ecc71;
+      --green-dim: rgba(46, 204, 113, 0.08);
+      --green-border: rgba(46, 204, 113, 0.25);
+      --green-text: #5dde8f;
+      --blue: #4a9eff;
+      --blue-dim: rgba(74, 158, 255, 0.08);
+      --blue-border: rgba(74, 158, 255, 0.25);
+      --yellow: #f5c842;
+      --yellow-dim: rgba(245, 200, 66, 0.08);
+      --yellow-border: rgba(245, 200, 66, 0.2);
+      --red: #ff5f5f;
+      --mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--mono);
+      font-size: 14px;
+      line-height: 1.65;
+      min-height: 100vh;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0, 0, 0, 0.02) 3px, rgba(0, 0, 0, 0.02) 4px);
+      pointer-events: none;
+      z-index: 9998;
+    }
+
+    /* ── GATE ── */
+    #gate {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: var(--bg);
+    }
+
+    .gate-wrap {
+      width: 100%;
+      max-width: 460px;
+    }
+
+    .gate-brand {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: 28px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .gate-brand::before {
+      content: '';
+      display: block;
+      width: 24px;
+      height: 1px;
+      background: var(--green);
+    }
+
+    .gate-h1 {
+      font-size: clamp(20px, 5vw, 28px);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-bottom: 10px;
+    }
+
+    .gate-h1 span {
+      color: var(--green);
+    }
+
+    .gate-sub {
+      font-size: 12px;
+      color: var(--muted2);
+      margin-bottom: 30px;
+      line-height: 1.65;
+    }
+
+    .gate-form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .f-label {
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .f-input {
+      width: 100%;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      color: var(--fg);
+      font-family: var(--mono);
+      font-size: 13px;
+      padding: 12px 14px;
+      outline: none;
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    .f-input::placeholder {
+      color: var(--muted);
+    }
+
+    .f-input:focus {
+      border-color: var(--green);
+      background: var(--bg-card2);
+    }
+
+    .gate-btn {
+      width: 100%;
+      background: var(--green);
+      color: #0a0b0f;
+      border: none;
+      border-radius: 3px;
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 14px;
+      cursor: pointer;
+      margin-top: 4px;
+      transition: opacity 0.15s, transform 0.1s;
+    }
+
+    .gate-btn:hover {
+      opacity: 0.88;
+    }
+
+    .gate-btn:active {
+      transform: scale(0.99);
+    }
+
+    .gate-privacy {
+      font-size: 10px;
+      color: var(--muted);
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .gate-err {
+      font-size: 11px;
+      color: var(--red);
+      display: none;
+      padding: 4px 0;
+    }
+
+
+    /* gate extras */
+    .hidden {
+      display: none !important;
+    }
+
+    .gate-perks {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 20px 0 26px;
+    }
+
+    .gate-perk {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 12px;
+      color: var(--muted2);
+      line-height: 1.5;
+    }
+
+    .pk-ico {
+      width: 28px;
+      height: 28px;
+      border-radius: 3px;
+      background: var(--green-dim);
+      border: 1px solid var(--green-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+
+    .gate-perk strong {
+      color: var(--fg);
+      font-weight: 600;
+    }
+
+    .gate-back {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 11px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 0;
+      margin-bottom: 20px;
+      transition: color 0.15s;
+    }
+
+    .gate-back:hover {
+      color: var(--fg);
+    }
+
+    .gate-email-show {
+      font-size: 12px;
+      color: var(--green-text);
+      background: var(--green-dim);
+      border: 1px solid var(--green-border);
+      border-radius: 3px;
+      padding: 10px 14px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* ── MAIN ── */
+    #main {
+      display: none;
+    }
+
+    #pbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 2px;
+      background: var(--green);
+      box-shadow: 0 0 8px var(--green);
+      width: 0%;
+      z-index: 999;
+      transition: width 0.15s;
+    }
+
+    /* ── HEADER ── */
+    header {
+      border-bottom: 1px solid var(--border);
+      padding: 14px 0;
+      position: sticky;
+      top: 0;
+      background: var(--bg);
+      z-index: 100;
+    }
+
+    .hi {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: var(--green);
+    }
+
+    .brand span {
+      color: var(--muted);
+    }
+
+    .pdots {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .pdot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--border);
+      transition: background 0.3s;
+    }
+
+    .pdot.on {
+      background: var(--green);
+      box-shadow: 0 0 6px var(--green);
+    }
+
+    /* ── LAYOUT ── */
+    .cx {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 46px 0 34px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .wt {
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--green-text);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .blink {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      animation: bl 1.2s ease infinite;
+    }
+
+    @keyframes bl {
+
+      0%,
+      100% {
+        opacity: 1
+      }
+
+      50% {
+        opacity: 0.15
+      }
+    }
+
+    .hero h1 {
+      font-size: clamp(22px, 5vw, 32px);
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      line-height: 1.15;
+      margin-bottom: 14px;
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      color: var(--green);
+    }
+
+    .hero-d {
+      font-size: 13px;
+      color: var(--muted2);
+      max-width: 520px;
+      line-height: 1.7;
+      margin-bottom: 22px;
+    }
+
+    .pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    .pill {
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 2px;
+    }
+
+    /* ── TOC ── */
+    .toc {
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .toc-ttl {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .toc-list {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .toc-list a {
+      text-decoration: none;
+      color: var(--muted2);
+      font-size: 11px;
+      padding: 5px 10px;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      background: var(--bg-card);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.15s;
+    }
+
+    .toc-list a:hover {
+      color: var(--green);
+      border-color: var(--green-border);
+      background: var(--green-dim);
+    }
+
+    .toc-list a .n {
+      color: var(--green);
+      font-weight: 700;
+    }
+
+    /* ── SECTION ── */
+    .sec {
+      padding: 42px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sec-hd {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 26px;
+    }
+
+    .sec-n {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: var(--green);
+      background: var(--green-dim);
+      border: 1px solid var(--green-border);
+      padding: 4px 9px;
+      border-radius: 2px;
+      white-space: nowrap;
+      margin-top: 3px;
+    }
+
+    .sec h2 {
+      font-size: clamp(16px, 3vw, 20px);
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      margin-bottom: 2px;
+    }
+
+    .sec .sub {
+      font-size: 12px;
+      color: var(--muted2);
+    }
+
+    /* ── DIDACTIC STEPS ── */
+    .dsteps {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .dstep {
+      display: flex;
+      gap: 16px;
+    }
+
+    .dsl {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 34px;
+      flex-shrink: 0;
+    }
+
+    .dsn {
+      width: 34px;
+      height: 34px;
+      border-radius: 3px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .dsl-line {
+      width: 1px;
+      flex: 1;
+      min-height: 16px;
+      background: var(--border);
+      margin: 5px 0;
+    }
+
+    .dsb {
+      flex: 1;
+      padding-bottom: 26px;
+    }
+
+    .dst {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--fg);
+      margin-bottom: 7px;
+    }
+
+    .dsd {
+      font-size: 12px;
+      color: var(--muted2);
+      line-height: 1.6;
+      margin-bottom: 10px;
+    }
+
+    .dsd strong {
+      color: var(--fg);
+      font-weight: 600;
+    }
+
+    /* ── CALLOUT ── */
+    .callout {
+      border: 1px solid var(--green-border);
+      background: var(--green-dim);
+      border-radius: 3px;
+      padding: 13px 16px;
+      font-size: 12px;
+      color: var(--green-text);
+      line-height: 1.65;
+      margin: 12px 0;
+    }
+
+    .callout.yellow {
+      border-color: var(--yellow-border);
+      background: var(--yellow-dim);
+      color: var(--yellow);
+    }
+
+    .callout.blue {
+      border-color: var(--blue-border);
+      background: var(--blue-dim);
+      color: var(--blue);
+    }
+
+    .ctag {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      opacity: 0.65;
+      margin-bottom: 5px;
+    }
+
+    /* ── INSTRUCTION ── */
+    .inst {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      background: var(--blue-dim);
+      border: 1px solid var(--blue-border);
+      border-radius: 3px;
+      padding: 12px 14px;
+      font-size: 12px;
+      color: var(--fg);
+      line-height: 1.6;
+      margin: 10px 0;
+    }
+
+    .inst .ico {
+      font-size: 16px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* ── COMPARE ── */
+    .cmp2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 16px 0;
+    }
+
+    @media(max-width:480px) {
+      .cmp2 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .cmp {
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 15px;
+      background: var(--bg-card);
+    }
+
+    .cmp.hi {
+      border-color: var(--green-border);
+      background: var(--green-dim);
+    }
+
+    .cmp-tag {
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .cmp.hi .cmp-tag {
+      color: var(--green-text);
+    }
+
+    .cdot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    .cmp-txt {
+      font-size: 12px;
+      color: var(--fg);
+      line-height: 1.55;
+    }
+
+    .cmp-txt em {
+      font-style: normal;
+      font-weight: 700;
+      color: var(--green);
+    }
+
+    /* ── CYCLE ── */
+    .cycle {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cy {
+      display: flex;
+      gap: 14px;
+    }
+
+    .cyl {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 30px;
+      flex-shrink: 0;
+    }
+
+    .cyd {
+      width: 30px;
+      height: 30px;
+      border-radius: 3px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--green);
+    }
+
+    .cyl-line {
+      width: 1px;
+      flex: 1;
+      min-height: 12px;
+      background: var(--border);
+      margin: 4px 0;
+    }
+
+    .cyb {
+      flex: 1;
+      padding-bottom: 18px;
+    }
+
+    .cyt {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--fg);
+      margin-bottom: 3px;
+    }
+
+    .cyd2 {
+      font-size: 12px;
+      color: var(--muted2);
+      line-height: 1.55;
+    }
+
+    /* ── CHAT ── */
+    .chat {
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background: var(--bg-card);
+      overflow: hidden;
+      margin: 14px 0;
+    }
+
+    .chat-top {
+      border-bottom: 1px solid var(--border);
+      padding: 8px 14px;
+      background: var(--bg-card2);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .clive {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 6px var(--green);
+      animation: bl 1.5s infinite;
+    }
+
+    .cr {
+      display: flex;
+      gap: 12px;
+      padding: 11px 14px;
+      border-bottom: 1px solid var(--border);
+      font-size: 12px;
+    }
+
+    .cr:last-child {
+      border-bottom: none;
+    }
+
+    .cw {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      min-width: 80px;
+      padding-top: 1px;
+      flex-shrink: 0;
+    }
+
+    .wu {
+      color: var(--blue);
+    }
+
+    .wai {
+      color: var(--green);
+    }
+
+    .wact {
+      color: var(--yellow);
+    }
+
+    .ct {
+      color: var(--fg);
+      line-height: 1.55;
+    }
+
+    .ct .dim {
+      color: var(--muted2);
+    }
+
+    .ct code {
+      color: var(--green-text);
+    }
+
+    /* ── TERMINAL ── */
+    .term {
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background: #07080c;
+      overflow: hidden;
+      margin: 10px 0;
+    }
+
+    .tbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 9px 14px;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg-card2);
+      position: relative;
+    }
+
+    .tdots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .tdots span {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .tr {
+      background: #ff5f57;
+    }
+
+    .ty {
+      background: #ffbd2e;
+    }
+
+    .tg {
+      background: #28c840;
+    }
+
+    .ttitle {
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .tbody {
+      padding: 14px 16px;
+      font-size: 12px;
+      line-height: 1.8;
+    }
+
+    .tp {
+      color: var(--muted);
+      user-select: none;
+    }
+
+    .tc {
+      color: var(--green);
+    }
+
+    .tcm {
+      color: var(--muted);
+      font-size: 11px;
+      font-style: italic;
+    }
+
+    .to {
+      color: #7a8499;
+      font-size: 11px;
+    }
+
+    .copy-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .copy-btn:hover {
+      color: var(--green);
+      border-color: var(--green-border);
+      background: var(--green-dim);
+    }
+
+    .copy-btn.ok {
+      color: var(--green);
+      border-color: var(--green-border);
+      background: var(--green-dim);
+    }
+
+    /* ── PROJECTS ── */
+    .pgrid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    @media(max-width:480px) {
+      .pgrid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .pc {
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 13px;
+      background: var(--bg-card);
+    }
+
+    .pct {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--fg);
+      margin-bottom: 9px;
+    }
+
+    .pr {
+      display: flex;
+      gap: 8px;
+      font-size: 11px;
+      margin-bottom: 3px;
+    }
+
+    .pk {
+      color: var(--muted);
+      min-width: 64px;
+    }
+
+    .pv {
+      color: var(--green-text);
+    }
+
+    /* ── CASES ── */
+    .cases {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 18px;
+    }
+
+    .case {
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--green);
+      border-radius: 3px;
+      padding: 12px 14px;
+      background: var(--bg-card);
+    }
+
+    .case-r {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--green-text);
+      margin-bottom: 5px;
+    }
+
+    .case-t {
+      font-size: 12px;
+      color: var(--muted2);
+      line-height: 1.55;
+    }
+
+    .case-t strong {
+      color: var(--fg);
+      font-weight: 500;
+    }
+
+    /* ── PLANS ── */
+    .plans {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .plan {
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      background: var(--bg-card);
+      overflow: hidden;
+    }
+
+    .plan.rec {
+      border-color: var(--green-border);
+    }
+
+    .phd {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 13px 15px;
+      cursor: pointer;
+      transition: background 0.15s;
+      user-select: none;
+    }
+
+    .phd:hover {
+      background: var(--bg-card2);
+    }
+
+    .pb-badge {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 2px;
+      border: 1px solid;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .bfree {
+      color: var(--muted2);
+      border-color: var(--border);
+    }
+
+    .bpro {
+      color: var(--blue);
+      border-color: var(--blue-border);
+      background: var(--blue-dim);
+    }
+
+    .bm5 {
+      color: var(--yellow);
+      border-color: var(--yellow-border);
+      background: var(--yellow-dim);
+    }
+
+    .bm20 {
+      color: var(--green);
+      border-color: var(--green-border);
+      background: var(--green-dim);
+    }
+
+    .pi {
+      flex: 1;
+    }
+
+    .pn {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--fg);
+    }
+
+    .pid {
+      font-size: 11px;
+      color: var(--muted2);
+      margin-top: 1px;
+    }
+
+    .pp {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--fg);
+      white-space: nowrap;
+      text-align: right;
+    }
+
+    .pp .sm {
+      font-size: 10px;
+      color: var(--muted);
+      font-weight: 400;
+    }
+
+    .chv {
+      width: 15px;
+      height: 15px;
+      flex-shrink: 0;
+      color: var(--muted);
+      transition: transform 0.2s;
+    }
+
+    .phd.op .chv {
+      transform: rotate(180deg);
+    }
+
+    .pbd {
+      display: none;
+      padding: 0 15px 15px;
+      border-top: 1px solid var(--border);
+    }
+
+    .pbd.op {
+      display: block;
+      padding-top: 13px;
+    }
+
+    .fl {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .fl li {
+      display: flex;
+      gap: 9px;
+      font-size: 12px;
+      color: var(--muted2);
+      align-items: flex-start;
+    }
+
+    .fok {
+      color: var(--green);
+      flex-shrink: 0;
+    }
+
+    .fno {
+      color: var(--red);
+      flex-shrink: 0;
+    }
+
+    .fl li strong {
+      color: var(--fg);
+      font-weight: 600;
+    }
+
+    /* ── ROADMAP ── */
+    .rm {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .rmi {
+      display: flex;
+      gap: 16px;
+    }
+
+    .rml {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 62px;
+      flex-shrink: 0;
+    }
+
+    .rmd {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      padding: 4px 6px;
+      color: var(--green-text);
+      text-align: center;
+      width: 100%;
+    }
+
+    .rml-line {
+      width: 1px;
+      flex: 1;
+      min-height: 12px;
+      background: var(--border);
+      margin: 5px 0;
+    }
+
+    .rmb {
+      flex: 1;
+      padding-bottom: 28px;
+    }
+
+    .rmt {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--fg);
+      margin-bottom: 8px;
+    }
+
+    .rmtk {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .rmtk li {
+      font-size: 12px;
+      color: var(--muted2);
+      display: flex;
+      gap: 8px;
+      line-height: 1.5;
+    }
+
+    .rmtk li::before {
+      content: '▸';
+      color: var(--green);
+      flex-shrink: 0;
+    }
+
+    /* ── LINKS ── */
+    .llist {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 18px;
+    }
+
+    .lrow {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 11px 14px;
+      background: var(--bg-card);
+      text-decoration: none;
+      color: var(--fg);
+      font-size: 12px;
+      transition: all 0.15s;
+      gap: 12px;
+    }
+
+    .lrow:hover {
+      border-color: var(--green-border);
+      background: var(--green-dim);
+      color: var(--green-text);
+    }
+
+    .ll {
+      color: var(--muted);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+
+    .larr {
+      color: var(--muted);
+      flex-shrink: 0;
+    }
+
+    /* ── CLOSING ── */
+    .closing {
+      padding: 44px 0;
+      text-align: center;
+    }
+
+    .closing p {
+      font-size: 13px;
+      color: var(--muted2);
+      line-height: 1.8;
+      max-width: 480px;
+      margin: 0 auto 14px;
+    }
+
+    .sig {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--green) !important;
+    }
+
+    footer {
+      padding: 26px 0;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .ft {
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      opacity: 0.55;
+    }
+
+    @media(max-width:600px) {
+      .sec {
+        padding: 30px 0;
+      }
+
+      .hero {
+        padding: 30px 0 26px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ══════ GATE ══════ -->
+  <div id="gate">
+    <div class="gate-wrap">
+      <div class="gate-brand">@miguelito.ai — biblioteca gratuita · 2026</div>
+
+      <!-- STEP 1: email check -->
+      <div id="gstep1">
+        <h1 class="gate-h1">Guias gratuitos para<br><span>quem quer criar</span></h1>
+        <p class="gate-sub">
+          Digite seu e-mail para acessar este guia e todos os próximos materiais gratuitos que vamos lançar.
+        </p>
+
+        <div class="gate-perks">
+          <div class="gate-perk">
+            <span class="pk-ico">📚</span>
+            <span><strong>Biblioteca crescente</strong> — novos guias gratuitos toda semana</span>
+          </div>
+          <div class="gate-perk">
+            <span class="pk-ico">🚀</span>
+            <span><strong>Acesso imediato</strong> — sem esperar, sem lista de espera</span>
+          </div>
+          <div class="gate-perk">
+            <span class="pk-ico">📲</span>
+            <span><strong>Siga no Instagram</strong> — <a href="https://instagram.com/miguelito.ai" target="_blank"
+                style="color:var(--green-text);text-decoration:none;">@miguelito.ai</a> para novidades em primeira
+              mão</span>
+          </div>
+        </div>
+
+        <div class="gate-form">
+          <div>
+            <label class="f-label" for="fe1">Seu e-mail</label>
+            <input class="f-input" type="email" id="fe1" placeholder="seu@email.com" autocomplete="email">
+          </div>
+          <div id="gerr1" class="gate-err">Digite um e-mail válido.</div>
+          <button class="gate-btn" onclick="checkEmail()">Acessar os guias gratuitamente →</button>
+          <p class="gate-privacy">🔒 Sem spam. Só conteúdo gratuito de qualidade.</p>
+        </div>
+      </div>
+
+      <!-- STEP 2: full registration (shown only if email not found) -->
+      <div id="gstep2" class="hidden">
+        <button class="gate-back" onclick="goBack()">← Voltar</button>
+        <h1 class="gate-h1">Quase lá!<br><span>Crie seu acesso</span></h1>
+        <p class="gate-sub">Esse cadastro dá acesso a todos os guias gratuitos que lançarmos — não só este.</p>
+
+        <div id="gemailshow" class="gate-email-show">
+          <span>✉️</span><span id="gemailtext"></span>
+        </div>
+
+        <div class="gate-form">
+          <div>
+            <label class="f-label" for="fn">Seu nome</label>
+            <input class="f-input" type="text" id="fn" placeholder="Como posso te chamar?" autocomplete="given-name">
+          </div>
+          <div>
+            <label class="f-label" for="fw">WhatsApp <span
+                style="color:var(--muted);font-size:9px;">(opcional)</span></label>
+            <input class="f-input" type="tel" id="fw" placeholder="(11) 99999-9999" autocomplete="tel">
+          </div>
+          <div id="gerr2" class="gate-err">Por favor, preencha seu nome.</div>
+          <button class="gate-btn" onclick="submitGate()">Criar meu acesso gratuito →</button>
+          <p class="gate-privacy">🔒 Seus dados ficam só com a gente. Sem spam, nunca.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════ MAIN ══════ -->
+  <div id="main">
+    <div id="pbar"></div>
+
+    <header>
+      <div class="hi">
+        <div class="brand">miguelito<span>.ai</span></div>
+        <div class="pdots">
+          <div class="pdot on" id="pd1"></div>
+          <div class="pdot" id="pd2"></div>
+          <div class="pdot" id="pd3"></div>
+          <div class="pdot" id="pd4"></div>
+          <div class="pdot" id="pd5"></div>
+        </div>
+      </div>
+    </header>
+
+    <div class="cx">
+
+      <!-- HERO -->
+      <section class="hero">
+        <div class="wt"><span class="blink"></span><span id="hname">Olá! Bem-vindo(a)</span></div>
+        <h1>O Guia Definitivo de<br><em>Claude Code</em></h1>
+        <p class="hero-d">Para quem quer criar coisas reais. O que é, como funciona, o que criar e qual plano escolher —
+          explicado do zero, sem enrolação.</p>
+        <div class="pills">
+          <span class="pill">Iniciantes</span>
+          <span class="pill">Sem código</span>
+          <span class="pill">Planos explicados</span>
+          <span class="pill">100% Gratuito</span>
+        </div>
+      </section>
+
+      <!-- TOC -->
+      <nav class="toc">
+        <div class="toc-ttl">// Neste guia</div>
+        <ul class="toc-list">
+          <li><a href="#s1"><span class="n">01</span> O que é?</a></li>
+          <li><a href="#s2"><span class="n">02</span> Como funciona?</a></li>
+          <li><a href="#s3"><span class="n">03</span> O que criar?</a></li>
+          <li><a href="#s4"><span class="n">04</span> Os planos</a></li>
+          <li><a href="#s5"><span class="n">05</span> Como começar</a></li>
+        </ul>
+      </nav>
+
+      <div class="callout yellow" style="margin-top:22px;">
+        <div class="ctag">// Antes de começar</div>
+        Este guia foi escrito para quem nunca usou o Claude Code. Não precisa saber programar, não precisa entender de
+        IA. Só precisa ter curiosidade e vontade de aprender.
+      </div>
+
+      <!-- ── SEC 01 ── -->
+      <section class="sec" id="s1">
+        <div class="sec-hd">
+          <span class="sec-n">01</span>
+          <div>
+            <h2>O que é o Claude Code?</h2>
+            <div class="sub">Entenda em 2 minutos</div>
+          </div>
+        </div>
+
+        <p class="dsd" style="margin-bottom:16px;">Você já deve ter ouvido falar do Claude — aquele assistente de IA que
+          responde perguntas, escreve textos e ajuda a pensar. O Claude Code é uma versão especial do Claude que não
+          fica só <em>falando</em> — ele <strong>age</strong>.</p>
+
+        <div class="cmp2">
+          <div class="cmp">
+            <div class="cmp-tag"><span class="cdot"></span>Claude Normal</div>
+            <div class="cmp-txt">É como perguntar para um amigo especialista. Ele te diz o que fazer, mas
+              <strong>você</strong> que tem que fazer.</div>
+          </div>
+          <div class="cmp hi">
+            <div class="cmp-tag"><span class="cdot"></span>Claude Code</div>
+            <div class="cmp-txt">É como ter um assistente que faz por você. Você pede, <em>ele executa</em>.</div>
+          </div>
+        </div>
+
+        <p class="dsd" style="margin:16px 0 14px;">O Claude Code tem <strong>"mãos"</strong>. Isso quer dizer que ele
+          consegue:</p>
+
+        <div class="dsteps">
+          <div class="dstep">
+            <div class="dsl">
+              <div class="dsn">📁</div>
+              <div class="dsl-line"></div>
+            </div>
+            <div class="dsb">
+              <div class="dst">Ler e criar arquivos</div>
+              <div class="dsd">Cria documentos, planilhas, código e organiza pastas no seu computador — sem você
+                precisar abrir nenhum app.</div>
+            </div>
+          </div>
+          <div class="dstep">
+            <div class="dsl">
+              <div class="dsn">⚡</div>
+              <div class="dsl-line"></div>
+            </div>
+            <div class="dsb">
+              <div class="dst">Rodar programas</div>
+              <div class="dsd">Executa scripts, instala ferramentas e testa se tudo está funcionando corretamente.</div>
+            </div>
+          </div>
+          <div class="dstep">
+            <div class="dsl">
+              <div class="dsn">🔍</div>
+              <div class="dsl-line"></div>
+            </div>
+            <div class="dsb">
+              <div class="dst">Pesquisar na internet</div>
+              <div class="dsd">Busca informações atuais quando precisa resolver problemas ou trazer dados recentes.
+              </div>
+            </div>
+          </div>
+          <div class="dstep">
+            <div class="dsl">
+              <div class="dsn">🔗</div>
+            </div>
+            <div class="dsb">
+              <div class="dst">Conectar com outros serviços</div>
+              <div class="dsd">Pode acessar GitHub, Notion, Gmail e outros apps via integrações — tudo automaticamente.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout" style="margin-top:4px;">
+          <div class="ctag">// A grande diferença</div>
+          Um chatbot responde. O Claude Code age. Ele não só te diz "crie um arquivo assim" — ele <strong>cria o
+            arquivo</strong>, testa, corrige os erros e avisa quando terminou. É a diferença entre um consultor e um
+          assistente que coloca a mão na massa.
+        </div>
+      </section>
+
+      <!-- ── SEC 02 ── -->
+      <section class="sec" id="s2">
+        <div class="sec-hd">
+          <span class="sec-n">02</span>
+          <div>
+            <h2>Como funciona na prática?</h2>
+            <div class="sub">O loop de raciocínio do agente</div>
+          </div>
+        </div>
+
+        <p class="dsd" style="margin-bottom:20px;">Quando você dá uma tarefa para o Claude Code, ele não vai direto
+          fazer. Ele pensa primeiro, divide em partes menores, e executa passo a passo — como um funcionário organizado.
+        </p>
+
+        <div class="cycle">
+          <div class="cy">
+            <div class="cyl">
+              <div class="cyd">1</div>
+              <div class="cyl-line"></div>
+            </div>
+            <div class="cyb">
+              <div class="cyt">Perceber</div>
+              <div class="cyd2">Lê seus arquivos, entende o projeto e identifica o que precisa ser feito</div>
+            </div>
+          </div>
+          <div class="cy">
+            <div class="cyl">
+              <div class="cyd">2</div>
+              <div class="cyl-line"></div>
+            </div>
+            <div class="cyb">
+              <div class="cyt">Planejar</div>
+              <div class="cyd2">Divide a tarefa em etapas e decide quais ferramentas vai usar</div>
+            </div>
+          </div>
+          <div class="cy">
+            <div class="cyl">
+              <div class="cyd">3</div>
+              <div class="cyl-line"></div>
+            </div>
+            <div class="cyb">
+              <div class="cyt">Agir</div>
+              <div class="cyd2">Executa: cria arquivos, roda comandos, busca informações</div>
+            </div>
+          </div>
+          <div class="cy">
+            <div class="cyl">
+              <div class="cyd">4</div>
+              <div class="cyl-line"></div>
+            </div>
+            <div class="cyb">
+              <div class="cyt">Verificar</div>
+              <div class="cyd2">Checa se deu certo, corrige erros e ajusta o que for necessário</div>
+            </div>
+          </div>
+          <div class="cy">
+            <div class="cyl">
+              <div class="cyd">5</div>
+            </div>
+            <div class="cyb">
+              <div class="cyt">Repetir</div>
+              <div class="cyd2">Volta ao início até completar a tarefa ou pedir ajuda</div>
+            </div>
+          </div>
+        </div>
+
+        <p style="font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin:24px 0 8px;">
+          // Veja como funciona na prática</p>
+
+        <div class="chat">
+          <div class="chat-top"><span class="clive"></span>Sessão ao vivo — Claude Code</div>
+          <div class="cr"><span class="cw wu">Você</span><span class="ct">Organiza as fotos da pasta Downloads por mês e
+              ano. Renomeia com a data no começo.</span></div>
+          <div class="cr"><span class="cw wai">Claude</span><span class="ct">Entendido. Vou verificar a pasta Downloads
+              primeiro para entender o que tem lá...</span></div>
+          <div class="cr"><span class="cw wact">[lendo]</span><span class="ct"><span class="dim">Encontrei 847 fotos.
+                Vou criar pastas</span> <code>2024-01</code>, <code>2024-02</code>... <span class="dim">e mover cada
+                foto.</span></span></div>
+          <div class="cr"><span class="cw wact">[pronto]</span><span class="ct">847 fotos organizadas. <span
+                class="dim">12 não tinham data — coloquei na pasta</span> <code>sem-data</code> <span class="dim">para
+                você revisar.</span></span></div>
+        </div>
+
+        <div class="callout">
+          <div class="ctag">// O ponto chave</div>
+          Você não precisa saber qual comando usar. Você só diz <strong>O QUÊ</strong> quer. O Claude Code decide o
+          <strong>COMO</strong>.
+        </div>
+      </section>
+
+      <!-- ── SEC 03 ── -->
+      <section class="sec" id="s3">
+        <div class="sec-hd">
+          <span class="sec-n">03</span>
+          <div>
+            <h2>O que você pode criar?</h2>
+            <div class="sub">Projetos reais de pessoas reais</div>
+          </div>
+        </div>
+
+        <p class="dsd" style="margin-bottom:16px;">O Claude Code não é só para programadores. Pessoas de diversas áreas
+          estão criando coisas que antes pareciam impossíveis sem uma equipe de tecnologia.</p>
+
+        <div class="pgrid">
+          <div class="pc">
+            <div class="pct">🌐 Sites & Landing Pages</div>
+            <div class="pr"><span class="pk">exemplos</span><span class="pv">portfólio, blog, vendas</span></div>
+            <div class="pr"><span class="pk">tempo</span><span class="pv">15 – 60 min</span></div>
+            <div class="pr"><span class="pk">código?</span><span class="pv">não precisa</span></div>
+          </div>
+          <div class="pc">
+            <div class="pct">📱 Apps Mobile</div>
+            <div class="pr"><span class="pk">exemplos</span><span class="pv">treinos, hábitos, diário</span></div>
+            <div class="pr"><span class="pk">tempo</span><span class="pv">2 – 8 horas</span></div>
+            <div class="pr"><span class="pk">código?</span><span class="pv">básico ajuda</span></div>
+          </div>
+          <div class="pc">
+            <div class="pct">🤖 Automações & Bots</div>
+            <div class="pr"><span class="pk">exemplos</span><span class="pv">WhatsApp, e-mails</span></div>
+            <div class="pr"><span class="pk">tempo</span><span class="pv">1 – 4 horas</span></div>
+            <div class="pr"><span class="pk">código?</span><span class="pv">não necessariamente</span></div>
+          </div>
+          <div class="pc">
+            <div class="pct">📊 Análise de Dados</div>
+            <div class="pr"><span class="pk">exemplos</span><span class="pv">dashboards, relatórios</span></div>
+            <div class="pr"><span class="pk">tempo</span><span class="pv">30 min – 3 horas</span></div>
+            <div class="pr"><span class="pk">código?</span><span class="pv">não precisa</span></div>
+          </div>
+          <div class="pc">
+            <div class="pct">⚙️ Ferramentas de Prod.</div>
+            <div class="pr"><span class="pk">exemplos</span><span class="pv">contratos, resumos</span></div>
+            <div class="pr"><span class="pk">tempo</span><span class="pv">20 min – 2 horas</span></div>
+            <div class="pr"><span class="pk">código?</span><span class="pv">não precisa</span></div>
+          </div>
+          <div class="pc">
+            <div class="pct">🎮 Jogos & Protótipos</div>
+            <div class="pr"><span class="pk">exemplos</span><span class="pv">quiz, calculadora</span></div>
+            <div class="pr"><span class="pk">tempo</span><span class="pv">1 – 6 horas</span></div>
+            <div class="pr"><span class="pk">código?</span><span class="pv">não precisa</span></div>
+          </div>
+        </div>
+
+        <p style="font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin:24px 0 8px;">
+          // Cases reais de quem já usou</p>
+
+        <div class="cases">
+          <div class="case">
+            <div class="case-r">Gerente de produto</div>
+            <div class="case-t">Construiu um <strong>app nativo de iOS</strong> para rastrear partidas do time do filho
+              — sem ser desenvolvedor, em algumas noites.</div>
+          </div>
+          <div class="case">
+            <div class="case-r">Freelancer</div>
+            <div class="case-t">Criou um <strong>MVP completo de gestão de faturas</strong> em um único dia, com banco
+              de dados e envio de e-mails — custando menos de R$ 20.</div>
+          </div>
+          <div class="case">
+            <div class="case-r">Consultor</div>
+            <div class="case-t">Automatizou toda a <strong>pesquisa de concorrentes</strong>: em vez de 4 horas de
+              trabalho manual, 10 minutos enquanto o agente pesquisava em paralelo.</div>
+          </div>
+          <div class="case">
+            <div class="case-r">Pessoa sem experiência em código</div>
+            <div class="case-t">Criou um <strong>site pessoal</strong>, configurou o GitHub e publicou online —
+              aprendendo o caminho junto com o Claude Code.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── SEC 04 ── -->
+      <section class="sec" id="s4">
+        <div class="sec-hd">
+          <span class="sec-n">04</span>
+          <div>
+            <h2>Comparando os Planos</h2>
+            <div class="sub">Free, Pro, Max 5x e Max 20x</div>
+          </div>
+        </div>
+
+        <div class="plans">
+          <div class="plan">
+            <div class="phd" onclick="tp(this)">
+              <span class="pb-badge bfree">Free</span>
+              <div class="pi">
+                <div class="pn">Plano Gratuito</div>
+                <div class="pid">Para explorar antes de pagar</div>
+              </div>
+              <div class="pp">R$ 0 <span class="sm">/ sempre</span></div>
+              <svg class="chv" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="m6 9 6 6 6-6" />
+              </svg>
+            </div>
+            <div class="pbd">
+              <ul class="fl">
+                <li><span class="fok">✓</span> Claude Sonnet (modelo intermediário)</li>
+                <li><span class="fok">✓</span> Limite baixo de mensagens diárias</li>
+                <li><span class="fok">✓</span> Navegador, celular e desktop</li>
+                <li><span class="fok">✓</span> Até 5 projetos</li>
+                <li><span class="fno">✗</span> <strong>Não inclui acesso ao Claude Code</strong></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="plan rec">
+            <div class="phd op" onclick="tp(this)">
+              <span class="pb-badge bpro">Pro ⭐</span>
+              <div class="pi">
+                <div class="pn">Plano Pro</div>
+                <div class="pid">Aprendizado e projetos pequenos</div>
+              </div>
+              <div class="pp">US$ 20 <span class="sm">/ mês</span></div>
+              <svg class="chv" style="transform:rotate(180deg)" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2">
+                <path d="m6 9 6 6 6-6" />
+              </svg>
+            </div>
+            <div class="pbd op">
+              <ul class="fl">
+                <li><span class="fok">✓</span> Tudo do Free, mais:</li>
+                <li><span class="fok">✓</span> <strong>Claude Code incluso</strong></li>
+                <li><span class="fok">✓</span> 5x mais mensagens que o Free</li>
+                <li><span class="fok">✓</span> Prioridade em horários de pico</li>
+                <li><span class="fok">✓</span> Acesso antecipado a novidades</li>
+                <li><span class="fok">✓</span> Projetos ilimitados com IA (RAG)</li>
+                <li><span class="fok">✓</span> Integração Google Workspace</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="plan">
+            <div class="phd" onclick="tp(this)">
+              <span class="pb-badge bm5">Max 5x</span>
+              <div class="pi">
+                <div class="pn">Plano Max 5x</div>
+                <div class="pid">Trabalho diário intenso</div>
+              </div>
+              <div class="pp">US$ 100 <span class="sm">/ mês</span></div>
+              <svg class="chv" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="m6 9 6 6 6-6" />
+              </svg>
+            </div>
+            <div class="pbd">
+              <ul class="fl">
+                <li><span class="fok">✓</span> Tudo do Pro, mais:</li>
+                <li><span class="fok">✓</span> 5x mais uso que o Pro (25x o Free)</li>
+                <li><span class="fok">✓</span> Acesso ao Claude Opus (mais poderoso)</li>
+                <li><span class="fok">✓</span> Prioridade máxima no servidor</li>
+                <li><span class="fok">✓</span> Sessões longas sem interrupção</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="plan">
+            <div class="phd" onclick="tp(this)">
+              <span class="pb-badge bm20">Max 20x</span>
+              <div class="pi">
+                <div class="pn">Plano Max 20x</div>
+                <div class="pid">Profissionais de alta demanda</div>
+              </div>
+              <div class="pp">US$ 200 <span class="sm">/ mês</span></div>
+              <svg class="chv" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="m6 9 6 6 6-6" />
+              </svg>
+            </div>
+            <div class="pbd">
+              <ul class="fl">
+                <li><span class="fok">✓</span> Tudo do Max 5x, mais:</li>
+                <li><span class="fok">✓</span> 20x mais uso que o Pro (100x o Free)</li>
+                <li><span class="fok">✓</span> Uso irrestrito do Opus 4.6</li>
+                <li><span class="fok">✓</span> Múltiplos agentes em paralelo</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout" style="margin-top:14px;">
+          <div class="ctag">// Recomendação do Miguelito</div>
+          Começando agora? Vá de <strong>Free</strong> para explorar. Quando quiser usar o Claude Code de verdade,
+          assine o <strong>Pro (US$20/mês)</strong>. Você só vai precisar do Max quando sentir que está travando nos
+          limites do Pro — e aí você vai saber exatamente quando isso acontecer.
+        </div>
+      </section>
+
+      <!-- ── SEC 05 ── -->
+      <section class="sec" id="s5">
+        <div class="sec-hd">
+          <span class="sec-n">05</span>
+          <div>
+            <h2>Por onde começar?</h2>
+            <div class="sub">Roteiro passo a passo — primeiros 7 dias</div>
+          </div>
+        </div>
+
+        <p class="dsd" style="margin-bottom:26px;">Siga este roteiro progressivo. Em 7 dias você vai ter uma visão clara
+          de como o Claude Code pode mudar sua forma de trabalhar.</p>
+
+        <div class="rm">
+
+          <!-- DIA 1 -->
+          <div class="rmi">
+            <div class="rml">
+              <div class="rmd">Dia 1</div>
+              <div class="rml-line"></div>
+            </div>
+            <div class="rmb">
+              <div class="rmt">Explore o Claude no navegador</div>
+              <ul class="rmtk">
+                <li>Abra <strong>claude.ai</strong> no navegador e crie uma conta gratuita</li>
+                <li>Converse com o Claude: peça para ele explicar algo ou escrever um texto</li>
+                <li>Objetivo: sentir como é conversar com uma IA de verdade</li>
+              </ul>
+
+              <div class="inst" style="margin-top:12px;">
+                <span class="ico">🌐</span>
+                <span>Acesse <strong>claude.ai</strong> → clique em <strong>"Sign up"</strong> → crie sua conta com
+                  e-mail ou Google. É grátis.</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- DIA 2-3 -->
+          <div class="rmi">
+            <div class="rml">
+              <div class="rmd">Dia 2–3</div>
+              <div class="rml-line"></div>
+            </div>
+            <div class="rmb">
+              <div class="rmt">Instale o Claude Code</div>
+              <ul class="rmtk">
+                <li>Assine o plano Pro em <strong>claude.ai/settings</strong></li>
+                <li>Abra o terminal do seu computador</li>
+                <li>Cole o comando de instalação abaixo</li>
+              </ul>
+
+              <div class="inst" style="margin-top:12px;">
+                <span class="ico">💻</span>
+                <div>
+                  <strong>Como abrir o Terminal:</strong><br>
+                  → <strong>Mac:</strong> pressione <code style="color:var(--blue)">Cmd ⌘ + Espaço</code>, digite
+                  "Terminal", pressione Enter<br>
+                  → <strong>Windows:</strong> pressione <code style="color:var(--blue)">Win + R</code>, digite "cmd",
+                  pressione Enter
+                </div>
+              </div>
+
+              <div class="inst">
+                <span class="ico">📋</span>
+                <span>Com o Terminal aberto, <strong>copie e cole</strong> o comando abaixo. Depois pressione
+                  Enter:</span>
+              </div>
+
+              <div class="term">
+                <div class="tbar">
+                  <div class="tdots"><span class="tr"></span><span class="ty"></span><span class="tg"></span></div>
+                  <span class="ttitle">Terminal</span>
+                  <button class="copy-btn" onclick="cp(this,'npm install -g @anthropic-ai/claude-code')">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="8" y="8" width="14" height="14" rx="2" />
+                      <path d="M4 16V4a2 2 0 0 1 2-2h10" />
+                    </svg>
+                    Copiar comando
+                  </button>
+                </div>
+                <div class="tbody">
+                  <div><span class="tp">$ </span><span class="tc">npm install -g @anthropic-ai/claude-code</span></div>
+                  <div class="tcm" style="margin-top:3px;"># Instala o Claude Code no seu computador</div>
+                  <div class="to" style="margin-top:8px;">added 1 package in 3s</div>
+                  <div class="to">✓ claude-code instalado com sucesso</div>
+                </div>
+              </div>
+
+              <div class="inst">
+                <span class="ico">📂</span>
+                <span>Agora, no Terminal, <strong>navegue até qualquer pasta</strong> do seu computador e inicie o
+                  agente:</span>
+              </div>
+
+              <div class="term">
+                <div class="tbar">
+                  <div class="tdots"><span class="tr"></span><span class="ty"></span><span class="tg"></span></div>
+                  <span class="ttitle">Terminal</span>
+                  <button class="copy-btn" onclick="cp(this,'claude')">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="8" y="8" width="14" height="14" rx="2" />
+                      <path d="M4 16V4a2 2 0 0 1 2-2h10" />
+                    </svg>
+                    Copiar comando
+                  </button>
+                </div>
+                <div class="tbody">
+                  <div><span class="tp">$ </span><span class="tc">claude</span></div>
+                  <div class="tcm" style="margin-top:3px;"># Inicia o Claude Code na pasta atual</div>
+                  <div class="to" style="margin-top:8px;">✓ Claude Code iniciado</div>
+                  <div class="to">→ Como posso ajudar?</div>
+                </div>
+              </div>
+
+              <div class="callout">
+                <div class="ctag">// Primeira coisa a pedir</div>
+                Digite: <strong>"O que tem nessa pasta? Me explica o que é esse projeto."</strong> — ele vai ler os
+                arquivos e te dar um resumo automaticamente.
+              </div>
+            </div>
+          </div>
+
+          <!-- DIA 4-5 -->
+          <div class="rmi">
+            <div class="rml">
+              <div class="rmd">Dia 4–5</div>
+              <div class="rml-line"></div>
+            </div>
+            <div class="rmb">
+              <div class="rmt">Crie seu primeiro projeto real</div>
+              <ul class="rmtk">
+                <li>Escolha algo pequeno: um site simples, uma planilha, ou um script pra organizar arquivos</li>
+                <li>Descreva o que você quer com detalhes — como se fosse explicar para um funcionário novo</li>
+                <li>Deixe o Claude Code trabalhar e apenas observe o processo</li>
+              </ul>
+
+              <div class="inst" style="margin-top:12px;">
+                <span class="ico">💡</span>
+                <div>
+                  <strong>Exemplo de pedido que funciona muito bem:</strong><br><br>
+                  <span style="color:var(--green-text);">"Cria um site de portfólio simples para mim com meu nome,
+                    minhas habilidades e um formulário de contato. Usa HTML, CSS e JavaScript puro."</span>
+                </div>
+              </div>
+
+              <div class="callout">
+                <div class="ctag">// Dica de ouro</div>
+                Quanto mais detalhes você der, melhor o resultado. Pense em descrever o que você quer como se fosse para
+                um funcionário que nunca te viu: quem você é, o que precisa, como deve ficar.
+              </div>
+            </div>
+          </div>
+
+          <!-- DIA 6-7 -->
+          <div class="rmi">
+            <div class="rml">
+              <div class="rmd">Dia 6–7</div>
+            </div>
+            <div class="rmb">
+              <div class="rmt">Crie o arquivo CLAUDE.md</div>
+              <ul class="rmtk">
+                <li>Crie um arquivo chamado <code style="color:var(--green-text)">CLAUDE.md</code> na raiz do seu
+                  projeto</li>
+                <li>Escreva nele: quem você é, o que o projeto faz, como o agente deve se comportar</li>
+                <li>Teste tarefas mais longas e observe a diferença</li>
+              </ul>
+
+              <div class="inst" style="margin-top:12px;">
+                <span class="ico">📝</span>
+                <span>O <strong>CLAUDE.md</strong> é o manual de instruções permanente para o agente. Tudo que você
+                  escrever lá, ele vai seguir em todas as sessões — sem você precisar repetir.</span>
+              </div>
+
+              <p
+                style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin:14px 0 6px;">
+                // Mac — crie e abra o arquivo</p>
+              <div class="term">
+                <div class="tbar">
+                  <div class="tdots"><span class="tr"></span><span class="ty"></span><span class="tg"></span></div>
+                  <span class="ttitle">Terminal (Mac)</span>
+                  <button class="copy-btn" onclick="cp(this,'touch CLAUDE.md && open CLAUDE.md')">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="8" y="8" width="14" height="14" rx="2" />
+                      <path d="M4 16V4a2 2 0 0 1 2-2h10" />
+                    </svg>
+                    Copiar
+                  </button>
+                </div>
+                <div class="tbody">
+                  <div><span class="tp">$ </span><span class="tc">touch CLAUDE.md && open CLAUDE.md</span></div>
+                  <div class="tcm" style="margin-top:3px;"># Cria o arquivo e abre para edição</div>
+                </div>
+              </div>
+
+              <p
+                style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin:10px 0 6px;">
+                // Windows — crie e abra o arquivo</p>
+              <div class="term">
+                <div class="tbar">
+                  <div class="tdots"><span class="tr"></span><span class="ty"></span><span class="tg"></span></div>
+                  <span class="ttitle">Terminal (Windows)</span>
+                  <button class="copy-btn" onclick="cp(this,'echo. > CLAUDE.md && notepad CLAUDE.md')">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="8" y="8" width="14" height="14" rx="2" />
+                      <path d="M4 16V4a2 2 0 0 1 2-2h10" />
+                    </svg>
+                    Copiar
+                  </button>
+                </div>
+                <div class="tbody">
+                  <div><span class="tp">> </span><span class="tc">echo. > CLAUDE.md && notepad CLAUDE.md</span></div>
+                  <div class="tcm" style="margin-top:3px;"># Cria o arquivo e abre no Bloco de Notas</div>
+                </div>
+              </div>
+
+              <div class="callout">
+                <div class="ctag">// Próximo passo: integrações</div>
+                Depois de dominar o básico, conecte com <strong>GitHub</strong>, <strong>Notion</strong> ou outras
+                ferramentas. O Claude Code pode criar branches, abrir pull requests e muito mais — automaticamente.
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /roadmap -->
+
+        <p style="font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin:26px 0 8px;">
+          // Links para começar</p>
+
+        <div class="llist">
+          <a class="lrow" href="https://claude.ai" target="_blank">
+            <div>
+              <div class="ll">Plataforma</div>claude.ai
+            </div><span class="larr">↗</span>
+          </a>
+          <a class="lrow" href="https://docs.anthropic.com/claude-code" target="_blank">
+            <div>
+              <div class="ll">Documentação oficial</div>docs.anthropic.com/claude-code
+            </div><span class="larr">↗</span>
+          </a>
+          <a class="lrow" href="https://console.anthropic.com" target="_blank">
+            <div>
+              <div class="ll">Criar API Key</div>console.anthropic.com
+            </div><span class="larr">↗</span>
+          </a>
+          <a class="lrow" href="https://discord.gg/anthropic" target="_blank">
+            <div>
+              <div class="ll">Comunidade Discord</div>discord.gg/anthropic
+            </div><span class="larr">↗</span>
+          </a>
+          <a class="lrow" href="https://instagram.com/miguelito.ai" target="_blank">
+            <div>
+              <div class="ll">Mais conteúdo gratuito</div>@miguelito.ai no Instagram
+            </div><span class="larr">↗</span>
+          </a>
+        </div>
+      </section>
+
+      <!-- CLOSING -->
+      <div class="closing">
+        <p>Você chegou até aqui. Isso já é mais do que a maioria das pessoas vai fazer.</p>
+        <p>O Claude Code não é magia — é uma ferramenta poderosa que qualquer pessoa pode aprender a usar. Comece
+          pequeno, explore com curiosidade e, em poucas semanas, você vai se surpreender com o que consegue criar.</p>
+        <p class="sig">Bons projetos! — Miguelito 🚀</p>
+      </div>
+
+    </div><!-- /cx -->
+
+    <footer>
+      <div class="cx">
+        <p class="ft">instagram.com/miguelito.ai · Guia Gratuito de Claude Code · 2026</p>
+      </div>
+    </footer>
+
+  </div><!-- /main -->
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    // ── Supabase Init ──
+    const SUPABASE_URL = "https://oeuogaoixspwdusqisqy.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9ldW9nYW9peHNwd2R1c3Fpc3F5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIwNTk4MDAsImV4cCI6MjA4NzYzNTgwMH0.GPj0FTvXd7aAIIZibyPpGaZF6hlDHxbzd8s7mcHUkRA";
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // ── Step 1: check email ──
+    async function checkEmail() {
+      const emailEl = document.getElementById('fe1');
+      const email = emailEl.value.trim().toLowerCase();
+      const err = document.getElementById('gerr1');
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!re.test(email)) { err.style.display = 'block'; return; }
+      err.style.display = 'none';
+
+      const btn = document.querySelector('#gstep1 .gate-btn');
+      const oldText = btn.textContent;
+      btn.textContent = "Buscando...";
+      btn.disabled = true;
+
+      try {
+        const { data, error } = await supabase
+          .from('cadastros_guiaclaude')
+          .select('nome')
+          .eq('email', email)
+          .maybeSingle();
+
+        if (data) {
+          unlockContent(data.nome || email.split('@')[0]);
+        } else {
+          document.getElementById('gemailtext').textContent = email;
+          document.getElementById('gstep1').classList.add('hidden');
+          document.getElementById('gstep2').classList.remove('hidden');
+        }
+      } catch (err) {
+        console.error('Erro na verificação:', err);
+        // Fallback
+        document.getElementById('gemailtext').textContent = email;
+        document.getElementById('gstep1').classList.add('hidden');
+        document.getElementById('gstep2').classList.remove('hidden');
+      } finally {
+        btn.textContent = oldText;
+        btn.disabled = false;
+      }
+    }
+
+    function goBack() {
+      document.getElementById('gstep2').classList.add('hidden');
+      document.getElementById('gstep1').classList.remove('hidden');
+    }
+
+    // ── Step 2: full registration ──
+    async function submitGate() {
+      const name = document.getElementById('fn').value.trim();
+      const email = document.getElementById('fe1').value.trim().toLowerCase();
+      const wpp = document.getElementById('fw').value.trim();
+      const err = document.getElementById('gerr2');
+
+      if (!name) { err.style.display = 'block'; return; }
+      err.style.display = 'none';
+
+      const btn = document.querySelector('#gstep2 .gate-btn');
+      const oldText = btn.textContent;
+      btn.textContent = "Verificando...";
+      btn.disabled = true;
+
+      try {
+        const { error } = await supabase
+          .from('cadastros_guiaclaude')
+          .insert([{ email: email, nome: name, whatsapp: wpp }]);
+
+        if (error) console.error("Erro no cadastro:", error);
+        unlockContent(name);
+      } catch (e) {
+        console.error(e);
+        unlockContent(name);
+      } finally {
+        btn.textContent = oldText;
+        btn.disabled = false;
+      }
+    }
+
+    function unlockContent(name) {
+      const firstName = name.split(' ')[0];
+      document.getElementById('hname').textContent = 'Olá, ' + firstName + '! Bem-vindo(a) 👋';
+      document.getElementById('gate').style.display = 'none';
+      document.getElementById('main').style.display = 'block';
+      window.scrollTo(0, 0);
+    }
+
+    // Enter key support
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Enter') return;
+      if (!document.getElementById('gstep2').classList.contains('hidden')) submitGate();
+      else checkEmail();
+    });
+
+    // ── Progress + dots ──
+    const secIds = ['s1', 's2', 's3', 's4', 's5'];
+    window.addEventListener('scroll', () => {
+      const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+      document.getElementById('pbar').style.width = pct + '%';
+      secIds.forEach((id, i) => {
+        const el = document.getElementById(id);
+        if (el && el.getBoundingClientRect().top < window.innerHeight * 0.6) {
+          document.getElementById('pd' + (i + 1)).classList.add('on');
+        }
+      });
+    });
+
+    // ── Plan accordion ──
+    function tp(hd) {
+      const bd = hd.nextElementSibling;
+      const isOpen = bd.classList.contains('op');
+      document.querySelectorAll('.phd').forEach(h => { h.classList.remove('op'); h.querySelector('.chv').style.transform = ''; });
+      document.querySelectorAll('.pbd').forEach(b => b.classList.remove('op'));
+      if (!isOpen) { hd.classList.add('op'); hd.querySelector('.chv').style.transform = 'rotate(180deg)'; bd.classList.add('op'); }
+    }
+
+    // ── Copy button ──
+    function cp(btn, text) {
+      navigator.clipboard.writeText(text).then(() => {
+        const orig = btn.innerHTML;
+        btn.innerHTML = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Copiado!`;
+        btn.classList.add('ok');
+        setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('ok'); }, 2200);
+      });
+    }
+  </script>
+
+</body>
+
+</html>

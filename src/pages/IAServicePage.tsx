@@ -13,13 +13,16 @@ import {
     Activity,
     Play,
     Layout,
-    Send
+    Send,
+    FileText,
+    Image as ImageIcon
 } from "lucide-react";
 import { FadeIn } from "../components/Shared";
 
 const IAServicePage = () => {
     const [form, setForm] = useState({ nome: '', empresa: '', whatsapp: '' });
     const [enviado, setEnviado] = useState(false);
+    const [investimento, setInvestimento] = useState(1000);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -389,42 +392,280 @@ const IAServicePage = () => {
                 </div>
             </section>
 
-            {/* SECTION - PARA QUEM É E NÃO É */}
-            <section className="py-24 px-6 border-b border-gray-100">
-                <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
-                    <FadeIn>
-                        <div className="bg-white p-10 rounded-3xl border border-gray-200 shadow-sm h-full relative overflow-hidden">
-                            <h3 className="text-3xl font-bold text-gray-900 mb-8">Para Quem É</h3>
-                            <ul className="space-y-6">
-                                {[
-                                    "Especialistas que querem produzir mais sem gravar diariamente",
-                                    "Marcas que desejam constância",
-                                    "Empresas que buscam eficiência na criação de conteúdo",
-                                    "Criadores que precisam escalar produção sem expandir equipe"
-                                ].map((text, i) => (
-                                    <li key={i} className="flex gap-4 items-center text-gray-600 font-medium">
-                                        <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center shrink-0">
-                                            <Check className="w-4 h-4 text-emerald-600" />
+            {/* SECTION - INVESTIMENTO & PLANOS */}
+            <section id="investimento" className="py-24 px-6 bg-gray-50 border-b border-gray-100">
+                <div className="max-w-7xl mx-auto">
+                    <div className="text-center mb-16 max-w-2xl mx-auto">
+                        <div className="inline-block px-4 py-1.5 bg-emerald-100 text-emerald-700 text-xs font-bold rounded-full uppercase tracking-widest mb-4">
+                            Assinatura Contínua
+                        </div>
+                        <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-gray-900 mb-6">
+                            Hub Ativo Mensal + Créditos
+                        </h2>
+                        <p className="text-gray-500 text-lg font-light">
+                            Sua agência in-house focada em inteligência sob demanda, zero atrito.
+                        </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
+                        {[
+                            {
+                                name: "Starter",
+                                price: "5.000",
+                                desc: "Organização básica para impulsionar a linha editorial.",
+                                items: ["Gestão e Organização", "Briefing estruturado", "Entrega documentada"],
+                                accent: false
+                            },
+                            {
+                                name: "Growth",
+                                price: "9.000",
+                                desc: "Foco em estruturação robusta e alinhamento tático impecável.",
+                                items: ["Tudo do Starter", "Estruturação editorial", "Dashboard de acompanhamento", "Relatórios de consumo"],
+                                accent: true
+                            },
+                            {
+                                name: "Scale",
+                                price: "12.000",
+                                desc: "Dominância máxima. Sem fricção, com todas esferas abordadas.",
+                                items: ["Tudo do Growth", "Clone de avatar custom exclusivo", "Aplicações de tradução", "Sincronia multiplataforma"],
+                                accent: false
+                            }
+                        ].map((plan, i) => (
+                            <FadeIn key={i} delay={i * 0.1} className="flex">
+                                <div className={`w-full bg-white p-10 rounded-3xl border flex flex-col h-full relative ${plan.accent ? 'border-emerald-500 shadow-xl shadow-emerald-500/10' : 'border-gray-200 shadow-sm'}`}>
+                                    {plan.accent && (
+                                        <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-emerald-500 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest">
+                                            Mais Escolhido
                                         </div>
-                                        {text}
-                                    </li>
-                                ))}
-                            </ul>
+                                    )}
+                                    <h3 className={`text-xl font-bold mb-4 ${plan.accent ? 'text-emerald-500' : 'text-gray-900'}`}>{plan.name}</h3>
+                                    <div className="mb-6">
+                                        <span className="text-4xl font-bold text-gray-900">R$ {plan.price}</span>
+                                        <span className="text-gray-500">/mês</span>
+                                    </div>
+                                    <p className="text-gray-500 text-sm font-light mb-8">{plan.desc}</p>
+
+                                    <ul className="space-y-4 mb-8 flex-grow">
+                                        {plan.items.map((item, idx) => (
+                                            <li key={idx} className="flex gap-3 text-sm text-gray-600">
+                                                <Check className={`w-5 h-5 shrink-0 ${plan.accent ? 'text-emerald-500' : 'text-emerald-500/50'}`} />
+                                                {item}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            </FadeIn>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* SECTION - SIMULADOR */}
+            <section id="simulador" className="py-24 px-6 bg-white border-b border-gray-100">
+                <div className="max-w-7xl mx-auto">
+                    <FadeIn>
+                        <div className="text-center mb-16 max-w-2xl mx-auto">
+                            <div className="inline-block px-4 py-1.5 bg-emerald-100 text-emerald-700 text-xs font-bold rounded-full uppercase tracking-widest mb-4">
+                                Potencial de Créditos
+                            </div>
+                            <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-gray-900 mb-6">
+                                O que você faz com R$ 1.000 em créditos?
+                            </h2>
+                            <p className="text-gray-500 text-lg font-light">
+                                Arraste o botão para simular. Entenda o volume de produção de Vídeos, Imagens e Clones que o seu orçamento permite criar.
+                            </p>
                         </div>
                     </FadeIn>
 
                     <FadeIn delay={0.2}>
-                        <div className="bg-gray-50 p-10 rounded-3xl border border-gray-200 h-full flex flex-col justify-center">
-                            <h3 className="text-3xl font-bold text-gray-900 mb-6">Investimento</h3>
-                            <p className="text-gray-500 font-light leading-relaxed mb-6">
-                                Cada projeto é único. O investimento é definido a partir do diagnóstico estratégico, onde mapeamos seus objetivos, estrutura atual e o que é necessário para escalar sua presença digital com IA.
-                            </p>
-                            <a
-                                href="#contato"
-                                className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-500 text-white rounded-full font-bold text-sm hover:bg-emerald-600 transition-colors w-fit"
-                            >
-                                Solicitar diagnóstico <ArrowRight className="w-4 h-4" />
-                            </a>
+                        <div className="max-w-4xl mx-auto bg-gray-50 p-10 md:p-14 rounded-3xl border border-gray-200 shadow-sm relative overflow-hidden">
+                            <div className="mb-12 relative z-10">
+                                <label className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-6 gap-2">
+                                    <span className="text-sm font-bold text-gray-500 uppercase tracking-widest">Seu Orçamento Base (R$)</span>
+                                    <span className="text-4xl md:text-5xl font-bold text-emerald-500">
+                                        R$ {investimento.toLocaleString('pt-BR')}
+                                    </span>
+                                </label>
+                                <input
+                                    type="range"
+                                    min="1000"
+                                    max="20000"
+                                    step="1000"
+                                    value={investimento}
+                                    onChange={(e) => setInvestimento(Number(e.target.value))}
+                                    className="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-emerald-500"
+                                />
+                                <div className="flex justify-between text-xs font-bold text-gray-400 mt-3">
+                                    <span>R$ 1.000</span>
+                                    <span>R$ 20.000</span>
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
+                                <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] flex flex-col items-center text-center hover:border-emerald-200 transition-colors">
+                                    <Play className="w-8 h-8 text-emerald-500 mb-4" />
+                                    <div className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Vídeos Curtos (30s)</div>
+                                    <div className="text-4xl font-bold text-gray-900 mb-2">{Math.floor(investimento / 45)}<span className="text-2xl text-gray-400 font-light">x</span></div>
+                                    <div className="text-xs text-gray-500 mt-auto">Vídeos criados com IA<br />(Ref: R$ 45/cada)</div>
+                                </div>
+                                <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] flex flex-col items-center text-center hover:border-emerald-200 transition-colors">
+                                    <ImageIcon className="w-8 h-8 text-sky-500 mb-4" />
+                                    <div className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Imagens Geradas</div>
+                                    <div className="text-4xl font-bold text-gray-900 mb-2">{Math.floor(investimento / 0.42)}<span className="text-2xl text-gray-400 font-light">x</span></div>
+                                    <div className="text-xs text-gray-500 mt-auto">Imagens em Alta Resolução<br />(Ref: R$ 0,42/cada)</div>
+                                </div>
+                                <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] flex flex-col items-center text-center hover:border-emerald-200 transition-colors">
+                                    <RefreshCw className="w-8 h-8 text-amber-500 mb-4" />
+                                    <div className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Clones Digitais (30s)</div>
+                                    <div className="text-4xl font-bold text-gray-900 mb-2">{Math.floor(investimento / 60)}<span className="text-2xl text-gray-400 font-light">x</span></div>
+                                    <div className="text-xs text-gray-500 mt-auto">Vídeos do seu Clone<br />(Ref: R$ 60/cada)</div>
+                                </div>
+                            </div>
+                        </div>
+                    </FadeIn>
+                </div>
+            </section>
+
+            {/* SECTION - PROJETOS SOB DEMANDA */}
+            <section id="projetos" className="py-24 px-6 bg-white border-b border-gray-100">
+                <div className="max-w-7xl mx-auto">
+                    <div className="mb-16 text-center max-w-2xl mx-auto">
+                        <div className="inline-block px-4 py-1.5 bg-sky-100 text-sky-700 text-xs font-bold rounded-full uppercase tracking-widest mb-4">
+                            Projetos Standalone
+                        </div>
+                        <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-gray-900 mb-6">
+                            Serviços Independentes
+                        </h2>
+                        <p className="text-xl text-gray-500 font-light">
+                            Não consumimos créditos para grandes entregáveis. Eles têm um valor fixo definido, garantindo escopo e qualidade impecável.
+                        </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        {/* LANDING PAGES */}
+                        <FadeIn delay={0.1}>
+                            <div className="bg-white p-10 rounded-3xl border border-gray-200 shadow-sm flex flex-col h-full hover:border-sky-300 transition-colors">
+                                <Layout className="w-10 h-10 text-sky-500 mb-6" />
+                                <h3 className="text-2xl font-bold text-gray-900 mb-2">Landing Pages</h3>
+                                <p className="text-gray-500 text-sm mb-6 flex-grow">Páginas de altíssima conversão focadas em captura de leads ou vendas diretas.</p>
+                                <div className="pt-6 border-t border-gray-100 mt-auto">
+                                    <p className="text-sm text-gray-400 uppercase tracking-widest font-bold mb-1">A partir de</p>
+                                    <p className="text-3xl font-bold text-gray-900">R$ 1.000</p>
+                                </div>
+                            </div>
+                        </FadeIn>
+
+                        {/* SITES EMPRESARIAIS */}
+                        <FadeIn delay={0.2}>
+                            <div className="bg-white p-10 rounded-3xl border border-gray-200 shadow-sm flex flex-col h-full hover:border-sky-300 transition-colors">
+                                <Box className="w-10 h-10 text-sky-500 mb-6" />
+                                <h3 className="text-2xl font-bold text-gray-900 mb-2">Sites Empresariais</h3>
+                                <p className="text-gray-500 text-sm mb-6 flex-grow">Estrutura corporativa completa, com múltiplas páginas, sistema estético robusto e CMS.</p>
+                                <div className="pt-6 border-t border-gray-100 mt-auto">
+                                    <p className="text-sm text-gray-400 uppercase tracking-widest font-bold mb-1">A partir de</p>
+                                    <p className="text-3xl font-bold text-gray-900">R$ 3.000</p>
+                                </div>
+                            </div>
+                        </FadeIn>
+
+                        {/* APRESENTAÇÕES */}
+                        <FadeIn delay={0.3}>
+                            <div className="bg-white p-10 rounded-3xl border border-gray-200 shadow-sm flex flex-col h-full hover:border-sky-300 transition-colors">
+                                <FileText className="w-10 h-10 text-sky-500 mb-6" />
+                                <h3 className="text-2xl font-bold text-gray-900 mb-2">Apresentações</h3>
+                                <p className="text-gray-500 text-sm mb-6 flex-grow">Pitch decks e apresentações comerciais criadas com visual premium e argumentos de peso.</p>
+                                <div className="pt-6 border-t border-gray-100 mt-auto">
+                                    <p className="text-sm text-gray-400 uppercase tracking-widest font-bold mb-1">A partir de</p>
+                                    <p className="text-3xl font-bold text-gray-900">R$ 500</p>
+                                </div>
+                            </div>
+                        </FadeIn>
+                    </div>
+                </div>
+            </section>
+
+            {/* SECTION - TABELA DE CONSUMO */}
+            <section id="tabela-consumo" className="py-24 px-6 bg-gray-50 border-b border-gray-100">
+                <div className="max-w-7xl mx-auto">
+                    <FadeIn>
+                        <div className="bg-white rounded-3xl border border-gray-200 overflow-hidden shadow-sm mb-20">
+                            <div className="p-8 md:p-10 border-b border-gray-100 bg-white">
+                                <h3 className="text-2xl font-bold text-gray-900 mb-2">Tabela de Consumo / Preços Base</h3>
+                                <p className="text-gray-500 font-light text-sm">Esta é a tabela unitária que abate seus créditos. Os valores são válidos tanto para pacotes quanto serviços sob demanda. Créditos não utilizados viram rollover automático.</p>
+                            </div>
+                            <div className="overflow-x-auto">
+                                <table className="w-full text-left border-collapse min-w-[600px]">
+                                    <thead>
+                                        <tr className="border-b border-gray-100 bg-white">
+                                            <th className="py-4 px-6 md:px-10 font-medium text-gray-400 text-sm">Formato</th>
+                                            <th className="py-4 px-6 md:px-10 font-medium text-gray-400 text-sm">Unidade</th>
+                                            <th className="py-4 px-6 md:px-10 font-medium text-gray-400 text-sm">Preço (Créditos)</th>
+                                            <th className="py-4 px-6 md:px-10 font-medium text-gray-400 text-sm">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-gray-50">
+                                        {[
+                                            { fmt: "🎬 Vídeo gerado por IA", uni: "por segundo", prc: "R$ 1,50 / seg", sts: "Ativo", color: "text-emerald-700 bg-emerald-50 border-emerald-100" },
+                                            { fmt: "🎬 Vídeo 30 segundos", uni: "por peça", prc: "R$ 45,00", sts: "Ativo", color: "text-emerald-700 bg-emerald-50 border-emerald-100" },
+                                            { fmt: "🎬 Vídeo 2 minutos", uni: "por peça", prc: "R$ 180,00", sts: "Ativo", color: "text-emerald-700 bg-emerald-50 border-emerald-100" },
+                                            { fmt: "🖼️ Imagem gerada por IA", uni: "por imagem", prc: "R$ 0,42", sts: "Ativo", color: "text-emerald-700 bg-emerald-50 border-emerald-100" },
+                                            { fmt: "🧬 Clone — Vídeo 30s", uni: "por peça", prc: "R$ 60,00", sts: "Clone IA", color: "text-sky-700 bg-sky-50 border-sky-100" },
+                                            { fmt: "🧬 Clone — Vídeo 2 min", uni: "por peça", prc: "R$ 240,00", sts: "Clone IA", color: "text-sky-700 bg-sky-50 border-sky-100" },
+                                            { fmt: "🧬 Clone Ultra-realista 30s", uni: "por peça", prc: "R$ 137,00", sts: "Premium", color: "text-indigo-700 bg-indigo-50 border-indigo-100" },
+                                            { fmt: "🧬 Clone Ultra-realista 2min", uni: "por peça", prc: "R$ 548,00", sts: "Premium", color: "text-indigo-700 bg-indigo-50 border-indigo-100" },
+                                            { fmt: "✂️ Corte & Distribuição", uni: "por 1000 views (CPMV)", prc: "R$ 1,00 - 1,50", sts: "Serviço Extra", color: "text-amber-700 bg-amber-50 border-amber-100" },
+                                        ].map((row, i) => (
+                                            <tr key={i} className="hover:bg-gray-50 transition-colors">
+                                                <td className="py-4 px-6 md:px-10 font-bold text-gray-900 text-sm whitespace-nowrap">{row.fmt}</td>
+                                                <td className="py-4 px-6 md:px-10 text-gray-500 text-sm whitespace-nowrap">{row.uni}</td>
+                                                <td className="py-4 px-6 md:px-10 font-bold text-gray-900 text-sm whitespace-nowrap">{row.prc}</td>
+                                                <td className="py-4 px-6 md:px-10 whitespace-nowrap">
+                                                    <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold border ${row.color}`}>
+                                                        {row.sts}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </FadeIn>
+
+                    <FadeIn delay={0.2}>
+                        <div className="bg-emerald-50 rounded-3xl p-10 md:p-14 border border-emerald-100 flex flex-col lg:flex-row items-center gap-12 mt-20">
+                            <div className="lg:w-1/2">
+                                <div className="inline-block px-4 py-1.5 bg-emerald-200/50 text-emerald-800 text-xs font-bold rounded-full uppercase tracking-widest mb-6">
+                                    Estratégia Separada e Autônoma
+                                </div>
+                                <h3 className="text-3xl md:text-5xl font-bold text-gray-900 mb-6">Cortes & Tráfego</h3>
+                                <p className="text-gray-600 font-light leading-relaxed mb-8">
+                                    Corte e Distribuição funcionam de forma independente da produção orgânica. Transformamos seus melhores vídeos em recortes cirúrgicos magnéticos para escalar vendas via anúncios curtos. Um funil validado de 1 Milhão de visualizações focadas.
+                                </p>
+                                <a
+                                    href="#contato"
+                                    className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-500 text-white rounded-full font-bold text-sm hover:bg-emerald-600 transition-colors"
+                                >
+                                    Quero orçar distribuição <ArrowRight className="w-4 h-4" />
+                                </a>
+                            </div>
+                            <div className="lg:w-1/2 flex flex-col gap-4 w-full">
+                                <div className="bg-white p-6 rounded-2xl border border-emerald-100 shadow-sm flex flex-col items-center justify-center text-center">
+                                    <span className="text-3xl font-bold text-emerald-600 mb-1">R$ 1,00 a 1,50</span>
+                                    <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">CPMV (Custo p/ 1000 Views)</span>
+                                    <span className="text-[10px] text-gray-400 mt-2 font-medium">*(vs Mín. R$ 6,00 no Meta Ads)*</span>
+                                </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="bg-white p-6 rounded-2xl border border-emerald-100 shadow-sm flex flex-col items-center justify-center text-center">
+                                        <span className="text-3xl font-bold text-emerald-600 mb-1">12h</span>
+                                        <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">Ciclo rápido</span>
+                                    </div>
+                                    <div className="bg-white p-6 rounded-2xl border border-emerald-100 shadow-sm flex flex-col items-center justify-center text-center">
+                                        <span className="text-3xl font-bold text-emerald-600 mb-1">1M+</span>
+                                        <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">Views mês</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </FadeIn>
                 </div>

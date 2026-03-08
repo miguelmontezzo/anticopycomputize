@@ -44,6 +44,7 @@ import AdminCalendarsPage from "./pages/AdminCalendarsPage";
 import AdminCalendarPage from "./pages/AdminCalendarPage";
 import AdminCalendarEditorPage from "./pages/AdminCalendarEditorPage";
 import ClientCalendarPage from "./pages/ClientCalendarPage";
+import GuiaClaudePage from "./pages/GuiaClaudePage";
 
 const ComputizePage = () => {
 
@@ -454,7 +455,7 @@ const ComputizePage = () => {
   );
 };
 
-const HomePage: React.FC = () => {
+const ACCPage: React.FC = () => {
   useEffect(() => {
     document.title = "Anti Copy Club — Hub Criativo com IA";
     return () => {
@@ -488,11 +489,27 @@ const HomePage: React.FC = () => {
   );
 };
 
+const HomePage: React.FC = () => {
+  return (
+    <div className="min-h-screen bg-black flex items-center justify-center relative overflow-hidden">
+      {/* Subtle background glow */}
+      <div className="absolute inset-0 pointer-events-none z-0 flex items-center justify-center">
+        <div className="w-[40%] h-[40%] glow-mixed opacity-20" />
+      </div>
+
+      <h1 className="text-white text-3xl md:text-5xl font-bold tracking-[0.2em] uppercase z-10 transition-opacity duration-1000">
+        Anti Copy Club
+      </h1>
+    </div>
+  );
+};
+
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/acc" element={<ACCPage />} />
         <Route path="/computize" element={<ComputizePage />} />
         <Route path="/computize/emp" element={<EmpPage />} />
         <Route path="/emp/view/:id" element={<EmpResponseViewPage />} />
@@ -525,6 +542,7 @@ export default function App() {
         <Route path="/:slug/emp" element={<EmpPage />} />
         <Route path="/metodoEMP" element={<MetodoEMPPage />} />
         <Route path="/eleicao" element={<EleicaoPage />} />
+        <Route path="/miguelitoai/guiaclaude" element={<GuiaClaudePage />} />
         {/* Fallback to home */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
