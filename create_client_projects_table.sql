@@ -15,13 +15,16 @@ alter table public.emp_responses
 
 create index if not exists idx_emp_responses_client_slug on public.emp_responses(client_slug);
 
--- RLS básica (ajuste conforme sua política de segurança)
+-- RLS básica
 alter table public.client_projects enable row level security;
 
-create policy if not exists "client_projects_read_authenticated"
+-- Recria policies de forma idempotente (CREATE POLICY IF NOT EXISTS não existe no PostgreSQL)
+drop policy if exists "client_projects_read_authenticated" on public.client_projects;
+create policy "client_projects_read_authenticated"
 on public.client_projects for select
 using (auth.role() = 'authenticated');
 
-create policy if not exists "client_projects_insert_authenticated"
+drop policy if exists "client_projects_insert_authenticated" on public.client_projects;
+create policy "client_projects_insert_authenticated"
 on public.client_projects for insert
 with check (auth.role() = 'authenticated');
