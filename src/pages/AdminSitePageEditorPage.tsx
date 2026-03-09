@@ -26,7 +26,7 @@ export default function AdminSitePageEditorPage() {
   const loadContent = async () => {
     setLoading(true);
     if (!supabase) { setLoading(false); return; }
-    const { data } = await supabase.from('site_pages').select('sections').eq('slug', slug).single();
+    const { data } = await supabase.from('site_pages').select('sections').eq('slug', slug).maybeSingle();
     if (data?.sections) {
       setContent(data.sections as Record<string, Record<string, string>>);
     }
@@ -126,8 +126,8 @@ export default function AdminSitePageEditorPage() {
                   key={key}
                   onClick={() => setSectionKey(key)}
                   className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${sectionKey === key
-                      ? 'bg-black text-white font-medium'
-                      : 'text-gray-600 hover:bg-gray-100'
+                    ? 'bg-black text-white font-medium'
+                    : 'text-gray-600 hover:bg-gray-100'
                     }`}
                 >
                   {sec.label}

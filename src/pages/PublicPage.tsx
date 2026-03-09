@@ -54,7 +54,7 @@ export default function PublicPage() {
             .eq('page_id', pageData.id)
             .order('created_at', { ascending: false })
             .limit(1)
-            .single();
+            .maybeSingle();
 
         if (formData) {
             setForm(formData);

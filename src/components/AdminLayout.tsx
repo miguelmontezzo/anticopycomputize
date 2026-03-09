@@ -58,7 +58,7 @@ export default function AdminLayout() {
           .select('id, name, role')
           .eq('email', email)
           .eq('is_active', true)
-          .single();
+          .maybeSingle();
 
         if (emp) {
           setRole(emp.role as EmployeeRole);
@@ -159,11 +159,10 @@ export default function AdminLayout() {
               key={item.path}
               to={item.path}
               onClick={() => setSidebarOpen(false)}
-              className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
-                active
+              className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-all ${active
                   ? 'bg-black text-white'
                   : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
-              }`}
+                }`}
             >
               {item.icon}
               {item.label}
