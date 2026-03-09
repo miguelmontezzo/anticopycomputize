@@ -259,11 +259,10 @@ export default function ContentCalendarBoard({ slug, adminMode = false }: { slug
             <button
               key={f.key}
               onClick={() => setFormatFilter(f.key as typeof formatFilter)}
-              className={`px-3 py-1.5 rounded-full border text-sm transition-colors ${
-                formatFilter === f.key
+              className={`px-3 py-1.5 rounded-full border text-sm transition-colors ${formatFilter === f.key
                   ? 'border-cyan-400/40 bg-cyan-400/10 text-cyan-200'
                   : 'border-white/20 text-white/60 hover:text-white hover:bg-white/5'
-              }`}
+                }`}
             >
               {f.label}
             </button>
@@ -310,7 +309,7 @@ export default function ContentCalendarBoard({ slug, adminMode = false }: { slug
                       <p className="text-sm text-white/70">Story {idx + 1}</p>
                       <span className={`text-xs px-2 py-0.5 rounded-full border ${statusClasses(sr.status)}`}>{sr.status}</span>
                     </div>
-                    <p className="text-sm text-white/60 leading-relaxed flex-1">{story}</p>
+                    <p className="text-sm text-white/60 leading-relaxed flex-1 whitespace-pre-wrap">{story}</p>
                     {sr.feedback && (
                       <p className="text-xs text-rose-300 border-l-2 border-rose-500/40 pl-2">
                         {sr.feedback}
@@ -364,7 +363,7 @@ export default function ContentCalendarBoard({ slug, adminMode = false }: { slug
                         {item.post_status}
                       </span>
                     </div>
-                    <p className="text-sm text-white/65 leading-relaxed">{item.caption}</p>
+                    <p className="text-sm text-white/65 leading-relaxed whitespace-pre-wrap">{item.caption}</p>
                     {item.post_feedback && (
                       <p className="text-xs text-rose-300 border-l-2 border-rose-500/40 pl-2">
                         {item.post_feedback}
@@ -412,7 +411,7 @@ export default function ContentCalendarBoard({ slug, adminMode = false }: { slug
                                   {sr.status}
                                 </span>
                               </div>
-                              <p className="text-xs text-white/55 leading-relaxed mb-2">{story}</p>
+                              <p className="text-xs text-white/55 leading-relaxed mb-2 whitespace-pre-wrap">{story}</p>
                               {sr.feedback && (
                                 <p className="text-xs text-rose-300 border-l-2 border-rose-500/40 pl-2 mb-2">
                                   {sr.feedback}
