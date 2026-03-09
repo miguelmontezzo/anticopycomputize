@@ -23,19 +23,15 @@ import {
 
 import { FadeIn, VideoPlayer } from "./components/Shared";
 import IAServicePage from "./pages/IAServicePage";
-import EmpPage from "./pages/EmpPage";
-import AdminEmpPage from "./pages/AdminEmpPage";
 import AdminLoginPage from "./pages/AdminLoginPage";
 import AdminDashboardPage from "./pages/AdminDashboardPage";
 import AdminLayout from "./components/AdminLayout";
-import EmpResponseViewPage from "./pages/EmpResponseViewPage";
 import MetodoEMPPage from "./pages/MetodoEMPPage";
 import AdminClientsPage from "./pages/AdminClientsPage";
 import AdminClientRoutesPage from "./pages/AdminClientRoutesPage";
-import AdminPagesPage from "./pages/AdminPagesPage";
-import AdminFormsPage from "./pages/AdminFormsPage";
-import AdminFormBuilderPage from "./pages/AdminFormBuilderPage";
-import AdminFormResponsesPage from "./pages/AdminFormResponsesPage";
+import AdminClientProfilePage from "./pages/AdminClientProfilePage";
+import AdminTasksPage from "./pages/AdminTasksPage";
+import AdminTeamPage from "./pages/AdminTeamPage";
 import PublicPage from "./pages/PublicPage";
 import ClientIAServicePage from "./pages/ClientIAServicePage";
 import ClientAnalysisPage from "./pages/ClientAnalysisPage";
@@ -511,8 +507,6 @@ export default function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/acc" element={<ACCPage />} />
         <Route path="/computize" element={<ComputizePage />} />
-        <Route path="/computize/emp" element={<EmpPage />} />
-        <Route path="/emp/view/:id" element={<EmpResponseViewPage />} />
 
         {/* Dynamic Public Pages */}
         <Route path="/p/:slug" element={<PublicPage />} />
@@ -525,11 +519,9 @@ export default function App() {
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<AdminDashboardPage />} />
           <Route path="clients" element={<AdminClientsPage />} />
-          <Route path="pages" element={<AdminPagesPage />} />
-          <Route path="forms" element={<AdminFormsPage />} />
-          <Route path="forms/:id" element={<AdminFormBuilderPage />} />
-          <Route path="forms/:id/responses" element={<AdminFormResponsesPage />} />
-          <Route path="emp" element={<AdminEmpPage />} />
+          <Route path="cliente/:id" element={<AdminClientProfilePage />} />
+          <Route path="tarefas" element={<AdminTasksPage />} />
+          <Route path="equipe" element={<AdminTeamPage />} />
           <Route path="clientes" element={<AdminClientRoutesPage />} />
           <Route path="calendarios" element={<AdminCalendarsPage />} />
           <Route path="calendario/:slug" element={<AdminCalendarPage />} />
@@ -539,7 +531,6 @@ export default function App() {
         <Route path="/ia-service" element={<IAServicePage />} />
         <Route path="/:slug/ia-service" element={<ClientIAServicePage />} />
         <Route path="/:slug/analise" element={<ClientAnalysisPage />} />
-        <Route path="/:slug/emp" element={<EmpPage />} />
         <Route path="/metodoEMP" element={<MetodoEMPPage />} />
         <Route path="/eleicao" element={<EleicaoPage />} />
         <Route path="/miguelitoai/guiaclaude" element={<GuiaClaudePage />} />

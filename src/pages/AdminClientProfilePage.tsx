@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import {
-  ArrowLeft, CalendarDays, ClipboardList, FileText, Loader2,
+  ArrowLeft, Loader2,
   Globe, Plus, ExternalLink, Copy, Check, Edit2,
   ToggleLeft, ToggleRight, Send, Bell, Trash2
 } from 'lucide-react';
@@ -34,14 +34,8 @@ type Calendar = {
   status: string;
 };
 
-type Form = {
-  id: string;
-  title: string;
-  description: string | null;
-};
-
 const PLAN_TYPES = ['starter', 'growth', 'premium', 'enterprise'];
-const TABS = ['Visão Geral', 'Calendários', 'Formulários', 'EMP', 'Portal'] as const;
+const TABS = ['Visão Geral', 'Calendários', 'Portal'] as const;
 type Tab = typeof TABS[number];
 
 export default function AdminClientProfilePage() {
@@ -50,7 +44,6 @@ export default function AdminClientProfilePage() {
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState<Tab>('Visão Geral');
   const [calendars, setCalendars] = useState<Calendar[]>([]);
-  const [forms, setForms] = useState<Form[]>([]);
   const [copied, setCopied] = useState<string | null>(null);
 
   // Portal state
@@ -77,10 +70,9 @@ export default function AdminClientProfilePage() {
 
   const loadAll = async () => {
     setLoading(true);
-    const [cRes, calRes, formRes] = await Promise.all([
+    const [cRes, calRes] = await Promise.all([
       supabase.from('clients').select('*').eq('id', id).single(),
       supabase.from('content_calendars').select('*').eq('client_id', id).order('created_at', { ascending: false }),
-      supabase.from('forms').select('id,title,description').eq('client_id', id).order('created_at', { ascending: false }),
     ]);
 
     if (cRes.data) {
@@ -96,7 +88,6 @@ export default function AdminClientProfilePage() {
       });
     }
     if (calRes.data) setCalendars(calRes.data);
-    if (formRes.data) setForms(formRes.data as Form[]);
     setLoading(false);
   };
 
@@ -275,12 +266,12 @@ export default function AdminClientProfilePage() {
             <div className="text-sm text-gray-500 mt-1">Calendários</div>
           </Card>
           <Card>
-            <div className="text-2xl font-bold text-gray-900">{forms.length}</div>
-            <div className="text-sm text-gray-500 mt-1">Formulários</div>
-          </Card>
-          <Card>
             <div className="text-2xl font-bold text-gray-900">—</div>
             <div className="text-sm text-gray-500 mt-1">Tarefas abertas</div>
+          </Card>
+          <Card>
+            <div className="text-2xl font-bold text-gray-900">{client.plan_type || 'starter'}</div>
+            <div className="text-sm text-gray-500 mt-1">Plano</div>
           </Card>
 
           {client.oferta && (
@@ -297,7 +288,6 @@ export default function AdminClientProfilePage() {
                 {[
                   { label: 'Apresentação', url: `${origin}/${slug}/ia-service` },
                   { label: 'Análise', url: `${origin}/${slug}/analise` },
-                  { label: 'Form EMP', url: `${origin}/${slug}/emp` },
                   { label: 'Calendário público', url: `${origin}/calendario/${slug}` },
                 ].map(link => (
                   <div key={link.url} className="flex items-center justify-between bg-gray-50 border border-gray-100 rounded-lg px-3 py-2">
@@ -353,59 +343,6 @@ export default function AdminClientProfilePage() {
             </div>
           )}
         </div>
-      )}
-
-      {tab === 'Formulários' && (
-        <div>
-          <div className="flex justify-end mb-4">
-            <Link to="/admin/forms">
-              <Button icon={<Plus className="w-4 h-4" />} variant="secondary" size="sm">
-                Novo formulário
-              </Button>
-            </Link>
-          </div>
-          {forms.length === 0 ? (
-            <Card>
-              <div className="text-center py-8 text-gray-400 text-sm">
-                Nenhum formulário criado para este cliente.
-              </div>
-            </Card>
-          ) : (
-            <div className="space-y-3">
-              {forms.map(form => (
-                <Card key={form.id} className="flex items-center justify-between gap-4">
-                  <div>
-                    <div className="text-sm font-semibold text-gray-900">{form.title}</div>
-                    {form.description && (
-                      <div className="text-xs text-gray-500 mt-0.5">{form.description}</div>
-                    )}
-                  </div>
-                  <div className="flex items-center gap-2 shrink-0">
-                    <Link to={`/admin/forms/${form.id}`}>
-                      <Button variant="secondary" size="sm">Campos</Button>
-                    </Link>
-                    <Link to={`/admin/forms/${form.id}/responses`}>
-                      <Button variant="ghost" size="sm">Respostas</Button>
-                    </Link>
-                  </div>
-                </Card>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
-
-      {tab === 'EMP' && (
-        <Card>
-          <div className="text-sm text-gray-600 mb-4">
-            Visualize o diagnóstico EMP enviado por este cliente.
-          </div>
-          <Link to="/admin/emp">
-            <Button variant="secondary" icon={<FileText className="w-4 h-4" />}>
-              Ver Respostas EMP
-            </Button>
-          </Link>
-        </Card>
       )}
 
       {tab === 'Portal' && (
