@@ -41,6 +41,7 @@ import AdminCalendarPage from "./pages/AdminCalendarPage";
 import AdminCalendarEditorPage from "./pages/AdminCalendarEditorPage";
 import ClientCalendarPage from "./pages/ClientCalendarPage";
 import GuiaClaudePage from "./pages/GuiaClaudePage";
+import PropostaLuccoEmovePage from "./pages/PropostaLuccoEmovePage";
 
 const ComputizePage = () => {
 
@@ -534,6 +535,7 @@ export default function App() {
         <Route path="/metodoEMP" element={<MetodoEMPPage />} />
         <Route path="/eleicao" element={<EleicaoPage />} />
         <Route path="/miguelitoai/guiaclaude" element={<GuiaClaudePage />} />
+        <Route path="/lucaslucco/emove" element={<PropostaLuccoEmovePage />} />
         {/* Fallback to home */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
