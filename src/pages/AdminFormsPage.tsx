@@ -27,6 +27,7 @@ export default function AdminFormsPage() {
 
   const fetchData = async () => {
     setLoading(true);
+    if (!supabase) { setLoading(false); return; }
     const [formsRes, clientsRes, pagesRes] = await Promise.all([
       supabase.from('forms').select('*, clients(name), pages(title)').order('created_at', { ascending: false }),
       supabase.from('clients').select('*').order('name', { ascending: true }),

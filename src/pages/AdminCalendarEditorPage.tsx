@@ -82,6 +82,7 @@ export default function AdminCalendarEditorPage() {
 
   const loadData = async () => {
     setLoading(true);
+    if (!supabase) { setLoading(false); return; }
     const [calRes, itemsRes] = await Promise.all([
       supabase.from('content_calendars').select('*').eq('id', id).single(),
       supabase.from('content_calendar_items').select('*').eq('calendar_id', id).order('post_date', { ascending: true }),
@@ -234,9 +235,8 @@ export default function AdminCalendarEditorPage() {
               <button
                 key={item.id}
                 onClick={() => selectItem(item)}
-                className={`w-full text-left px-3 py-3 border-b border-gray-50 hover:bg-gray-50 transition-colors ${
-                  selectedId === item.id && !isNew ? 'bg-gray-100' : ''
-                }`}
+                className={`w-full text-left px-3 py-3 border-b border-gray-50 hover:bg-gray-50 transition-colors ${selectedId === item.id && !isNew ? 'bg-gray-100' : ''
+                  }`}
               >
                 <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0 flex-1">

@@ -40,6 +40,7 @@ export default function AdminCalendarsPage() {
 
   const load = async () => {
     setLoading(true);
+    if (!supabase) { setLoading(false); return; }
     const [cRes, calRes] = await Promise.all([
       supabase.from('clients').select('id,name').order('name', { ascending: true }),
       supabase.from('content_calendars').select('*').order('created_at', { ascending: false }),

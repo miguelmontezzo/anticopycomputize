@@ -49,7 +49,7 @@ export default function AdminClientProfilePage() {
   // Portal state
   const [togglingPortal, setTogglingPortal] = useState(false);
   const [sendingLink, setSendingLink] = useState(false);
-  const [portalNotifs, setPortalNotifs] = useState<{id:string;title:string;message:string|null;is_read:boolean;created_at:string}[]>([]);
+  const [portalNotifs, setPortalNotifs] = useState<{ id: string; title: string; message: string | null; is_read: boolean; created_at: string }[]>([]);
   const [notifsLoading, setNotifsLoading] = useState(false);
   const [newNotifOpen, setNewNotifOpen] = useState(false);
   const [newNotifTitle, setNewNotifTitle] = useState('');
@@ -70,6 +70,7 @@ export default function AdminClientProfilePage() {
 
   const loadAll = async () => {
     setLoading(true);
+    if (!supabase) { setLoading(false); return; }
     const [cRes, calRes] = await Promise.all([
       supabase.from('clients').select('*').eq('id', id).single(),
       supabase.from('content_calendars').select('*').eq('client_id', id).order('created_at', { ascending: false }),
@@ -247,11 +248,10 @@ export default function AdminClientProfilePage() {
           <button
             key={t}
             onClick={() => setTab(t)}
-            className={`px-4 py-2.5 text-sm font-medium whitespace-nowrap border-b-2 transition-colors ${
-              tab === t
+            className={`px-4 py-2.5 text-sm font-medium whitespace-nowrap border-b-2 transition-colors ${tab === t
                 ? 'border-black text-gray-900'
                 : 'border-transparent text-gray-500 hover:text-gray-700'
-            }`}
+              }`}
           >
             {t}
           </button>

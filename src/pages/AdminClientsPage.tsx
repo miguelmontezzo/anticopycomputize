@@ -37,6 +37,7 @@ export default function AdminClientsPage() {
 
   const fetchClients = async () => {
     setLoading(true);
+    if (!supabase) { setLoading(false); return; }
     const { data, error } = await supabase
       .from('clients')
       .select('*')

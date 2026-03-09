@@ -99,6 +99,7 @@ export default function ContentCalendarBoard({ slug, adminMode = false }: { slug
   };
 
   const persist = async (id: string, changes: object) => {
+    if (!supabase) { console.error('Supabase não configurado'); return; }
     setSavingId(id);
     const { error } = await supabase
       .from('content_calendar_items')
@@ -260,8 +261,8 @@ export default function ContentCalendarBoard({ slug, adminMode = false }: { slug
               key={f.key}
               onClick={() => setFormatFilter(f.key as typeof formatFilter)}
               className={`px-3 py-1.5 rounded-full border text-sm transition-colors ${formatFilter === f.key
-                  ? 'border-cyan-400/40 bg-cyan-400/10 text-cyan-200'
-                  : 'border-white/20 text-white/60 hover:text-white hover:bg-white/5'
+                ? 'border-cyan-400/40 bg-cyan-400/10 text-cyan-200'
+                : 'border-white/20 text-white/60 hover:text-white hover:bg-white/5'
                 }`}
             >
               {f.label}

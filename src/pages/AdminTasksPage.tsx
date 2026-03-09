@@ -68,6 +68,7 @@ export default function AdminTasksPage() {
 
   const loadAll = async () => {
     setLoading(true);
+    if (!supabase) { setLoading(false); return; }
     const [tasksRes, clientsRes, empsRes] = await Promise.all([
       supabase
         .from('tasks')

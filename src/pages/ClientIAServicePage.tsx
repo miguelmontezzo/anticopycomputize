@@ -10,6 +10,7 @@ export default function ClientIAServicePage() {
 
   useEffect(() => {
     (async () => {
+      if (!supabase) return;
       const { data } = await supabase.from('client_projects').select('nome,slug,oferta,analise_resumo').eq('slug', slug).maybeSingle();
       setClient(data as ClientProject | null);
     })();

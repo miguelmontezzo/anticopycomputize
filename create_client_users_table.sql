@@ -11,16 +11,25 @@ CREATE TABLE IF NOT EXISTS client_users (
 -- RLS
 ALTER TABLE client_users ENABLE ROW LEVEL SECURITY;
 
--- Usuário autenticado pode ler o próprio registro
+-- Usuário autenticado pode ler apenas o próprio registro
 CREATE POLICY "Users can read own client_user"
   ON client_users FOR SELECT TO authenticated
   USING (user_id = auth.uid());
 
--- Admins (via service role ou usuários autenticados) podem gerenciar todos
-CREATE POLICY "Authenticated can manage client_users"
-  ON client_users FOR ALL TO authenticated
-  USING (true) WITH CHECK (true);
+-- Usuário só pode criar vínculo com seu próprio user_id (auto-link no primeiro login)
+CREATE POLICY "Users can insert own client_user"
+  ON client_users FOR INSERT TO authenticated
+  WITH CHECK (user_id = auth.uid());
+
+-- Usuário pode deletar apenas o próprio vínculo (logout/unlink)
+CREATE POLICY "Users can delete own client_user"
+  ON client_users FOR DELETE TO authenticated
+  USING (user_id = auth.uid());
+
+-- Service role (Supabase functions / admin backend) pode gerenciar todos os vínculos
+-- Isso é aplicado automaticamente para a service_role key, sem precisar de policy explícita.
 
 -- Índices
 CREATE INDEX IF NOT EXISTS client_users_user_id_idx ON client_users(user_id);
 CREATE INDEX IF NOT EXISTS client_users_client_id_idx ON client_users(client_id);
+

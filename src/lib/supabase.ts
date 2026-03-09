@@ -12,4 +12,15 @@ if (!(globalThis as any).__supabaseInstance && supabaseUrl && supabaseAnonKey) {
     (globalThis as any).__supabaseInstance = createClient(supabaseUrl, supabaseAnonKey);
 }
 
-export const supabase: SupabaseClient = (globalThis as any).__supabaseInstance || null;
+/** Instância do Supabase. Pode ser null se as variáveis de ambiente não estiverem configuradas. */
+export const supabase: SupabaseClient | null = (globalThis as any).__supabaseInstance ?? null;
+
+/**
+ * Retorna a instância do Supabase garantida.
+ * Use em contextos onde o Supabase é obrigatório (ex: páginas públicas de formulário).
+ * @throws Error se o Supabase não estiver configurado
+ */
+export function getSupabase(): SupabaseClient {
+    if (!supabase) throw new Error('Supabase não configurado. Verifique as variáveis de ambiente VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY.');
+    return supabase;
+}

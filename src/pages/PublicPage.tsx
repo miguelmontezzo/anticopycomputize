@@ -26,6 +26,11 @@ export default function PublicPage() {
 
     const fetchPageData = async () => {
         setLoading(true);
+        if (!supabase) {
+            setNotFound(true);
+            setLoading(false);
+            return;
+        }
         // 1. Fetch Page
         const { data: pageData, error: pageErr } = await supabase
             .from('pages')

@@ -50,6 +50,11 @@ export default function PortalLayout() {
 
       if (cu?.clients) {
         const c = cu.clients as any;
+        if (!c.portal_enabled) {
+          setUnauthorized(true);
+          setLoading(false);
+          return;
+        }
         setClient(c);
         loadNotifications(c.id);
         setLoading(false);
@@ -138,11 +143,10 @@ export default function PortalLayout() {
           key={link.to}
           to={link.to}
           onClick={() => setMobileOpen(false)}
-          className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors relative ${
-            isActive(link.to)
+          className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors relative ${isActive(link.to)
               ? 'bg-gray-900 text-white'
               : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
-          }`}
+            }`}
         >
           {link.icon}
           {link.label}
