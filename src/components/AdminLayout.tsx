@@ -4,7 +4,7 @@ import { supabase } from '../lib/supabase';
 import {
   LayoutDashboard, LogOut, Loader2, Menu, X,
   Users, CalendarDays, Layers,
-  CheckSquare, UserCog
+  CheckSquare, UserCog, FolderKanban
 } from 'lucide-react';
 import { AdminRoleContext } from '../context/AdminRoleContext';
 import { EmployeeRole } from '../types';
@@ -14,17 +14,26 @@ type NavItem = {
   icon: React.ReactNode;
   label: string;
   exact?: boolean;
-  roles?: EmployeeRole[]; // undefined = todos os roles
+  roles?: EmployeeRole[];
 };
 
 const ALL_NAV_ITEMS: NavItem[] = [
   { path: '/admin', icon: <LayoutDashboard className="w-4 h-4" />, label: 'Dashboard', exact: true },
-  { path: '/admin/clients', icon: <Users className="w-4 h-4" />, label: 'Clientes', roles: ['admin', 'gestor', 'editor'] },
-  { path: '/admin/clientes', icon: <Layers className="w-4 h-4" />, label: 'Projetos & Rotas', roles: ['admin', 'gestor'] },
+  { path: '/admin/clients', icon: <Users className="w-4 h-4" />, label: 'Clientes', roles: ['admin', 'gestor', 'atendimento', 'editor'] },
+  { path: '/admin/projetos', icon: <FolderKanban className="w-4 h-4" />, label: 'Projetos', roles: ['admin', 'gestor', 'atendimento', 'editor', 'social_media'] },
+  { path: '/admin/tarefas', icon: <CheckSquare className="w-4 h-4" />, label: 'Tarefas & Fluxo' },
   { path: '/admin/calendarios', icon: <CalendarDays className="w-4 h-4" />, label: 'Calendários' },
-  { path: '/admin/tarefas', icon: <CheckSquare className="w-4 h-4" />, label: 'Tarefas' },
+  { path: '/admin/clientes', icon: <Layers className="w-4 h-4" />, label: 'Projetos & Rotas', roles: ['admin', 'gestor'] },
   { path: '/admin/equipe', icon: <UserCog className="w-4 h-4" />, label: 'Equipe', roles: ['admin'] },
 ];
+
+const roleLabel: Record<EmployeeRole, string> = {
+  admin: 'Admin',
+  gestor: 'Gerente de Projeto',
+  atendimento: 'Atendimento',
+  editor: 'Criação',
+  social_media: 'Social Media',
+};
 
 export default function AdminLayout() {
   const [loading, setLoading] = useState(true);
@@ -50,7 +59,6 @@ export default function AdminLayout() {
         return;
       }
 
-      // Fetch employee role
       const email = session.user.email;
       if (email) {
         const { data: emp } = await supabase
@@ -65,8 +73,6 @@ export default function AdminLayout() {
           setEmployeeId(emp.id);
           setEmployeeName(emp.name);
         } else {
-          // Not in employees — check if this is a portal-only user.
-          // Use error handling so a missing table (404) doesn't block admin access.
           const { data: clientUser, error: cuError } = await supabase
             .from('client_users')
             .select('id')
@@ -74,13 +80,11 @@ export default function AdminLayout() {
             .maybeSingle();
 
           if (!cuError) {
-            // Table exists — check result
             if (clientUser) {
               navigate('/portal/login', { replace: true });
               setLoading(false);
               return;
             }
-            // Not found in client_users — also check by email (pre-first-login)
             const { data: clientByEmail } = await supabase
               .from('clients')
               .select('id')
@@ -93,7 +97,6 @@ export default function AdminLayout() {
               return;
             }
           }
-          // cuError (table doesn't exist yet) or no match → treat as owner/superuser
         }
       }
 
@@ -122,23 +125,15 @@ export default function AdminLayout() {
     );
   }
 
-  // Filter nav by role (null role = not in employees table = treat as admin)
   const navItems = ALL_NAV_ITEMS.filter(item => {
-    if (!item.roles) return true; // visible to all
-    if (!role) return true;       // not in employees table → admin
+    if (!item.roles) return true;
+    if (!role) return true;
     return item.roles.includes(role);
   });
 
   const isActive = (item: NavItem) => {
     if (item.exact) return location.pathname === item.path;
     return location.pathname === item.path || location.pathname.startsWith(item.path + '/');
-  };
-
-  const roleLabel: Record<EmployeeRole, string> = {
-    admin: 'Admin',
-    gestor: 'Gestor',
-    editor: 'Editor',
-    social_media: 'Social Media',
   };
 
   const SidebarContent = () => (

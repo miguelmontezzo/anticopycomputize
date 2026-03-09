@@ -41,6 +41,14 @@ import AdminCalendarPage from "./pages/AdminCalendarPage";
 import AdminCalendarEditorPage from "./pages/AdminCalendarEditorPage";
 import ClientCalendarPage from "./pages/ClientCalendarPage";
 import GuiaClaudePage from "./pages/GuiaClaudePage";
+import AdminProjectsPage from "./pages/AdminProjectsPage";
+import PortalLayout from "./components/PortalLayout";
+import ClientPortalLoginPage from "./pages/portal/ClientPortalLoginPage";
+import PortalCalendarPage from "./pages/portal/PortalCalendarPage";
+import PortalNotificationsPage from "./pages/portal/PortalNotificationsPage";
+import PortalMeetingsPage from "./pages/portal/PortalMeetingsPage";
+import PortalCallbackPage from "./pages/portal/PortalCallbackPage";
+import PortalApprovalsPage from "./pages/portal/PortalApprovalsPage";
 
 const ComputizePage = () => {
 
@@ -523,9 +531,20 @@ export default function App() {
           <Route path="tarefas" element={<AdminTasksPage />} />
           <Route path="equipe" element={<AdminTeamPage />} />
           <Route path="clientes" element={<AdminClientRoutesPage />} />
+          <Route path="projetos" element={<AdminProjectsPage />} />
           <Route path="calendarios" element={<AdminCalendarsPage />} />
           <Route path="calendario/:slug" element={<AdminCalendarPage />} />
           <Route path="calendarios/:id" element={<AdminCalendarEditorPage />} />
+        </Route>
+
+        {/* Client Portal Routes */}
+        <Route path="/portal/login" element={<ClientPortalLoginPage />} />
+        <Route path="/portal/callback" element={<PortalCallbackPage />} />
+        <Route path="/portal/:slug" element={<PortalLayout />}>
+          <Route path="calendario" element={<PortalCalendarPage />} />
+          <Route path="aprovacoes" element={<PortalApprovalsPage />} />
+          <Route path="notificacoes" element={<PortalNotificationsPage />} />
+          <Route path="reunioes" element={<PortalMeetingsPage />} />
         </Route>
 
         <Route path="/ia-service" element={<IAServicePage />} />

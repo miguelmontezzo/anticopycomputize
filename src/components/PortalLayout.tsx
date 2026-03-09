@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { Outlet, useNavigate, useLocation, Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { User } from '@supabase/supabase-js';
-import { Loader2, Bell, LogOut, CalendarDays, Bell as BellIcon, Users2, Menu, X } from 'lucide-react';
+import { Loader2, LogOut, CalendarDays, Bell as BellIcon, Users2, Menu, X, CheckSquare } from 'lucide-react';
 import { ClientPortalContext, PortalClient, PortalNotification } from '../context/ClientPortalContext';
 
 export default function PortalLayout() {
@@ -12,6 +12,7 @@ export default function PortalLayout() {
   const [user, setUser] = useState<User | null>(null);
   const [notifications, setNotifications] = useState<PortalNotification[]>([]);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [pendingApprovals, setPendingApprovals] = useState(0);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -23,6 +24,15 @@ export default function PortalLayout() {
       .order('created_at', { ascending: false })
       .limit(50);
     if (data) setNotifications(data as PortalNotification[]);
+  }, []);
+
+  const loadPendingApprovals = useCallback(async (clientId: string) => {
+    const { count } = await supabase
+      .from('tasks')
+      .select('id', { count: 'exact', head: true })
+      .eq('client_id', clientId)
+      .in('workflow_status', ['client_review', 'client_approval']);
+    setPendingApprovals(count || 0);
   }, []);
 
   const markAsRead = useCallback(async (id: string) => {
@@ -41,7 +51,6 @@ export default function PortalLayout() {
 
       setUser(session.user);
 
-      // Look up client_users by user_id
       const { data: cu } = await supabase
         .from('client_users')
         .select('client_id, clients(id, name, slug, email, plan_type, portal_enabled)')
@@ -52,11 +61,11 @@ export default function PortalLayout() {
         const c = cu.clients as any;
         setClient(c);
         loadNotifications(c.id);
+        loadPendingApprovals(c.id);
         setLoading(false);
         return;
       }
 
-      // Auto-link: check if email matches any client
       const { data: clientByEmail } = await supabase
         .from('clients')
         .select('id, name, slug, email, plan_type, portal_enabled')
@@ -64,13 +73,13 @@ export default function PortalLayout() {
         .maybeSingle();
 
       if (clientByEmail) {
-        // Create the link
         await supabase.from('client_users').insert({
           user_id: session.user.id,
           client_id: clientByEmail.id,
         });
         setClient(clientByEmail as PortalClient);
         loadNotifications(clientByEmail.id);
+        loadPendingApprovals(clientByEmail.id);
       } else {
         setUnauthorized(true);
       }
@@ -85,7 +94,7 @@ export default function PortalLayout() {
     });
 
     return () => subscription.unsubscribe();
-  }, [navigate, loadNotifications]);
+  }, [navigate, loadNotifications, loadPendingApprovals]);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -110,10 +119,7 @@ export default function PortalLayout() {
         <p className="text-sm text-gray-500 max-w-xs">
           Este email não está associado a nenhum cliente. Entre em contato com a agência.
         </p>
-        <button
-          onClick={handleLogout}
-          className="text-sm text-gray-500 hover:text-gray-900 underline"
-        >
+        <button onClick={handleLogout} className="text-sm text-gray-500 hover:text-gray-900 underline">
           Sair
         </button>
       </div>
@@ -125,6 +131,7 @@ export default function PortalLayout() {
 
   const navLinks = [
     { to: `/portal/${slug}/calendario`, label: 'Calendário', icon: <CalendarDays className="w-4 h-4" /> },
+    { to: `/portal/${slug}/aprovacoes`, label: 'Aprovações', icon: <CheckSquare className="w-4 h-4" />, badge: pendingApprovals },
     { to: `/portal/${slug}/notificacoes`, label: 'Notificações', icon: <BellIcon className="w-4 h-4" />, badge: unreadCount },
     { to: `/portal/${slug}/reunioes`, label: 'Reuniões', icon: <Users2 className="w-4 h-4" /> },
   ];
@@ -163,10 +170,8 @@ export default function PortalLayout() {
       markAsRead,
     }}>
       <div className="min-h-screen bg-gray-50">
-        {/* Top Nav */}
         <header className="bg-white border-b border-gray-200 sticky top-0 z-40">
           <div className="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between gap-4">
-            {/* Logo + Client */}
             <div className="flex items-center gap-3 min-w-0">
               <span className="font-bold text-sm text-gray-900 shrink-0">Anti Copy Club</span>
               {client && (
@@ -176,13 +181,9 @@ export default function PortalLayout() {
                 </>
               )}
             </div>
-
-            {/* Desktop Nav */}
             <nav className="hidden md:flex items-center gap-1">
               <NavLinks />
             </nav>
-
-            {/* Logout (desktop) */}
             <button
               onClick={handleLogout}
               className="hidden md:flex items-center gap-1.5 text-sm text-gray-500 hover:text-red-600 transition-colors"
@@ -190,8 +191,6 @@ export default function PortalLayout() {
               <LogOut className="w-4 h-4" />
               Sair
             </button>
-
-            {/* Mobile hamburger */}
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
               className="md:hidden p-2 text-gray-600 hover:bg-gray-100 rounded-lg"
@@ -199,8 +198,6 @@ export default function PortalLayout() {
               {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
-
-          {/* Mobile Nav */}
           {mobileOpen && (
             <div className="md:hidden border-t border-gray-100 px-4 py-3 flex flex-col gap-1 bg-white">
               <NavLinks />
@@ -214,8 +211,6 @@ export default function PortalLayout() {
             </div>
           )}
         </header>
-
-        {/* Main Content */}
         <main className="max-w-5xl mx-auto px-4 py-8">
           <Outlet />
         </main>
