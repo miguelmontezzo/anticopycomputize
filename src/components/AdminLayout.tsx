@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Outlet, useNavigate, useLocation, Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import {
-  LayoutDashboard, FileText, LogOut, Loader2, Menu, X,
-  Users, Globe, ClipboardList, CalendarDays, Layers,
+  LayoutDashboard, LogOut, Loader2, Menu, X,
+  Users, CalendarDays, Layers,
   CheckSquare, UserCog
 } from 'lucide-react';
 import { AdminRoleContext } from '../context/AdminRoleContext';
@@ -23,10 +23,6 @@ const ALL_NAV_ITEMS: NavItem[] = [
   { path: '/admin/clientes', icon: <Layers className="w-4 h-4" />, label: 'Projetos & Rotas', roles: ['admin', 'gestor'] },
   { path: '/admin/calendarios', icon: <CalendarDays className="w-4 h-4" />, label: 'Calendários' },
   { path: '/admin/tarefas', icon: <CheckSquare className="w-4 h-4" />, label: 'Tarefas' },
-  { path: '/admin/site-pages', icon: <Globe className="w-4 h-4" />, label: 'Site (CMS)', roles: ['admin', 'gestor', 'editor'] },
-  { path: '/admin/pages', icon: <Globe className="w-4 h-4" />, label: 'Páginas', roles: ['admin', 'gestor'] },
-  { path: '/admin/forms', icon: <ClipboardList className="w-4 h-4" />, label: 'Formulários', roles: ['admin', 'gestor', 'editor'] },
-  { path: '/admin/emp', icon: <FileText className="w-4 h-4" />, label: 'Respostas EMP', roles: ['admin', 'gestor', 'editor'] },
   { path: '/admin/equipe', icon: <UserCog className="w-4 h-4" />, label: 'Equipe', roles: ['admin'] },
 ];
 

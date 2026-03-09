@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
-import { Users, Globe, ClipboardList, FileText, CalendarDays, Layers, ArrowRight } from 'lucide-react';
+import { Users, CalendarDays, Layers, CheckSquare, UserCog, ArrowRight } from 'lucide-react';
 import Card from '../components/ui/Card';
 import PageHeader from '../components/ui/PageHeader';
 
@@ -32,7 +32,7 @@ export default function AdminDashboardPage() {
     {
       icon: <Layers className="w-4 h-4" />,
       title: 'Projetos & Rotas',
-      desc: 'Apresentações, análises EMP e links por cliente.',
+      desc: 'Apresentações, análises e links por cliente.',
       link: '/admin/clientes',
       linkLabel: 'Acessar',
     },
@@ -44,31 +44,17 @@ export default function AdminDashboardPage() {
       linkLabel: 'Acessar',
     },
     {
-      icon: <Globe className="w-4 h-4" />,
-      title: 'Site (CMS)',
-      desc: 'Editar seções das páginas do site.',
-      link: '/admin/site-pages',
+      icon: <CheckSquare className="w-4 h-4" />,
+      title: 'Tarefas',
+      desc: 'Kanban de tarefas da equipe por prioridade.',
+      link: '/admin/tarefas',
       linkLabel: 'Acessar',
     },
     {
-      icon: <Globe className="w-4 h-4" />,
-      title: 'Páginas',
-      desc: 'Landing pages dinâmicas por cliente.',
-      link: '/admin/pages',
-      linkLabel: 'Acessar',
-    },
-    {
-      icon: <ClipboardList className="w-4 h-4" />,
-      title: 'Formulários',
-      desc: 'Formulários dinâmicos e captura de leads.',
-      link: '/admin/forms',
-      linkLabel: 'Acessar',
-    },
-    {
-      icon: <FileText className="w-4 h-4" />,
-      title: 'Respostas EMP',
-      desc: 'Diagnósticos estratégicos recebidos.',
-      link: '/admin/emp',
+      icon: <UserCog className="w-4 h-4" />,
+      title: 'Equipe',
+      desc: 'Gerencie colaboradores e permissões de acesso.',
+      link: '/admin/equipe',
       linkLabel: 'Acessar',
     },
   ];
