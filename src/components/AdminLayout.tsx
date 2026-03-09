@@ -66,7 +66,7 @@ export default function AdminLayout() {
           .select('id, name, role')
           .eq('email', email)
           .eq('is_active', true)
-          .single();
+          .maybeSingle();
 
         if (emp) {
           setRole(emp.role as EmployeeRole);
