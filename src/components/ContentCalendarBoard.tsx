@@ -40,6 +40,9 @@ export default function ContentCalendarBoard({ slug, adminMode = false }: { slug
   const [savingId, setSavingId] = useState<string | null>(null);
   const [formatFilter, setFormatFilter] = useState<'todos' | 'reels' | 'post-estatico' | 'carrossel' | 'stories'>('todos');
 
+  // IDs do calendário para criação de tarefas
+  const [calendarClientId, setCalendarClientId] = useState<string | null>(null);
+
   // Reject modal
   const [modalOpen, setModalOpen] = useState(false);
   const [rejectTarget, setRejectTarget] = useState<{ itemId: string; type: 'post' | 'story'; storyIndex?: number } | null>(null);
@@ -52,11 +55,13 @@ export default function ContentCalendarBoard({ slug, adminMode = false }: { slug
 
       const { data: calendar } = await supabase
         .from('content_calendars')
-        .select('id,week_start,week_end')
+        .select('id,week_start,week_end,client_id')
         .eq('slug', slug)
         .order('created_at', { ascending: false })
         .limit(1)
         .maybeSingle();
+
+      if (calendar?.client_id) setCalendarClientId(calendar.client_id);
 
       if (calendar?.id) {
         const { data } = await supabase
@@ -109,12 +114,44 @@ export default function ContentCalendarBoard({ slug, adminMode = false }: { slug
     if (error) console.error('Erro ao salvar:', error.message);
   };
 
+  /* ── auto-task ao aprovar ─────────────────────────────────────── */
+
+  const createTaskIfNeeded = async (item: DBItem) => {
+    if (!supabase || !calendarClientId) return;
+
+    // Verifica se já existe tarefa vinculada a este post
+    const { data: existing } = await supabase
+      .from('tasks')
+      .select('id')
+      .eq('calendar_item_id', item.id)
+      .maybeSingle();
+
+    if (existing) return; // já existe, não duplica
+
+    // Calcula prioridade pela data do post
+    const today = new Date();
+    const postDate = new Date(item.post_date);
+    const diffDays = Math.ceil((postDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+    const priority = diffDays <= 2 ? 'urgent' : diffDays <= 5 ? 'high' : 'normal';
+
+    await supabase.from('tasks').insert([{
+      title: `Produzir: ${item.format} — ${item.title}`,
+      description: item.caption && item.caption !== '-' ? item.caption.slice(0, 300) : null,
+      client_id: calendarClientId,
+      calendar_item_id: item.id,
+      status: 'todo',
+      priority,
+      due_date: item.post_date,
+    }]);
+  };
+
   /* ── post actions ─────────────────────────────────────────────── */
 
   const approvePost = (item: DBItem) => {
     const changes = { post_status: 'aprovado' as ApprovalStatus, post_feedback: '' };
     patch(item.id, changes);
     persist(item.id, changes);
+    createTaskIfNeeded(item); // 🎯 cria tarefa para o criativo
   };
 
   const resetPost = (item: DBItem) => {
