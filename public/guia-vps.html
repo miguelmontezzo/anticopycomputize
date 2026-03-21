@@ -1,0 +1,1607 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Claude Code na VPS Hostinger — miguelito.ai</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
+
+    :root {
+      --bg: #0a0b0f;
+      --bg-card: #111318;
+      --bg-card2: #16181f;
+      --border: #1e2028;
+      --fg: #e8eaf0;
+      --muted: #636578;
+      --muted2: #888a9e;
+      --green: #2ecc71;
+      --green-dim: rgba(46, 204, 113, 0.08);
+      --green-border: rgba(46, 204, 113, 0.25);
+      --green-text: #5dde8f;
+      --blue: #4a9eff;
+      --blue-dim: rgba(74, 158, 255, 0.08);
+      --blue-border: rgba(74, 158, 255, 0.25);
+      --yellow: #f5c842;
+      --yellow-dim: rgba(245, 200, 66, 0.08);
+      --yellow-border: rgba(245, 200, 66, 0.2);
+      --red: #ff5f5f;
+      --mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--mono);
+      font-size: 14px;
+      line-height: 1.65;
+      min-height: 100vh;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0, 0, 0, 0.02) 3px, rgba(0, 0, 0, 0.02) 4px);
+      pointer-events: none;
+      z-index: 9998;
+    }
+
+    /* ── GATE ── */
+    #gate {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: var(--bg);
+    }
+
+    .gate-wrap {
+      width: 100%;
+      max-width: 460px;
+    }
+
+    .gate-brand {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: 28px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .gate-brand::before {
+      content: '';
+      display: block;
+      width: 24px;
+      height: 1px;
+      background: var(--green);
+    }
+
+    .gate-h1 {
+      font-size: clamp(20px, 5vw, 28px);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-bottom: 10px;
+    }
+
+    .gate-h1 span {
+      color: var(--green);
+    }
+
+    .gate-sub {
+      font-size: 12px;
+      color: var(--muted2);
+      margin-bottom: 30px;
+      line-height: 1.65;
+    }
+
+    .gate-form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .f-label {
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .f-input {
+      width: 100%;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      color: var(--fg);
+      font-family: var(--mono);
+      font-size: 13px;
+      padding: 12px 14px;
+      outline: none;
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    .f-input::placeholder {
+      color: var(--muted);
+    }
+
+    .f-input:focus {
+      border-color: var(--green);
+      background: var(--bg-card2);
+    }
+
+    .gate-btn {
+      width: 100%;
+      background: var(--green);
+      color: #0a0b0f;
+      border: none;
+      border-radius: 3px;
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 14px;
+      cursor: pointer;
+      margin-top: 4px;
+      transition: opacity 0.15s, transform 0.1s;
+    }
+
+    .gate-btn:hover {
+      opacity: 0.88;
+    }
+
+    .gate-btn:active {
+      transform: scale(0.99);
+    }
+
+    .gate-privacy {
+      font-size: 10px;
+      color: var(--muted);
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .gate-err {
+      font-size: 11px;
+      color: var(--red);
+      display: none;
+      padding: 4px 0;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .gate-perks {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 20px 0 26px;
+    }
+
+    .gate-perk {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 12px;
+      color: var(--muted2);
+      line-height: 1.5;
+    }
+
+    .pk-ico {
+      width: 28px;
+      height: 28px;
+      border-radius: 3px;
+      background: var(--green-dim);
+      border: 1px solid var(--green-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+
+    .gate-perk strong {
+      color: var(--fg);
+      font-weight: 600;
+    }
+
+    .gate-back {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 11px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 0;
+      margin-bottom: 20px;
+      transition: color 0.15s;
+    }
+
+    .gate-back:hover {
+      color: var(--fg);
+    }
+
+    .gate-email-show {
+      font-size: 12px;
+      color: var(--green-text);
+      background: var(--green-dim);
+      border: 1px solid var(--green-border);
+      border-radius: 3px;
+      padding: 10px 14px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* ── MAIN ── */
+    #main {
+      display: none;
+    }
+
+    #pbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 2px;
+      background: var(--green);
+      box-shadow: 0 0 8px var(--green);
+      width: 0%;
+      z-index: 999;
+      transition: width 0.15s;
+    }
+
+    /* ── HEADER ── */
+    header {
+      border-bottom: 1px solid var(--border);
+      padding: 14px 0;
+      position: sticky;
+      top: 0;
+      background: var(--bg);
+      z-index: 100;
+    }
+
+    .hi {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: var(--green);
+    }
+
+    .brand span {
+      color: var(--muted);
+    }
+
+    .pdots {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .pdot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--border);
+      transition: background 0.3s;
+    }
+
+    .pdot.on {
+      background: var(--green);
+      box-shadow: 0 0 6px var(--green);
+    }
+
+    /* ── LAYOUT ── */
+    .cx {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 46px 0 34px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .wt {
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--green-text);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .blink {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      animation: bl 1.2s ease infinite;
+    }
+
+    @keyframes bl {
+      0%, 100% { opacity: 1 }
+      50% { opacity: 0.15 }
+    }
+
+    .hero h1 {
+      font-size: clamp(22px, 5vw, 32px);
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      line-height: 1.15;
+      margin-bottom: 14px;
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      color: var(--green);
+    }
+
+    .hero-d {
+      font-size: 13px;
+      color: var(--muted2);
+      max-width: 520px;
+      line-height: 1.7;
+      margin-bottom: 22px;
+    }
+
+    .pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    .pill {
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 2px;
+    }
+
+    /* ── TOC ── */
+    .toc {
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .toc-ttl {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .toc-list {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .toc-list a {
+      text-decoration: none;
+      color: var(--muted2);
+      font-size: 11px;
+      padding: 5px 10px;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      background: var(--bg-card);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.15s;
+    }
+
+    .toc-list a:hover {
+      color: var(--green);
+      border-color: var(--green-border);
+      background: var(--green-dim);
+    }
+
+    .toc-list a .n {
+      color: var(--green);
+      font-weight: 700;
+    }
+
+    /* ── SECTION ── */
+    .sec {
+      padding: 42px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sec-hd {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 26px;
+    }
+
+    .sec-n {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: var(--green);
+      background: var(--green-dim);
+      border: 1px solid var(--green-border);
+      padding: 4px 9px;
+      border-radius: 2px;
+      white-space: nowrap;
+      margin-top: 3px;
+    }
+
+    .sec h2 {
+      font-size: clamp(16px, 3vw, 20px);
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      margin-bottom: 2px;
+    }
+
+    .sec .sub {
+      font-size: 12px;
+      color: var(--muted2);
+    }
+
+    /* ── DIDACTIC STEPS ── */
+    .dsteps {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .dstep {
+      display: flex;
+      gap: 16px;
+    }
+
+    .dsl {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 34px;
+      flex-shrink: 0;
+    }
+
+    .dsn {
+      width: 34px;
+      height: 34px;
+      border-radius: 3px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .dsl-line {
+      width: 1px;
+      flex: 1;
+      min-height: 16px;
+      background: var(--border);
+      margin: 5px 0;
+    }
+
+    .dsb {
+      flex: 1;
+      padding-bottom: 26px;
+    }
+
+    .dst {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--fg);
+      margin-bottom: 7px;
+    }
+
+    .dsd {
+      font-size: 12px;
+      color: var(--muted2);
+      line-height: 1.6;
+      margin-bottom: 10px;
+    }
+
+    .dsd strong {
+      color: var(--fg);
+      font-weight: 600;
+    }
+
+    .dsd a {
+      color: var(--green-text);
+      text-decoration: none;
+    }
+
+    .dsd a:hover {
+      text-decoration: underline;
+    }
+
+    /* ── CALLOUT ── */
+    .callout {
+      border: 1px solid var(--green-border);
+      background: var(--green-dim);
+      border-radius: 3px;
+      padding: 13px 16px;
+      font-size: 12px;
+      color: var(--green-text);
+      line-height: 1.65;
+      margin: 12px 0;
+    }
+
+    .callout.yellow {
+      border-color: var(--yellow-border);
+      background: var(--yellow-dim);
+      color: var(--yellow);
+    }
+
+    .callout.blue {
+      border-color: var(--blue-border);
+      background: var(--blue-dim);
+      color: var(--blue);
+    }
+
+    .ctag {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      opacity: 0.65;
+      margin-bottom: 5px;
+    }
+
+    /* ── INSTRUCTION ── */
+    .inst {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      background: var(--blue-dim);
+      border: 1px solid var(--blue-border);
+      border-radius: 3px;
+      padding: 12px 14px;
+      font-size: 12px;
+      color: var(--fg);
+      line-height: 1.6;
+      margin: 10px 0;
+    }
+
+    .inst .ico {
+      font-size: 16px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* ── TERMINAL ── */
+    .term {
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background: #07080c;
+      overflow: hidden;
+      margin: 10px 0;
+    }
+
+    .tbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 9px 14px;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg-card2);
+      position: relative;
+    }
+
+    .tdots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .tdots span {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .tr { background: #ff5f57; }
+    .ty { background: #ffbd2e; }
+    .tg { background: #28c840; }
+
+    .ttitle {
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .tbody {
+      padding: 14px 16px;
+      font-size: 12px;
+      line-height: 1.8;
+    }
+
+    .tp {
+      color: var(--muted);
+      user-select: none;
+    }
+
+    .tc {
+      color: var(--green);
+    }
+
+    .tcm {
+      color: var(--muted);
+      font-size: 11px;
+      font-style: italic;
+    }
+
+    .to {
+      color: #7a8499;
+      font-size: 11px;
+    }
+
+    .copy-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .copy-btn:hover {
+      color: var(--green);
+      border-color: var(--green-border);
+      background: var(--green-dim);
+    }
+
+    .copy-btn.ok {
+      color: var(--green);
+      border-color: var(--green-border);
+      background: var(--green-dim);
+    }
+
+    /* ── SPEC TABLE ── */
+    .spec-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0;
+      font-size: 12px;
+    }
+
+    .spec-table td {
+      padding: 9px 14px;
+      border: 1px solid var(--border);
+    }
+
+    .spec-table td:first-child {
+      color: var(--muted);
+      width: 120px;
+      background: var(--bg-card);
+    }
+
+    .spec-table td:last-child {
+      color: var(--fg);
+      background: var(--bg-card2);
+    }
+
+    .spec-table tr.highlight td {
+      border-color: var(--green-border);
+    }
+
+    .spec-table tr.highlight td:last-child {
+      color: var(--green-text);
+      font-weight: 700;
+    }
+
+    /* ── CLOSING ── */
+    .closing {
+      padding: 44px 0;
+      text-align: center;
+    }
+
+    .closing p {
+      font-size: 13px;
+      color: var(--muted2);
+      line-height: 1.8;
+      max-width: 480px;
+      margin: 0 auto 14px;
+    }
+
+    .sig {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--green) !important;
+    }
+
+    footer {
+      padding: 26px 0;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .ft {
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      opacity: 0.55;
+    }
+
+    @media(max-width:600px) {
+      .sec { padding: 30px 0; }
+      .hero { padding: 30px 0 26px; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ══════ GATE ══════ -->
+  <div id="gate">
+    <div class="gate-wrap">
+      <div class="gate-brand">@miguelito.ai — biblioteca gratuita · 2026</div>
+
+      <!-- STEP 1: email check -->
+      <div id="gstep1">
+        <h1 class="gate-h1">Guias gratuitos para<br><span>quem quer criar</span></h1>
+        <p class="gate-sub">
+          Digite seu e-mail para acessar este guia e todos os próximos materiais gratuitos que vamos lançar.
+        </p>
+
+        <div class="gate-perks">
+          <div class="gate-perk">
+            <span class="pk-ico">📚</span>
+            <span><strong>Biblioteca crescente</strong> — novos guias gratuitos toda semana</span>
+          </div>
+          <div class="gate-perk">
+            <span class="pk-ico">🚀</span>
+            <span><strong>Acesso imediato</strong> — sem esperar, sem lista de espera</span>
+          </div>
+          <div class="gate-perk">
+            <span class="pk-ico">📲</span>
+            <span><strong>Siga no Instagram</strong> — <a href="https://instagram.com/miguelito.ai" target="_blank"
+                style="color:var(--green-text);text-decoration:none;">@miguelito.ai</a> para novidades em primeira
+              mão</span>
+          </div>
+        </div>
+
+        <div class="gate-form">
+          <div>
+            <label class="f-label" for="fe1">Seu e-mail</label>
+            <input class="f-input" type="email" id="fe1" placeholder="seu@email.com" autocomplete="email">
+          </div>
+          <div id="gerr1" class="gate-err">Digite um e-mail válido.</div>
+          <button class="gate-btn" onclick="checkEmail()">Acessar os guias gratuitamente →</button>
+          <p class="gate-privacy">🔒 Sem spam. Só conteúdo gratuito de qualidade.</p>
+        </div>
+      </div>
+
+      <!-- STEP 2: full registration (shown only if email not found) -->
+      <div id="gstep2" class="hidden">
+        <button class="gate-back" onclick="goBack()">← Voltar</button>
+        <h1 class="gate-h1">Quase lá!<br><span>Crie seu acesso</span></h1>
+        <p class="gate-sub">Esse cadastro dá acesso a todos os guias gratuitos que lançarmos — não só este.</p>
+
+        <div id="gemailshow" class="gate-email-show">
+          <span>✉️</span><span id="gemailtext"></span>
+        </div>
+
+        <div class="gate-form">
+          <div>
+            <label class="f-label" for="fn">Seu nome</label>
+            <input class="f-input" type="text" id="fn" placeholder="Como posso te chamar?" autocomplete="given-name">
+          </div>
+          <div>
+            <label class="f-label" for="fw">WhatsApp <span
+                style="color:var(--muted);font-size:9px;">(opcional)</span></label>
+            <input class="f-input" type="tel" id="fw" placeholder="(11) 99999-9999" autocomplete="tel">
+          </div>
+          <div id="gerr2" class="gate-err">Por favor, preencha seu nome.</div>
+          <button class="gate-btn" onclick="submitGate()">Criar meu acesso gratuito →</button>
+          <p class="gate-privacy">🔒 Seus dados ficam só com a gente. Sem spam, nunca.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════ MAIN ══════ -->
+  <div id="main">
+    <div id="pbar"></div>
+
+    <header>
+      <div class="hi">
+        <div class="brand">miguelito<span>.ai</span></div>
+        <div class="pdots">
+          <div class="pdot on" id="pd1"></div>
+          <div class="pdot" id="pd2"></div>
+          <div class="pdot" id="pd3"></div>
+          <div class="pdot" id="pd4"></div>
+          <div class="pdot" id="pd5"></div>
+          <div class="pdot" id="pd6"></div>
+          <div class="pdot" id="pd7"></div>
+        </div>
+      </div>
+    </header>
+
+    <div class="cx">
+
+      <!-- HERO -->
+      <section class="hero">
+        <div class="wt"><span class="blink"></span><span id="hname">Olá! Bem-vindo(a)</span></div>
+        <h1>Claude Code na<br><em>VPS Hostinger</em></h1>
+        <p class="hero-d">Guia completo para instalar e rodar o Claude Code numa VPS da Hostinger — funciona no Mac e no Windows, sem travar seu computador.</p>
+        <div class="pills">
+          <span class="pill">VPS</span>
+          <span class="pill">Hostinger</span>
+          <span class="pill">Terminal</span>
+          <span class="pill">24/7</span>
+          <span class="pill">100% Gratuito</span>
+        </div>
+      </section>
+
+      <!-- TOC -->
+      <nav class="toc">
+        <div class="toc-ttl">// Neste guia</div>
+        <ul class="toc-list">
+          <li><a href="#s1"><span class="n">01</span> Contratar a VPS</a></li>
+          <li><a href="#s2"><span class="n">02</span> Conectar pelo terminal</a></li>
+          <li><a href="#s3"><span class="n">03</span> Criar usuário</a></li>
+          <li><a href="#s4"><span class="n">04</span> Instalar Node.js</a></li>
+          <li><a href="#s5"><span class="n">05</span> Instalar Claude Code</a></li>
+          <li><a href="#s6"><span class="n">06</span> Rodar em background</a></li>
+          <li><a href="#s7"><span class="n">07</span> Acessar de qualquer lugar</a></li>
+        </ul>
+      </nav>
+
+      <div class="callout yellow" style="margin-top:22px;">
+        <div class="ctag">// Antes de começar</div>
+        Este guia é para quem quer rodar o Claude Code numa VPS — um servidor na nuvem que fica ligado 24/7 sem precisar deixar seu computador ligado. Ideal para quem quer usar de forma profissional.
+      </div>
+
+      <!-- ── SEC 01 ── -->
+      <section class="sec" id="s1">
+        <div class="sec-hd">
+          <span class="sec-n">01</span>
+          <div>
+            <h2>Contratar a VPS na Hostinger</h2>
+            <div class="sub">Escolha o plano certo</div>
+          </div>
+        </div>
+
+        <p class="dsd" style="margin-bottom:16px;">Clica no link abaixo para contratar já com desconto:</p>
+
+        <div class="inst">
+          <span class="ico">👉</span>
+          <span><a href="https://www.hostinger.com/br/cart?product=vps%3Avps_kvm_2&period=1&referral_type=cart_link&REFERRALCODE=DEOZZOSTUQC0&referral_id=019d1121-9695-73c8-b5d0-ba638a8c9cce" target="_blank" style="color:var(--green-text);text-decoration:none;font-weight:700;">Contratar VPS na Hostinger →</a></span>
+        </div>
+
+        <table class="spec-table">
+          <tr>
+            <td>vCPU</td>
+            <td>2 Cores</td>
+          </tr>
+          <tr>
+            <td>RAM</td>
+            <td>8 GB</td>
+          </tr>
+          <tr>
+            <td>Disco</td>
+            <td>100 GB NVMe</td>
+          </tr>
+          <tr>
+            <td>Banda</td>
+            <td>8 TB</td>
+          </tr>
+          <tr>
+            <td>Mensal</td>
+            <td>R$70,99/mês</td>
+          </tr>
+          <tr class="highlight">
+            <td>Anual</td>
+            <td>R$49,90/mês</td>
+          </tr>
+        </table>
+
+        <p class="dsd" style="margin:16px 0 10px;">Na configuração selecione:</p>
+
+        <div class="dsteps">
+          <div class="dstep">
+            <div class="dsl">
+              <div class="dsn">🖥️</div>
+              <div class="dsl-line"></div>
+            </div>
+            <div class="dsb">
+              <div class="dst">Sistema operacional</div>
+              <div class="dsd"><strong>Ubuntu 22.04 LTS</strong></div>
+            </div>
+          </div>
+          <div class="dstep">
+            <div class="dsl">
+              <div class="dsn">📍</div>
+              <div class="dsl-line"></div>
+            </div>
+            <div class="dsb">
+              <div class="dst">Localização do servidor</div>
+              <div class="dsd"><strong>São Paulo</strong></div>
+            </div>
+          </div>
+          <div class="dstep">
+            <div class="dsl">
+              <div class="dsn">🔑</div>
+            </div>
+            <div class="dsb">
+              <div class="dst">Senha root</div>
+              <div class="dsd"><strong>Guarde bem a senha root que você criar</strong></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── SEC 02 ── -->
+      <section class="sec" id="s2">
+        <div class="sec-hd">
+          <span class="sec-n">02</span>
+          <div>
+            <h2>Conectar na VPS pelo terminal</h2>
+            <div class="sub">Acesso remoto via SSH</div>
+          </div>
+        </div>
+
+        <p class="dsd" style="margin-bottom:16px;">Substitua o IP pelo endereço que aparece no painel da Hostinger.</p>
+
+        <p style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin:14px 0 6px;">
+          // Mac / Linux — Terminal</p>
+        <div class="term">
+          <div class="tbar">
+            <div class="tdots"><span class="tr"></span><span class="ty"></span><span class="tg"></span></div>
+            <span class="ttitle">Terminal</span>
+            <button class="copy-btn" onclick="cp(this,'ssh root@SEU_IP_AQUI')">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="8" y="8" width="14" height="14" rx="2" />
+                <path d="M4 16V4a2 2 0 0 1 2-2h10" />
+              </svg>
+              Copiar
+            </button>
+          </div>
+          <div class="tbody">
+            <div><span class="tp">$ </span><span class="tc">ssh root@SEU_IP_AQUI</span></div>
+          </div>
+        </div>
+
+        <p style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin:14px 0 6px;">
+          // Windows — CMD ou PowerShell</p>
+        <div class="term">
+          <div class="tbar">
+            <div class="tdots"><span class="tr"></span><span class="ty"></span><span class="tg"></span></div>
+            <span class="ttitle">Terminal</span>
+            <button class="copy-btn" onclick="cp(this,'ssh root@SEU_IP_AQUI')">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="8" y="8" width="14" height="14" rx="2" />
+                <path d="M4 16V4a2 2 0 0 1 2-2h10" />
+              </svg>
+              Copiar
+            </button>
+          </div>
+          <div class="tbody">
+            <div><span class="tp">> </span><span class="tc">ssh root@SEU_IP_AQUI</span></div>
+          </div>
+        </div>
+
+        <div class="callout">
+          <div class="ctag">// Dica</div>
+          O SSH já vem nativo no Windows 10/11. Na primeira conexão ele vai perguntar se confia no host — digita <strong>yes</strong> e pressiona Enter.
+        </div>
+      </section>
+
+      <!-- ── SEC 03 ── -->
+      <section class="sec" id="s3">
+        <div class="sec-hd">
+          <span class="sec-n">03</span>
+          <div>
+            <h2>Criar um usuário dedicado</h2>
+            <div class="sub">Segurança e boas práticas</div>
+          </div>
+        </div>
+
+        <p class="dsd" style="margin-bottom:16px;">Rodar tudo como root não é recomendado. Cria um usuário dedicado — isso também evita qualquer problema de permissão com o Claude Code:</p>
+
+        <div class="term">
+          <div class="tbar">
+            <div class="tdots"><span class="tr"></span><span class="ty"></span><span class="tg"></span></div>
+            <span class="ttitle">Terminal</span>
+            <button class="copy-btn" onclick="cp(this,'adduser claudeuser')">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="8" y="8" width="14" height="14" rx="2" />
+                <path d="M4 16V4a2 2 0 0 1 2-2h10" />
+              </svg>
+              Copiar
+            </button>
+          </div>
+          <div class="tbody">
+            <div><span class="tp">$ </span><span class="tc">adduser claudeuser</span></div>
+            <div class="tcm" style="margin-top:3px;"># Cria o novo usuário — preencha a senha, o resto pode ficar em branco</div>
+          </div>
+        </div>
+
+        <p class="dsd" style="margin:14px 0 8px;">Adiciona o usuário ao grupo sudo:</p>
+
+        <div class="term">
+          <div class="tbar">
+            <div class="tdots"><span class="tr"></span><span class="ty"></span><span class="tg"></span></div>
+            <span class="ttitle">Terminal</span>
+            <button class="copy-btn" onclick="cp(this,'usermod -aG sudo claudeuser')">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="8" y="8" width="14" height="14" rx="2" />
+                <path d="M4 16V4a2 2 0 0 1 2-2h10" />
+              </svg>
+              Copiar
+            </button>
+          </div>
+          <div class="tbody">
+            <div><span class="tp">$ </span><span class="tc">usermod -aG sudo claudeuser</span></div>
+          </div>
+        </div>
+
+        <p class="dsd" style="margin:14px 0 8px;">Troca para esse usuário:</p>
+
+        <div class="term">
+          <div class="tbar">
+            <div class="tdots"><span class="tr"></span><span class="ty"></span><span class="tg"></span></div>
+            <span class="ttitle">Terminal</span>
+            <button class="copy-btn" onclick="cp(this,'su - claudeuser')">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="8" y="8" width="14" height="14" rx="2" />
+                <path d="M4 16V4a2 2 0 0 1 2-2h10" />
+              </svg>
+              Copiar
+            </button>
+          </div>
+          <div class="tbody">
+            <div><span class="tp">$ </span><span class="tc">su - claudeuser</span></div>
+          </div>
+        </div>
+
+        <div class="callout">
+          <div class="ctag">// Importante</div>
+          A partir daqui todos os comandos rodam como <strong>claudeuser</strong>, não como root.
+        </div>
+      </section>
+
+      <!-- ── SEC 04 ── -->
+      <section class="sec" id="s4">
+        <div class="sec-hd">
+          <span class="sec-n">04</span>
+          <div>
+            <h2>Atualizar o sistema e instalar o Node.js</h2>
+            <div class="sub">Preparando o ambiente</div>
+          </div>
+        </div>
+
+        <p class="dsd" style="margin-bottom:16px;">Atualiza os pacotes do sistema:</p>
+
+        <div class="term">
+          <div class="tbar">
+            <div class="tdots"><span class="tr"></span><span class="ty"></span><span class="tg"></span></div>
+            <span class="ttitle">Terminal</span>
+            <button class="copy-btn" onclick="cp(this,'sudo apt update && sudo apt upgrade -y')">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="8" y="8" width="14" height="14" rx="2" />
+                <path d="M4 16V4a2 2 0 0 1 2-2h10" />
+              </svg>
+              Copiar
+            </button>
+          </div>
+          <div class="tbody">
+            <div><span class="tp">$ </span><span class="tc">sudo apt update && sudo apt upgrade -y</span></div>
+            <div class="tcm" style="margin-top:3px;"># Atualiza todos os pacotes do sistema</div>
+          </div>
+        </div>
+
+        <p class="dsd" style="margin:16px 0 8px;">Instala o Node.js 20:</p>
+
+        <div class="term">
+          <div class="tbar">
+            <div class="tdots"><span class="tr"></span><span class="ty"></span><span class="tg"></span></div>
+            <span class="ttitle">Terminal</span>
+            <button class="copy-btn" onclick="cp(this,'curl -fsSL https://deb.nodesource.com/setup_20.x | sudo bash -\nsudo apt install -y nodejs')">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="8" y="8" width="14" height="14" rx="2" />
+                <path d="M4 16V4a2 2 0 0 1 2-2h10" />
+              </svg>
+              Copiar
+            </button>
+          </div>
+          <div class="tbody">
+            <div><span class="tp">$ </span><span class="tc">curl -fsSL https://deb.nodesource.com/setup_20.x | sudo bash -</span></div>
+            <div><span class="tp">$ </span><span class="tc">sudo apt install -y nodejs</span></div>
+          </div>
+        </div>
+
+        <p class="dsd" style="margin:16px 0 8px;">Verifica se instalou certo:</p>
+
+        <div class="term">
+          <div class="tbar">
+            <div class="tdots"><span class="tr"></span><span class="ty"></span><span class="tg"></span></div>
+            <span class="ttitle">Terminal</span>
+            <button class="copy-btn" onclick="cp(this,'node --version')">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="8" y="8" width="14" height="14" rx="2" />
+                <path d="M4 16V4a2 2 0 0 1 2-2h10" />
+              </svg>
+              Copiar
+            </button>
+          </div>
+          <div class="tbody">
+            <div><span class="tp">$ </span><span class="tc">node --version</span></div>
+            <div class="to" style="margin-top:3px;">v20.x.x</div>
+          </div>
+        </div>
+
+        <div class="callout">
+          <div class="ctag">// Verificação</div>
+          Deve aparecer algo como <strong>v20.x.x</strong>. Se aparecer, tudo certo — próximo passo!
+        </div>
+      </section>
+
+      <!-- ── SEC 05 ── -->
+      <section class="sec" id="s5">
+        <div class="sec-hd">
+          <span class="sec-n">05</span>
+          <div>
+            <h2>Instalar o Claude Code</h2>
+            <div class="sub">O momento principal</div>
+          </div>
+        </div>
+
+        <div class="term">
+          <div class="tbar">
+            <div class="tdots"><span class="tr"></span><span class="ty"></span><span class="tg"></span></div>
+            <span class="ttitle">Terminal</span>
+            <button class="copy-btn" onclick="cp(this,'npm install -g @anthropic-ai/claude-code')">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="8" y="8" width="14" height="14" rx="2" />
+                <path d="M4 16V4a2 2 0 0 1 2-2h10" />
+              </svg>
+              Copiar
+            </button>
+          </div>
+          <div class="tbody">
+            <div><span class="tp">$ </span><span class="tc">npm install -g @anthropic-ai/claude-code</span></div>
+            <div class="to" style="margin-top:8px;">added 1 package in 3s</div>
+            <div class="to">✓ claude-code instalado com sucesso</div>
+          </div>
+        </div>
+
+        <p class="dsd" style="margin:16px 0 8px;">Inicia o Claude Code:</p>
+
+        <div class="term">
+          <div class="tbar">
+            <div class="tdots"><span class="tr"></span><span class="ty"></span><span class="tg"></span></div>
+            <span class="ttitle">Terminal</span>
+            <button class="copy-btn" onclick="cp(this,'claude')">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="8" y="8" width="14" height="14" rx="2" />
+                <path d="M4 16V4a2 2 0 0 1 2-2h10" />
+              </svg>
+              Copiar
+            </button>
+          </div>
+          <div class="tbody">
+            <div><span class="tp">$ </span><span class="tc">claude</span></div>
+            <div class="to" style="margin-top:8px;">✓ Claude Code iniciado</div>
+            <div class="to">→ Como posso ajudar?</div>
+          </div>
+        </div>
+
+        <div class="callout">
+          <div class="ctag">// Autenticação</div>
+          Na primeira execução ele vai pedir pra autenticar com sua conta Anthropic. <strong>Siga o link que aparecer no terminal e autorize.</strong>
+        </div>
+      </section>
+
+      <!-- ── SEC 06 ── -->
+      <section class="sec" id="s6">
+        <div class="sec-hd">
+          <span class="sec-n">06</span>
+          <div>
+            <h2>Manter o Claude Code rodando em background</h2>
+            <div class="sub">Ativo 24/7 com PM2</div>
+          </div>
+        </div>
+
+        <p class="dsd" style="margin-bottom:16px;">Quando você fechar o terminal, o processo para. O <strong>PM2</strong> resolve isso mantendo tudo ativo 24/7:</p>
+
+        <div class="term">
+          <div class="tbar">
+            <div class="tdots"><span class="tr"></span><span class="ty"></span><span class="tg"></span></div>
+            <span class="ttitle">Terminal</span>
+            <button class="copy-btn" onclick="cp(this,'npm install -g pm2')">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="8" y="8" width="14" height="14" rx="2" />
+                <path d="M4 16V4a2 2 0 0 1 2-2h10" />
+              </svg>
+              Copiar
+            </button>
+          </div>
+          <div class="tbody">
+            <div><span class="tp">$ </span><span class="tc">npm install -g pm2</span></div>
+          </div>
+        </div>
+
+        <p class="dsd" style="margin:16px 0 8px;">Cria uma pasta de trabalho e sobe o processo:</p>
+
+        <div class="term">
+          <div class="tbar">
+            <div class="tdots"><span class="tr"></span><span class="ty"></span><span class="tg"></span></div>
+            <span class="ttitle">Terminal</span>
+            <button class="copy-btn" onclick="cp(this,'mkdir ~/meu-projeto && cd ~/meu-projeto\npm2 start &quot;claude&quot; --name claude-code')">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="8" y="8" width="14" height="14" rx="2" />
+                <path d="M4 16V4a2 2 0 0 1 2-2h10" />
+              </svg>
+              Copiar
+            </button>
+          </div>
+          <div class="tbody">
+            <div><span class="tp">$ </span><span class="tc">mkdir ~/meu-projeto && cd ~/meu-projeto</span></div>
+            <div><span class="tp">$ </span><span class="tc">pm2 start "claude" --name claude-code</span></div>
+          </div>
+        </div>
+
+        <p class="dsd" style="margin:16px 0 8px;">Garante que o PM2 reinicia automaticamente se a VPS for reiniciada:</p>
+
+        <div class="term">
+          <div class="tbar">
+            <div class="tdots"><span class="tr"></span><span class="ty"></span><span class="tg"></span></div>
+            <span class="ttitle">Terminal</span>
+            <button class="copy-btn" onclick="cp(this,'pm2 startup\npm2 save')">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="8" y="8" width="14" height="14" rx="2" />
+                <path d="M4 16V4a2 2 0 0 1 2-2h10" />
+              </svg>
+              Copiar
+            </button>
+          </div>
+          <div class="tbody">
+            <div><span class="tp">$ </span><span class="tc">pm2 startup</span></div>
+            <div><span class="tp">$ </span><span class="tc">pm2 save</span></div>
+          </div>
+        </div>
+
+        <div class="callout">
+          <div class="ctag">// Resultado</div>
+          Agora o Claude Code fica ativo <strong>24/7</strong> mesmo com o terminal fechado.
+        </div>
+      </section>
+
+      <!-- ── SEC 07 ── -->
+      <section class="sec" id="s7">
+        <div class="sec-hd">
+          <span class="sec-n">07</span>
+          <div>
+            <h2>Acessar de qualquer lugar</h2>
+            <div class="sub">Computador liberado, Claude rodando no servidor</div>
+          </div>
+        </div>
+
+        <p class="dsd" style="margin-bottom:16px;">Sempre que quiser retomar, abre o terminal e conecta:</p>
+
+        <p style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin:14px 0 6px;">
+          // Mac / Linux — Terminal</p>
+        <div class="term">
+          <div class="tbar">
+            <div class="tdots"><span class="tr"></span><span class="ty"></span><span class="tg"></span></div>
+            <span class="ttitle">Terminal</span>
+            <button class="copy-btn" onclick="cp(this,'ssh claudeuser@SEU_IP_AQUI')">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="8" y="8" width="14" height="14" rx="2" />
+                <path d="M4 16V4a2 2 0 0 1 2-2h10" />
+              </svg>
+              Copiar
+            </button>
+          </div>
+          <div class="tbody">
+            <div><span class="tp">$ </span><span class="tc">ssh claudeuser@SEU_IP_AQUI</span></div>
+          </div>
+        </div>
+
+        <p style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin:14px 0 6px;">
+          // Windows — CMD ou PowerShell</p>
+        <div class="term">
+          <div class="tbar">
+            <div class="tdots"><span class="tr"></span><span class="ty"></span><span class="tg"></span></div>
+            <span class="ttitle">Terminal</span>
+            <button class="copy-btn" onclick="cp(this,'ssh claudeuser@SEU_IP_AQUI')">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="8" y="8" width="14" height="14" rx="2" />
+                <path d="M4 16V4a2 2 0 0 1 2-2h10" />
+              </svg>
+              Copiar
+            </button>
+          </div>
+          <div class="tbody">
+            <div><span class="tp">> </span><span class="tc">ssh claudeuser@SEU_IP_AQUI</span></div>
+          </div>
+        </div>
+
+        <p class="dsd" style="margin:20px 0 8px;">Comandos úteis do dia a dia:</p>
+
+        <div class="term">
+          <div class="tbar">
+            <div class="tdots"><span class="tr"></span><span class="ty"></span><span class="tg"></span></div>
+            <span class="ttitle">Terminal</span>
+          </div>
+          <div class="tbody">
+            <div><span class="tp">$ </span><span class="tc">pm2 status</span><span class="tcm" style="margin-left:16px;"># ver se está rodando</span></div>
+            <div><span class="tp">$ </span><span class="tc">pm2 logs claude-code</span><span class="tcm" style="margin-left:16px;"># ver os logs em tempo real</span></div>
+            <div><span class="tp">$ </span><span class="tc">pm2 restart claude-code</span><span class="tcm" style="margin-left:16px;"># reiniciar se precisar</span></div>
+          </div>
+        </div>
+
+        <div class="callout">
+          <div class="ctag">// Setup completo</div>
+          Computador liberado. Claude Code rodando no servidor <strong>24/7</strong>. Esse é o setup certo.
+        </div>
+
+        <!-- Bonus: dica final do MD -->
+        <div class="callout yellow" style="margin-top:16px;">
+          <div class="ctag">// Agora é só usar — não tenha medo da tela preta!</div>
+          Digita <strong>claude</strong> no terminal e o chat abre na hora. É exatamente como conversar com um assistente de IA — só que dentro do terminal. Você escreve em português normal, como se estivesse mandando mensagem pra um funcionário.
+        </div>
+
+        <p class="dsd" style="margin:20px 0 8px;">Exemplos do que pedir:</p>
+
+        <div class="dsteps">
+          <div class="dstep">
+            <div class="dsl">
+              <div class="dsn">💬</div>
+              <div class="dsl-line"></div>
+            </div>
+            <div class="dsb">
+              <div class="dsd" style="color:var(--green-text);"><strong>"Crie uma pasta chamada projetos e dentro dela um arquivo chamado ideias.txt"</strong></div>
+            </div>
+          </div>
+          <div class="dstep">
+            <div class="dsl">
+              <div class="dsn">💬</div>
+              <div class="dsl-line"></div>
+            </div>
+            <div class="dsb">
+              <div class="dsd" style="color:var(--green-text);"><strong>"Escreve um script Python que lê um arquivo CSV e mostra as primeiras 5 linhas"</strong></div>
+            </div>
+          </div>
+          <div class="dstep">
+            <div class="dsl">
+              <div class="dsn">💬</div>
+            </div>
+            <div class="dsb">
+              <div class="dsd" style="color:var(--green-text);"><strong>"Tem um erro no meu código, me ajuda a corrigir?"</strong></div>
+            </div>
+          </div>
+        </div>
+
+        <p class="dsd" style="margin:16px 0 8px;"><strong>Atalhos úteis:</strong></p>
+
+        <div class="dsteps">
+          <div class="dstep">
+            <div class="dsl">
+              <div class="dsn" style="font-size:12px;color:var(--green);">/exit</div>
+            </div>
+            <div class="dsb">
+              <div class="dsd">Sai do chat</div>
+            </div>
+          </div>
+          <div class="dstep">
+            <div class="dsl">
+              <div class="dsn" style="font-size:11px;color:var(--green);">/clear</div>
+            </div>
+            <div class="dsb">
+              <div class="dsd">Limpa a conversa</div>
+            </div>
+          </div>
+          <div class="dstep">
+            <div class="dsl">
+              <div class="dsn" style="font-size:11px;color:var(--green);">/help</div>
+            </div>
+            <div class="dsb">
+              <div class="dsd">Mostra todos os comandos disponíveis</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout" style="margin-top:8px;">
+          <div class="ctag">// Pense assim</div>
+          Ele é como um estagiário técnico que entende tudo que você fala e vive dentro do terminal. <strong>Você manda, ele executa.</strong>
+        </div>
+      </section>
+
+      <!-- CLOSING -->
+      <div class="closing">
+        <p>Pronto! Seu Claude Code está rodando 24/7 na nuvem, sem travar seu computador e acessível de qualquer lugar.</p>
+        <p>Agora é só usar — comece com tarefas simples e vá explorando o potencial. Qualquer dúvida, me chama no Instagram.</p>
+        <p class="sig">Bons projetos! — Miguelito 🚀</p>
+      </div>
+
+    </div><!-- /cx -->
+
+    <footer>
+      <div class="cx">
+        <p class="ft">instagram.com/miguelito.ai · Guia VPS Hostinger · 2026</p>
+      </div>
+    </footer>
+
+  </div><!-- /main -->
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    // ── Supabase Init ──
+    const SUPABASE_URL = "https://oeuogaoixspwdusqisqy.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9ldW9nYW9peHNwd2R1c3Fpc3F5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIwNTk4MDAsImV4cCI6MjA4NzYzNTgwMH0.GPj0FTvXd7aAIIZibyPpGaZF6hlDHxbzd8s7mcHUkRA";
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // ── Step 1: check email ──
+    async function checkEmail() {
+      const emailEl = document.getElementById('fe1');
+      const email = emailEl.value.trim().toLowerCase();
+      const err = document.getElementById('gerr1');
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!re.test(email)) { err.style.display = 'block'; return; }
+      err.style.display = 'none';
+
+      const btn = document.querySelector('#gstep1 .gate-btn');
+      const oldText = btn.textContent;
+      btn.textContent = "Buscando...";
+      btn.disabled = true;
+
+      try {
+        const { data, error } = await supabaseClient
+          .from('cadastros_guiaclaude')
+          .select('nome')
+          .eq('email', email)
+          .maybeSingle();
+
+        if (data) {
+          unlockContent(data.nome || email.split('@')[0]);
+        } else {
+          document.getElementById('gemailtext').textContent = email;
+          document.getElementById('gstep1').classList.add('hidden');
+          document.getElementById('gstep2').classList.remove('hidden');
+        }
+      } catch (err) {
+        console.error('Erro na verificação:', err);
+        document.getElementById('gemailtext').textContent = email;
+        document.getElementById('gstep1').classList.add('hidden');
+        document.getElementById('gstep2').classList.remove('hidden');
+      } finally {
+        btn.textContent = oldText;
+        btn.disabled = false;
+      }
+    }
+
+    function goBack() {
+      document.getElementById('gstep2').classList.add('hidden');
+      document.getElementById('gstep1').classList.remove('hidden');
+    }
+
+    // ── Step 2: full registration ──
+    async function submitGate() {
+      const name = document.getElementById('fn').value.trim();
+      const email = document.getElementById('fe1').value.trim().toLowerCase();
+      const wpp = document.getElementById('fw').value.trim();
+      const err = document.getElementById('gerr2');
+
+      if (!name) { err.style.display = 'block'; return; }
+      err.style.display = 'none';
+
+      const btn = document.querySelector('#gstep2 .gate-btn');
+      const oldText = btn.textContent;
+      btn.textContent = "Verificando...";
+      btn.disabled = true;
+
+      try {
+        const { error } = await supabaseClient
+          .from('cadastros_guiaclaude')
+          .insert([{ email: email, nome: name, whatsapp: wpp }]);
+
+        if (error) console.error("Erro no cadastro:", error);
+        unlockContent(name);
+      } catch (e) {
+        console.error(e);
+        unlockContent(name);
+      } finally {
+        btn.textContent = oldText;
+        btn.disabled = false;
+      }
+    }
+
+    function unlockContent(name) {
+      const firstName = name.split(' ')[0];
+      document.getElementById('hname').textContent = 'Olá, ' + firstName + '! Bem-vindo(a) 👋';
+      document.getElementById('gate').style.display = 'none';
+      document.getElementById('main').style.display = 'block';
+      window.scrollTo(0, 0);
+    }
+
+    // Enter key support
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Enter') return;
+      if (!document.getElementById('gstep2').classList.contains('hidden')) submitGate();
+      else checkEmail();
+    });
+
+    // ── Progress + dots ──
+    const secIds = ['s1', 's2', 's3', 's4', 's5', 's6', 's7'];
+    window.addEventListener('scroll', () => {
+      const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+      document.getElementById('pbar').style.width = pct + '%';
+      secIds.forEach((id, i) => {
+        const el = document.getElementById(id);
+        if (el && el.getBoundingClientRect().top < window.innerHeight * 0.6) {
+          document.getElementById('pd' + (i + 1)).classList.add('on');
+        }
+      });
+    });
+
+    // ── Copy button ──
+    function cp(btn, text) {
+      navigator.clipboard.writeText(text).then(() => {
+        const orig = btn.innerHTML;
+        btn.innerHTML = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Copiado!`;
+        btn.classList.add('ok');
+        setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('ok'); }, 2200);
+      });
+    }
+  </script>
+
+</body>
+
+</html>
