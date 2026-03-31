@@ -43,6 +43,7 @@ import ClientCalendarPage from "./pages/ClientCalendarPage";
 import GuiaClaudePage from "./pages/GuiaClaudePage";
 import GuiaVpsPage from "./pages/GuiaVpsPage";
 import PropostaLuccoEmovePage from "./pages/PropostaLuccoEmovePage";
+import PropostaLuccoGoperPage from "./pages/PropostaLuccoGoperPage";
 
 const ComputizePage = () => {
 
@@ -538,6 +539,7 @@ export default function App() {
         <Route path="/miguelitoai/guiaclaude" element={<GuiaClaudePage />} />
         <Route path="/miguelitoai/vps" element={<GuiaVpsPage />} />
         <Route path="/lucaslucco/emove" element={<PropostaLuccoEmovePage />} />
+        <Route path="/lucaslucco/goper" element={<PropostaLuccoGoperPage />} />
         {/* Fallback to home */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

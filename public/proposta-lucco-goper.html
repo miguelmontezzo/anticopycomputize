@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lucas Lucco × Goper — Proposta de Embaixador</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #050505;
+  --white: #ffffff;
+  --off: #c8c8c8;
+  --dim: #555;
+  --red: #e63030;
+  --border: rgba(255,255,255,0.07);
+  --card: #0d0d0d;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--white);
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 300;
+  overflow-x: hidden;
+}
+
+.cursor {
+  width:8px; height:8px;
+  background: var(--red);
+  border-radius:50%;
+  position:fixed;
+  pointer-events:none;
+  z-index:9999;
+  transform:translate(-50%,-50%);
+  transition: left 0.08s, top 0.08s;
+}
+
+nav {
+  position:fixed; top:0; left:0; right:0; z-index:100;
+  display:flex; justify-content:space-between; align-items:center;
+  padding:1.2rem 4rem;
+  border-bottom:1px solid var(--border);
+  background: rgba(5,5,5,0.92);
+  backdrop-filter: blur(20px);
+}
+.nav-l { font-family:'Anton',sans-serif; font-size:0.85rem; letter-spacing:0.2em; color:var(--red); }
+.nav-r { display:flex; gap:2.5rem; list-style:none; }
+.nav-r a { color:var(--dim); font-size:0.7rem; letter-spacing:0.15em; text-transform:uppercase; text-decoration:none; transition:color 0.3s; }
+.nav-r a:hover { color:var(--white); }
+
+/* HERO */
+.hero {
+  height:100vh; position:relative; overflow:hidden;
+  display:flex; align-items:flex-end;
+}
+
+.hero-img {
+  position:absolute; inset:0; z-index:1;
+  background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Lucas_Lucco_2016.jpg/800px-Lucas_Lucco_2016.jpg');
+  background-size: cover;
+  background-position: center top;
+  filter: grayscale(60%) contrast(1.2) brightness(0.35);
+}
+
+.hero-overlay {
+  position:absolute; inset:0; z-index:2;
+  background:
+    linear-gradient(to right, rgba(5,5,5,0.95) 35%, rgba(5,5,5,0.15) 100%),
+    linear-gradient(to top, rgba(5,5,5,1) 0%, transparent 55%);
+}
+
+.hero-content {
+  position:relative; z-index:3;
+  padding:0 4rem 5rem;
+  width:100%;
+}
+
+.hero-badge {
+  display:inline-flex; align-items:center; gap:0.7rem;
+  background:var(--red);
+  padding:0.4rem 1.1rem;
+  font-size:0.62rem; letter-spacing:0.22em; text-transform:uppercase;
+  margin-bottom:2rem;
+}
+.hero-badge::before {
+  content:''; width:6px; height:6px; background:#fff; border-radius:50%;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%,100%{ opacity:1; transform:scale(1); }
+  50%{ opacity:0.4; transform:scale(1.6); }
+}
+
+.hero-name {
+  font-family:'Anton',sans-serif;
+  font-size:clamp(5rem,13vw,12rem);
+  line-height:0.88;
+  text-transform:uppercase;
+  animation: fadeUp 1s ease both;
+}
+.hero-name em {
+  font-style:normal;
+  color:transparent;
+  -webkit-text-stroke:2px #fff;
+}
+
+.hero-x {
+  font-family:'Anton',sans-serif;
+  font-size:clamp(1.8rem,3.5vw,3rem);
+  color:var(--red); letter-spacing:0.12em;
+  margin:0.6rem 0;
+  animation: fadeUp 1s 0.1s ease both;
+}
+
+.hero-bottom {
+  display:flex; justify-content:space-between; align-items:flex-end;
+  margin-top:3rem;
+  animation: fadeUp 1s 0.2s ease both;
+}
+
+.hero-kpis { display:flex; gap:4rem; }
+.kpi-num {
+  font-family:'Anton',sans-serif;
+  font-size:2.4rem; line-height:1;
+}
+.kpi-red { color:var(--red); }
+.kpi-label { font-size:0.62rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--dim); margin-top:0.3rem; }
+
+.scroll-hint {
+  font-size:0.62rem; letter-spacing:0.2em; text-transform:uppercase;
+  color:var(--dim); writing-mode:vertical-rl;
+  display:flex; align-items:center; gap:0.8rem;
+}
+.scroll-hint::after { content:''; width:1px; height:50px; background:var(--dim); }
+
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(24px); }
+  to { opacity:1; transform:translateY(0); }
+}
+
+/* SECTIONS */
+.section { max-width:1200px; margin:0 auto; padding:8rem 4rem; }
+.hr { width:100%; height:1px; background:var(--border); }
+
+.sec-label {
+  font-size:0.62rem; letter-spacing:0.28em; text-transform:uppercase;
+  color:var(--red); margin-bottom:1.2rem;
+  display:flex; align-items:center; gap:0.8rem;
+}
+.sec-label::before { content:''; width:20px; height:1px; background:var(--red); }
+
+.sec-title {
+  font-family:'Anton',sans-serif;
+  font-size:clamp(3rem,6vw,6rem);
+  line-height:0.88; text-transform:uppercase;
+  margin-bottom:4rem;
+}
+.sec-title span { color:var(--red); }
+
+/* AUDIENCE */
+.aud-grid {
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:1px; background:var(--border); margin-bottom:3rem;
+}
+.aud-card {
+  background:var(--card); padding:3rem 2.5rem;
+  position:relative; overflow:hidden; transition:background 0.3s;
+}
+.aud-card:hover { background:#111; }
+.aud-card::after {
+  content:''; position:absolute;
+  bottom:0; left:0; right:0; height:2px;
+  background:var(--red);
+  transform:scaleX(0); transform-origin:left;
+  transition:transform 0.4s ease;
+}
+.aud-card:hover::after { transform:scaleX(1); }
+.aud-num { font-family:'Anton',sans-serif; font-size:4rem; line-height:1; margin-bottom:0.4rem; }
+.aud-num.red { color:var(--red); }
+.aud-label { font-size:0.68rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--dim); margin-bottom:1rem; }
+.aud-desc { font-size:0.86rem; color:rgba(255,255,255,0.4); line-height:1.7; max-width:360px; }
+
+.moment-box {
+  border-left:3px solid var(--red);
+  background:var(--card);
+  padding:2.5rem;
+}
+.moment-box p { font-size:0.95rem; line-height:1.85; color:rgba(255,255,255,0.5); max-width:780px; }
+.moment-box strong { color:#fff; font-weight:500; }
+
+/* SCOPE */
+.scope-grid { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--border); }
+.scope-card { background:var(--card); padding:3rem 2.5rem; transition:background 0.3s; }
+.scope-card:hover { background:#111; }
+.scope-ico { font-size:1.8rem; margin-bottom:1.5rem; }
+.scope-tag {
+  font-size:0.6rem; letter-spacing:0.2em; text-transform:uppercase;
+  color:var(--red); margin-bottom:0.5rem;
+  display:flex; align-items:center; gap:0.5rem;
+}
+.scope-tag::before { content:''; width:12px; height:1px; background:var(--red); }
+.scope-name { font-family:'Anton',sans-serif; font-size:2rem; text-transform:uppercase; margin-bottom:1.5rem; line-height:1; }
+.scope-list { list-style:none; display:flex; flex-direction:column; gap:0.7rem; }
+.scope-list li { font-size:0.83rem; color:rgba(255,255,255,0.45); display:flex; gap:0.8rem; line-height:1.5; align-items:flex-start; }
+.scope-list li::before { content:'→'; color:var(--red); flex-shrink:0; }
+.scope-freq { margin-top:2rem; padding-top:1.5rem; border-top:1px solid var(--border); font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--dim); }
+.scope-freq strong { color:#fff; }
+
+/* TIMELINE */
+.timeline { position:relative; }
+.timeline::before {
+  content:''; position:absolute; left:0; top:0; bottom:0;
+  width:1px; background:linear-gradient(to bottom, var(--red), transparent);
+}
+.tl-item {
+  padding:0 0 4rem 3.5rem; position:relative;
+  opacity:0; transform:translateX(-16px);
+  transition:opacity 0.6s ease, transform 0.6s ease;
+}
+.tl-item.vis { opacity:1; transform:translateX(0); }
+.tl-dot {
+  position:absolute; left:-5px; top:0.2rem;
+  width:11px; height:11px;
+  border:2px solid var(--red); border-radius:50%;
+  background:var(--bg); transition:background 0.3s;
+}
+.tl-item:hover .tl-dot { background:var(--red); }
+.tl-period { font-size:0.62rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--red); margin-bottom:0.5rem; }
+.tl-title { font-family:'Anton',sans-serif; font-size:1.8rem; text-transform:uppercase; margin-bottom:0.8rem; }
+.tl-desc { font-size:0.85rem; line-height:1.8; color:rgba(255,255,255,0.4); max-width:600px; }
+
+/* INVEST */
+.invest-main {
+  background:var(--card); border:1px solid var(--border);
+  padding:4rem; margin-bottom:1px;
+  display:flex; gap:4rem; align-items:center;
+}
+.invest-big { font-family:'Anton',sans-serif; font-size:clamp(4rem,8vw,8rem); line-height:1; flex-shrink:0; }
+.invest-big span { color:var(--red); }
+.invest-rows { flex:1; }
+.invest-row { display:flex; justify-content:space-between; border-bottom:1px solid var(--border); padding:1.2rem 0; }
+.invest-row:last-child { border:none; }
+.ir-l { font-size:0.68rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--dim); }
+.ir-v { font-size:0.9rem; font-weight:500; }
+.ir-v.red { color:var(--red); }
+
+.invest-sub { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--border); }
+.invest-sub-card { background:var(--card); padding:2rem 2.5rem; }
+.isc-label { font-size:0.62rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--dim); margin-bottom:0.8rem; }
+.isc-text { font-size:0.85rem; line-height:1.8; color:rgba(255,255,255,0.45); }
+.isc-text strong { color:#fff; font-weight:500; }
+
+/* CLAUSES */
+.clause {
+  display:grid; grid-template-columns:60px 1fr; gap:2rem; align-items:start;
+  border-bottom:1px solid var(--border); padding:2rem 0;
+  transition:padding-left 0.3s; cursor:default;
+}
+.clause:hover { padding-left:0.5rem; }
+.cl-num { font-family:'Anton',sans-serif; font-size:1.8rem; color:var(--red); opacity:0.3; line-height:1; }
+.cl-title { font-size:0.7rem; letter-spacing:0.15em; text-transform:uppercase; color:#fff; margin-bottom:0.6rem; }
+.cl-text { font-size:0.84rem; line-height:1.8; color:rgba(255,255,255,0.38); }
+
+/* SIGN */
+.sign-wrap {
+  border-top:1px solid var(--border);
+  max-width:1200px; margin:0 auto; padding:5rem 4rem;
+  display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:end;
+}
+.sign-brand { font-family:'Anton',sans-serif; font-size:2.2rem; color:var(--red); letter-spacing:0.06em; margin-bottom:0.8rem; }
+.sign-info { font-size:0.78rem; line-height:2; color:var(--dim); }
+.sign-r { text-align:right; }
+.sign-date { font-size:0.68rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--dim); margin-bottom:3rem; }
+.sign-line { height:1px; background:rgba(255,255,255,0.13); margin-bottom:0.7rem; }
+.sign-name { font-size:0.68rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--dim); }
+
+/* FADE */
+.fade { opacity:0; transform:translateY(20px); transition:opacity 0.7s ease, transform 0.7s ease; }
+.fade.vis { opacity:1; transform:translateY(0); }
+
+@media(max-width:768px){
+  nav { padding:1rem 1.5rem; }
+  .nav-r { display:none; }
+  .hero-content { padding:0 1.5rem 3rem; }
+  .hero-kpis { gap:2rem; flex-wrap:wrap; }
+  .section { padding:5rem 1.5rem; }
+  .aud-grid, .scope-grid, .invest-sub, .sign-wrap { grid-template-columns:1fr; }
+  .invest-main { flex-direction:column; gap:2rem; padding:2.5rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+
+<nav>
+  <div class="nav-l">ACC × GOPER · 2026</div>
+  <ul class="nav-r">
+    <li><a href="#audiencia">Audiência</a></li>
+    <li><a href="#escopo">Entregas</a></li>
+    <li><a href="#cronograma">Cronograma</a></li>
+    <li><a href="#invest">Investimento</a></li>
+    <li><a href="#clausulas">Contrato</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-img"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-badge">Proposta Confidencial · Embaixador 2026</div>
+    <div class="hero-name">
+      Lucas<br><em>Lucco</em>
+    </div>
+    <div class="hero-x">× GOPER</div>
+    <div class="hero-bottom">
+      <div class="hero-kpis">
+        <div>
+          <div class="kpi-num kpi-red">17,9M</div>
+          <div class="kpi-label">Seguidores · Instagram</div>
+        </div>
+        <div>
+          <div class="kpi-num">R$15K</div>
+          <div class="kpi-label">Fee mensal</div>
+        </div>
+        <div>
+          <div class="kpi-num">12</div>
+          <div class="kpi-label">Meses de contrato</div>
+        </div>
+      </div>
+      <div class="scroll-hint">scroll</div>
+    </div>
+  </div>
+</div>
+
+<!-- AUDIÊNCIA -->
+<div class="hr"></div>
+<div class="section" id="audiencia">
+  <div class="sec-label fade">01 — Audiência</div>
+  <h2 class="sec-title fade">Por que<br><span>Lucas Lucco</span></h2>
+
+  <div class="aud-grid fade">
+    <div class="aud-card">
+      <div class="aud-num red">17,9M</div>
+      <div class="aud-label">Seguidores no Instagram</div>
+      <div class="aud-desc">Um dos maiores sertanejos em audiência digital ativa no Brasil, com base consolidada e engajamento real em múltiplas plataformas.</div>
+    </div>
+    <div class="aud-card">
+      <div class="aud-num">14,4M</div>
+      <div class="aud-label">Curtidas no Facebook</div>
+      <div class="aud-desc">Presença multiplataforma com audiência qualificada nas classes A e B — o público que investe em saúde, lifestyle e bem-estar.</div>
+    </div>
+    <div class="aud-card">
+      <div class="aud-num red">2025</div>
+      <div class="aud-label">Retorno aos palcos</div>
+      <div class="aud-desc">Após pausa para cuidar da saúde mental, Lucas retorna com nova narrativa: mais autêntico, mais próximo, mais humano.</div>
+    </div>
+    <div class="aud-card">
+      <div class="aud-num">3K+</div>
+      <div class="aud-label">Publicações no Instagram</div>
+      <div class="aud-desc">Histórico sólido de conteúdo consistente. Audiência fidelizada e acostumada com recomendações genuínas do artista.</div>
+    </div>
+  </div>
+
+  <div class="moment-box fade">
+    <p>O momento de retorno do Lucas Lucco cria uma <strong>janela única de ativação</strong>. Ele está reconstruindo sua narrativa com foco em saúde, equilíbrio e autenticidade — exatamente o posicionamento da Goper. Treino em casa, disciplina com liberdade, bem-estar sem abrir mão da rotina. <strong>O fit é orgânico e genuíno.</strong></p>
+  </div>
+</div>
+
+<!-- ESCOPO -->
+<div class="hr"></div>
+<div class="section" id="escopo">
+  <div class="sec-label fade">02 — Escopo de Entregas</div>
+  <h2 class="sec-title fade">O que está<br><span>incluso</span></h2>
+
+  <div class="scope-grid fade">
+    <div class="scope-card">
+      <div class="scope-ico">📱</div>
+      <div class="scope-tag">Semanal</div>
+      <div class="scope-name">Stories</div>
+      <ul class="scope-list">
+        <li>Mínimo de 3 stories por sequência semanal</li>
+        <li>Conteúdo autêntico de uso real da Goper Bike Pro Experience</li>
+        <li>Menção explícita à marca com tag @letsgoper</li>
+        <li>Aprovação prévia pela Goper em até 48h</li>
+        <li>Stories disponíveis 24h + destaque opcional no perfil</li>
+        <li>Pode incluir treino, bastidores, antes/depois</li>
+      </ul>
+      <div class="scope-freq"><strong>4 sequências / mês</strong> · 48 no total</div>
+    </div>
+    <div class="scope-card">
+      <div class="scope-ico">🖼️</div>
+      <div class="scope-tag">Mensal</div>
+      <div class="scope-name">Post Feed</div>
+      <ul class="scope-list">
+        <li>1 post no feed do Instagram por mês</li>
+        <li>Formato: carrossel, foto ou reels — a definir por ativação</li>
+        <li>Caption com menção e link na bio quando aplicável</li>
+        <li>Arte e copy aprovados com 5 dias úteis de antecedência</li>
+        <li>Permanência mínima de 12 meses no feed</li>
+        <li>Métricas compartilhadas em até 72h após publicação</li>
+      </ul>
+      <div class="scope-freq"><strong>1 post / mês</strong> · 12 no total</div>
+    </div>
+    <div class="scope-card">
+      <div class="scope-ico">🚴</div>
+      <div class="scope-tag">Equipamento cedido</div>
+      <div class="scope-name">Goper Pro 21"</div>
+      <ul class="scope-list">
+        <li>Goper Bike Pro Experience com tela touch 21" Full HD</li>
+        <li>Equipamento cedido durante toda a vigência</li>
+        <li>Instalação e suporte técnico pela Goper</li>
+        <li>Acesso ilimitado à plataforma de aulas</li>
+        <li>Bike no estúdio ou residência do embaixador</li>
+      </ul>
+      <div class="scope-freq">Cedida por <strong>12 meses</strong> · Devolução ao término</div>
+    </div>
+    <div class="scope-card">
+      <div class="scope-ico">🚫</div>
+      <div class="scope-tag">Não incluso</div>
+      <div class="scope-name">Restrições</div>
+      <ul class="scope-list">
+        <li>Aparições em eventos físicos da Goper</li>
+        <li>Conteúdo para TikTok ou YouTube</li>
+        <li>Uso da imagem em mídia paga (campanhas pagas)</li>
+        <li>Exclusividade total de categoria fitness</li>
+        <li>Produções com equipe de terceiros contratada</li>
+      </ul>
+      <div class="scope-freq">Itens acima <strong>negociáveis</strong> via aditivo</div>
+    </div>
+  </div>
+</div>
+
+<!-- CRONOGRAMA -->
+<div class="hr"></div>
+<div class="section" id="cronograma">
+  <div class="sec-label fade">03 — Cronograma</div>
+  <h2 class="sec-title fade">Linha do<br><span>tempo</span></h2>
+
+  <div class="timeline fade">
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-period">Semanas 1–2 · Pré-contrato</div>
+      <div class="tl-title">Alinhamento & Assinatura</div>
+      <div class="tl-desc">Revisão da proposta pelas partes, ajustes e assinatura digital. Entrega e instalação da Goper Bike Pro Experience 21" no endereço do embaixador.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-period">Semanas 3–4 · Mês 1</div>
+      <div class="tl-title">Ativação & Primeiro Conteúdo</div>
+      <div class="tl-desc">Primeiro post de feed marcando o início da parceria. Primeiras 2 sequências de stories com unboxing e primeiro treino. Tom autêntico, sem roteiro engessado.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-period">Meses 2–6 · Consolidação</div>
+      <div class="tl-title">Ritmo Contínuo</div>
+      <div class="tl-desc">1 sequência de stories/semana + 1 post no feed/mês. Reunião de alinhamento mensal entre times. Compartilhamento de métricas a cada publicação de feed.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-period">Meses 7–11 · Escala</div>
+      <div class="tl-title">Ativações Temáticas</div>
+      <div class="tl-desc">Conteúdos sazonais com antecedência: Dia do Pai, Natal, virada de ano. Ativações extras mediante aditivo contratual.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-period">Mês 12 · Encerramento</div>
+      <div class="tl-title">Renovação ou Conclusão</div>
+      <div class="tl-desc">30 dias antes: negociação de renovação ou encerramento. Devolução do equipamento em até 15 dias. Relatório final consolidado de resultados.</div>
+    </div>
+  </div>
+</div>
+
+<!-- INVESTIMENTO -->
+<div class="hr"></div>
+<div class="section" id="invest">
+  <div class="sec-label fade">04 — Investimento</div>
+  <h2 class="sec-title fade">Estrutura<br><span>financeira</span></h2>
+
+  <div class="fade">
+    <div class="invest-main">
+      <div class="invest-big">R$<span>15</span>K</div>
+      <div class="invest-rows">
+        <div class="invest-row">
+          <div class="ir-l">Fee mensal</div>
+          <div class="ir-v red">R$ 15.000,00</div>
+        </div>
+        <div class="invest-row">
+          <div class="ir-l">Total contratual (12 meses)</div>
+          <div class="ir-v">R$ 180.000,00</div>
+        </div>
+        <div class="invest-row">
+          <div class="ir-l">Equipamento cedido</div>
+          <div class="ir-v">Goper Bike Pro Experience 21"</div>
+        </div>
+        <div class="invest-row">
+          <div class="ir-l">Vencimento do fee</div>
+          <div class="ir-v">Todo dia 5 de cada mês</div>
+        </div>
+        <div class="invest-row">
+          <div class="ir-l">Conta de recebimento</div>
+          <div class="ir-v">Anti Copy Club (PJ)</div>
+        </div>
+      </div>
+    </div>
+    <div class="invest-sub">
+      <div class="invest-sub-card">
+        <div class="isc-label">Forma de pagamento</div>
+        <div class="isc-text">Transferência via <strong>TED ou PIX</strong> para conta PJ da Anti Copy Club, vencimento todo dia 5 de cada mês de vigência.</div>
+      </div>
+      <div class="invest-sub-card">
+        <div class="isc-label">Nota fiscal</div>
+        <div class="isc-text">Emissão de <strong>NF-e</strong> pela Anti Copy Club até o 3º dia útil de cada mês, referente às entregas do mês anterior.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CLÁUSULAS -->
+<div class="hr"></div>
+<div class="section" id="clausulas">
+  <div class="sec-label fade">05 — Cláusulas Contratuais</div>
+  <h2 class="sec-title fade">Termos da<br><span>parceria</span></h2>
+
+  <div class="fade">
+    <div class="clause"><div class="cl-num">01</div><div><div class="cl-title">Objeto do Contrato</div><div class="cl-text">O presente instrumento tem por objeto a prestação de serviços de divulgação e embaixada da marca Goper pelo artista Lucas Lucco, mediante publicação de conteúdo patrocinado nas redes sociais oficiais do contratado, conforme escopo descrito nesta proposta.</div></div></div>
+
+    <div class="clause"><div class="cl-num">02</div><div><div class="cl-title">Vigência</div><div class="cl-text">O contrato terá vigência de 12 meses corridos, com início na data da assinatura pelas partes. A renovação deverá ser comunicada com no mínimo 30 dias de antecedência, podendo ser renegociada em novos termos.</div></div></div>
+
+    <div class="clause"><div class="cl-num">03</div><div><div class="cl-title">Aprovação de Conteúdo</div><div class="cl-text">Todo conteúdo deverá ser submetido à aprovação da Goper com no mínimo 48h de antecedência para stories e 5 dias úteis para posts de feed. A aprovação não fornecida nesse prazo implica em aprovação tácita.</div></div></div>
+
+    <div class="clause"><div class="cl-num">04</div><div><div class="cl-title">Exclusividade de Categoria</div><div class="cl-text">O contratado se compromete a não divulgar marcas concorrentes diretas no segmento de bikes estacionárias conectadas ou plataformas de treino indoor por assinatura durante a vigência. Outras parcerias de fitness não se enquadram nessa restrição.</div></div></div>
+
+    <div class="clause"><div class="cl-num">05</div><div><div class="cl-title">Uso de Imagem</div><div class="cl-text">As publicações poderão ser republicadas pela Goper em seus canais orgânicos. O uso em campanhas pagas (mídia paga, OOH, TV, impresso) não está incluso e requer aditivo específico com fee adicional.</div></div></div>
+
+    <div class="clause"><div class="cl-num">06</div><div><div class="cl-title">Equipamento</div><div class="cl-text">A Goper Bike Pro Experience 21" será cedida pelo prazo do contrato, permanecendo patrimônio da Goper/TrendX. Em caso de encerramento, deverá ser devolvida em até 15 dias corridos em condições de uso regular.</div></div></div>
+
+    <div class="clause"><div class="cl-num">07</div><div><div class="cl-title">Rescisão</div><div class="cl-text">Qualquer das partes pode rescindir com aviso prévio de 30 dias, sem penalidade, desde que os conteúdos já publicados estejam compensados. Rescisão antecipada sem justa causa pela Goper implica multa de 2 fees mensais.</div></div></div>
+
+    <div class="clause"><div class="cl-num">08</div><div><div class="cl-title">Métricas e Transparência</div><div class="cl-text">O contratado compartilha métricas (alcance, impressões, engajamento) de cada post de feed em até 72h após publicação. Para stories, relatório agrupado semanal.</div></div></div>
+
+    <div class="clause"><div class="cl-num">09</div><div><div class="cl-title">Foro e Legislação</div><div class="cl-text">Regido pela legislação brasileira. Foro eleito: Comarca de São Paulo/SP, com renúncia expressa a qualquer outro.</div></div></div>
+  </div>
+</div>
+
+<!-- ASSINATURA -->
+<div class="sign-wrap">
+  <div>
+    <div class="sign-brand">Anti Copy Club</div>
+    <div class="sign-info">
+      Representando Lucas Lucco<br>
+      CNPJ: a confirmar<br>
+      Uberlândia, MG · 2026
+    </div>
+  </div>
+  <div class="sign-r">
+    <div class="sign-date">São Paulo, março de 2026</div>
+    <div class="sign-line"></div>
+    <div class="sign-name">Goper / TrendX — Luis Canevari</div>
+    <br><br>
+    <div class="sign-line" style="margin-top:1.5rem;"></div>
+    <div class="sign-name">Anti Copy Club — Contratado</div>
+  </div>
+</div>
+
+<script>
+const cursor = document.getElementById('cursor');
+document.addEventListener('mousemove', e => {
+  cursor.style.left = e.clientX + 'px';
+  cursor.style.top = e.clientY + 'px';
+});
+
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('vis'); });
+}, { threshold: 0.08 });
+
+document.querySelectorAll('.fade').forEach(el => io.observe(el));
+
+document.querySelectorAll('.tl-item').forEach((el, i) => {
+  el.style.transitionDelay = `${i * 0.1}s`;
+  io.observe(el);
+});
+</script>
+
+</body>
+</html>
