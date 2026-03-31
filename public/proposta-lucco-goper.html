@@ -11,7 +11,7 @@
   --white: #ffffff;
   --off: #c8c8c8;
   --dim: #555;
-  --red: #e63030;
+  --red: #2BBEC0;
   --border: rgba(255,255,255,0.07);
   --card: #0d0d0d;
 }
@@ -25,6 +25,13 @@ body {
   font-family: 'Space Grotesk', sans-serif;
   font-weight: 300;
   overflow-x: hidden;
+}
+
+body::after {
+  content:'';
+  position:fixed; inset:0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)' opacity='.03'/%3E%3C/svg%3E");
+  pointer-events:none; z-index:9998;
 }
 
 .cursor {
@@ -46,7 +53,8 @@ nav {
   background: rgba(5,5,5,0.92);
   backdrop-filter: blur(20px);
 }
-.nav-l { font-family:'Anton',sans-serif; font-size:0.85rem; letter-spacing:0.2em; color:var(--red); }
+.nav-l { display:flex; align-items:center; gap:1rem; font-family:'Anton',sans-serif; font-size:0.85rem; letter-spacing:0.2em; color:var(--red); }
+.nav-logo { height:22px; opacity:0.9; }
 .nav-r { display:flex; gap:2.5rem; list-style:none; }
 .nav-r a { color:var(--dim); font-size:0.7rem; letter-spacing:0.15em; text-transform:uppercase; text-decoration:none; transition:color 0.3s; }
 .nav-r a:hover { color:var(--white); }
@@ -277,6 +285,113 @@ nav {
 .sign-line { height:1px; background:rgba(255,255,255,0.13); margin-bottom:0.7rem; }
 .sign-name { font-size:0.68rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--dim); }
 
+/* PRODUCT SHOWCASE */
+.product-showcase {
+  display:grid; grid-template-columns:1fr 1fr; gap:0; align-items:stretch;
+  background:var(--card); border:1px solid var(--border);
+  overflow:hidden; margin-top:4rem;
+}
+.product-img {
+  position:relative; overflow:hidden;
+  min-height:500px;
+  display:flex; align-items:center; justify-content:center;
+  background:linear-gradient(135deg, #0a0a0a 0%, #111 50%, #0a0a0a 100%);
+}
+.product-img img {
+  max-height:460px; width:auto; max-width:90%;
+  object-fit:contain;
+  filter:drop-shadow(0 20px 60px rgba(43,190,192,0.2));
+  transition:transform 0.6s ease;
+}
+.product-img:hover img { transform:scale(1.04); }
+.product-img .glow {
+  position:absolute; width:300px; height:300px;
+  background:radial-gradient(circle, rgba(43,190,192,0.15) 0%, transparent 70%);
+  border-radius:50%; pointer-events:none;
+}
+.product-info {
+  padding:4rem 3rem; display:flex; flex-direction:column; justify-content:center;
+}
+.product-info .sec-label { margin-bottom:1rem; }
+.product-info h3 {
+  font-family:'Anton',sans-serif; font-size:2.8rem;
+  text-transform:uppercase; line-height:0.95; margin-bottom:1.5rem;
+}
+.product-info h3 span { color:var(--red); }
+.product-specs {
+  list-style:none; display:flex; flex-direction:column; gap:0.8rem;
+  margin-bottom:2rem;
+}
+.product-specs li {
+  font-size:0.82rem; color:rgba(255,255,255,0.45);
+  display:flex; align-items:center; gap:0.8rem;
+  padding:0.6rem 0; border-bottom:1px solid var(--border);
+}
+.product-specs li::before {
+  content:''; width:6px; height:6px;
+  background:var(--red); border-radius:50%; flex-shrink:0;
+}
+.product-specs li strong { color:#fff; font-weight:500; }
+
+/* PHOTO STRIP */
+.photo-strip {
+  display:grid; grid-template-columns:repeat(3, 1fr);
+  gap:1px; background:var(--border);
+  margin-top:4rem;
+}
+.photo-strip-item {
+  position:relative; overflow:hidden;
+  aspect-ratio:4/3;
+}
+.photo-strip-item img {
+  width:100%; height:100%; object-fit:cover;
+  filter:grayscale(40%) brightness(0.6) contrast(1.1);
+  transition:filter 0.5s ease, transform 0.5s ease;
+}
+.photo-strip-item:hover img {
+  filter:grayscale(0%) brightness(0.75) contrast(1.05);
+  transform:scale(1.05);
+}
+.photo-strip-item .photo-label {
+  position:absolute; bottom:0; left:0; right:0;
+  padding:1.5rem;
+  background:linear-gradient(to top, rgba(5,5,5,0.9), transparent);
+  font-size:0.6rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--dim);
+}
+
+/* LIFESTYLE BANNER */
+.lifestyle-banner {
+  position:relative; overflow:hidden;
+  height:400px; margin:0;
+}
+.lifestyle-banner img {
+  width:100%; height:100%; object-fit:cover;
+  filter:grayscale(30%) brightness(0.35) contrast(1.2);
+}
+.lifestyle-banner .overlay {
+  position:absolute; inset:0;
+  background:linear-gradient(to right, rgba(5,5,5,0.95) 0%, rgba(5,5,5,0.3) 50%, rgba(5,5,5,0.95) 100%);
+  display:flex; align-items:center; justify-content:center;
+}
+.lifestyle-banner .overlay-text {
+  text-align:center; max-width:600px;
+}
+.lifestyle-banner .overlay-text h3 {
+  font-family:'Anton',sans-serif; font-size:3rem;
+  text-transform:uppercase; line-height:0.95; margin-bottom:1rem;
+}
+.lifestyle-banner .overlay-text h3 span { color:var(--red); }
+.lifestyle-banner .overlay-text p {
+  font-size:0.85rem; color:rgba(255,255,255,0.45); line-height:1.8;
+}
+
+/* LOGOS ROW */
+.logos-row {
+  display:flex; align-items:center; justify-content:center;
+  gap:3rem; padding:3rem 0; opacity:0.6;
+}
+.logos-row img { height:32px; filter:brightness(0) invert(1); opacity:0.5; }
+
 /* FADE */
 .fade { opacity:0; transform:translateY(20px); transition:opacity 0.7s ease, transform 0.7s ease; }
 .fade.vis { opacity:1; transform:translateY(0); }
@@ -289,6 +404,12 @@ nav {
   .section { padding:5rem 1.5rem; }
   .aud-grid, .scope-grid, .invest-sub, .sign-wrap { grid-template-columns:1fr; }
   .invest-main { flex-direction:column; gap:2rem; padding:2.5rem; }
+  .product-showcase { grid-template-columns:1fr; }
+  .product-img { min-height:300px; }
+  .product-info { padding:2.5rem 1.5rem; }
+  .photo-strip { grid-template-columns:1fr; }
+  .lifestyle-banner { height:280px; }
+  .lifestyle-banner .overlay-text h3 { font-size:2rem; }
 }
 </style>
 </head>
@@ -297,7 +418,10 @@ nav {
 <div class="cursor" id="cursor"></div>
 
 <nav>
-  <div class="nav-l">ACC × GOPER · 2026</div>
+  <div class="nav-l">
+    <img src="https://goper.fit/wp-content/uploads/2021/12/logo-branco.png" alt="Goper" class="nav-logo">
+    ACC × GOPER · 2026
+  </div>
   <ul class="nav-r">
     <li><a href="#audiencia">Audiência</a></li>
     <li><a href="#escopo">Entregas</a></li>
@@ -368,6 +492,44 @@ nav {
 
   <div class="moment-box fade">
     <p>O momento de retorno do Lucas Lucco cria uma <strong>janela única de ativação</strong>. Ele está reconstruindo sua narrativa com foco em saúde, equilíbrio e autenticidade — exatamente o posicionamento da Goper. Treino em casa, disciplina com liberdade, bem-estar sem abrir mão da rotina. <strong>O fit é orgânico e genuíno.</strong></p>
+  </div>
+
+  <!-- PHOTO STRIP -->
+  <div class="photo-strip fade" style="margin-top:3rem;">
+    <div class="photo-strip-item">
+      <img src="https://goper.fit/wp-content/uploads/2022/12/home-modalidades-bike-1.png" alt="Goper Bike — Treino Indoor">
+      <div class="photo-label">Treino Indoor · Goper</div>
+    </div>
+    <div class="photo-strip-item">
+      <img src="https://goper.fit/wp-content/uploads/2022/12/home-modalidades-bike-bootcamp.png" alt="Goper Bootcamp">
+      <div class="photo-label">Bootcamp · Alta Intensidade</div>
+    </div>
+    <div class="photo-strip-item">
+      <img src="https://goper.fit/wp-content/uploads/2022/12/home-modalidades-cardio.png" alt="Goper Cardio">
+      <div class="photo-label">Cardio · Resistência</div>
+    </div>
+  </div>
+</div>
+
+<!-- PRODUTO -->
+<div class="hr"></div>
+<div class="section" style="padding-bottom:4rem;">
+  <div class="product-showcase fade">
+    <div class="product-img">
+      <div class="glow" style="top:20%; left:20%;"></div>
+      <img src="https://goper.fit/wp-content/uploads/2024/08/GOPER-SMART-BIKE-21-1024x1024.png" alt="Goper Bike Pro Experience 21 polegadas">
+    </div>
+    <div class="product-info">
+      <div class="sec-label">Equipamento cedido</div>
+      <h3>Goper Bike<br><span>Pro Experience</span><br>21"</h3>
+      <ul class="product-specs">
+        <li><strong>Tela touch 21" Full HD</strong> — experiência imersiva</li>
+        <li><strong>Plataforma de aulas</strong> — acesso ilimitado ao conteúdo Goper</li>
+        <li><strong>Resistência magnética</strong> — ajuste silencioso e preciso</li>
+        <li><strong>Métricas em tempo real</strong> — cadência, watts, distância, calorias</li>
+        <li><strong>Instalação inclusa</strong> — suporte técnico durante toda a vigência</li>
+      </ul>
+    </div>
   </div>
 </div>
 
@@ -475,6 +637,17 @@ nav {
   </div>
 </div>
 
+<!-- LIFESTYLE BANNER -->
+<div class="lifestyle-banner fade">
+  <img src="https://goper.fit/wp-content/uploads/2022/01/pagina-home-sla-maisoq-1.png" alt="Goper Lifestyle">
+  <div class="overlay">
+    <div class="overlay-text">
+      <h3>Treino em casa.<br><span>Sem desculpas.</span></h3>
+      <p>A Goper conecta performance e lifestyle. Lucas Lucco traz a autenticidade que transforma produto em estilo de vida.</p>
+    </div>
+  </div>
+</div>
+
 <!-- INVESTIMENTO -->
 <div class="hr"></div>
 <div class="section" id="invest">
@@ -547,6 +720,13 @@ nav {
   </div>
 </div>
 
+<!-- LOGOS -->
+<div class="logos-row fade">
+  <img src="https://goper.fit/wp-content/uploads/2021/12/logo-branco.png" alt="Goper" style="height:28px;">
+  <span style="color:var(--dim); font-size:0.7rem; letter-spacing:0.15em;">×</span>
+  <span style="font-family:'Anton',sans-serif; font-size:1.2rem; letter-spacing:0.1em; color:#fff; opacity:0.7;">ANTI COPY CLUB</span>
+</div>
+
 <!-- ASSINATURA -->
 <div class="sign-wrap">
   <div>
@@ -559,6 +739,7 @@ nav {
   </div>
   <div class="sign-r">
     <div class="sign-date">São Paulo, março de 2026</div>
+    <img src="https://goper.fit/wp-content/uploads/2021/12/logo-branco.png" alt="Goper" style="height:20px; opacity:0.4; margin-bottom:1.5rem; display:inline-block;">
     <div class="sign-line"></div>
     <div class="sign-name">Goper / TrendX — Luis Canevari</div>
     <br><br>
