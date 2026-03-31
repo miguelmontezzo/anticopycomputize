@@ -263,6 +263,38 @@ nav {
 
 
 
+/* CONTRACT DURATION HIGHLIGHT */
+.duration-highlight {
+  display:flex; align-items:center; justify-content:center; gap:4rem;
+  background:var(--card); border:1px solid var(--border);
+  padding:3.5rem 3rem; margin-bottom:4rem;
+  position:relative; overflow:hidden;
+}
+.duration-highlight::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:3px;
+  background:linear-gradient(to right, transparent, var(--red), transparent);
+}
+.duration-big {
+  font-family:'Anton',sans-serif;
+  font-size:clamp(5rem,10vw,9rem); line-height:0.85;
+  color:var(--red); flex-shrink:0;
+}
+.duration-big small {
+  font-size:0.3em; color:var(--white); display:block;
+  letter-spacing:0.15em; text-transform:uppercase; opacity:0.5;
+}
+.duration-info { max-width:400px; }
+.duration-info h4 {
+  font-family:'Anton',sans-serif; font-size:1.6rem;
+  text-transform:uppercase; margin-bottom:0.8rem; line-height:1;
+}
+.duration-info p {
+  font-size:0.85rem; color:rgba(255,255,255,0.4); line-height:1.8;
+}
+.duration-divider {
+  width:1px; height:80px; background:var(--border); flex-shrink:0;
+}
+
 /* PRODUCT SHOWCASE */
 .product-showcase {
   display:grid; grid-template-columns:1fr 1fr; gap:0; align-items:stretch;
@@ -580,6 +612,15 @@ nav {
 <div class="section" id="cronograma">
   <div class="sec-label fade">03 — Cronograma</div>
   <h2 class="sec-title fade">Linha do<br><span>tempo</span></h2>
+
+  <div class="duration-highlight fade">
+    <div class="duration-big">12<small>meses</small></div>
+    <div class="duration-divider"></div>
+    <div class="duration-info">
+      <h4>Duração do contrato</h4>
+      <p>Parceria com vigência de 12 meses corridos a partir da assinatura, com possibilidade de renovação mediante acordo entre as partes.</p>
+    </div>
+  </div>
 
   <div class="timeline fade">
     <div class="tl-item">
