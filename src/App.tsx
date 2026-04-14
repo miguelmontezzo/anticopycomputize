@@ -44,6 +44,7 @@ import GuiaClaudePage from "./pages/GuiaClaudePage";
 import GuiaVpsPage from "./pages/GuiaVpsPage";
 import PropostaLuccoEmovePage from "./pages/PropostaLuccoEmovePage";
 import PropostaLuccoGoperPage from "./pages/PropostaLuccoGoperPage";
+import MediakitLuccoJoogPage from "./pages/MediakitLuccoJoogPage";
 
 const ComputizePage = () => {
 
@@ -540,6 +541,7 @@ export default function App() {
         <Route path="/miguelitoai/vps" element={<GuiaVpsPage />} />
         <Route path="/lucaslucco/emove" element={<PropostaLuccoEmovePage />} />
         <Route path="/lucaslucco/goper" element={<PropostaLuccoGoperPage />} />
+        <Route path="/lucaslucco/joog" element={<MediakitLuccoJoogPage />} />
         {/* Fallback to home */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

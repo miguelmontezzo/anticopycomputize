@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lucas Lucco × JOOG</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; -webkit-font-smoothing:antialiased; }
+html,body { height:100%; overflow:hidden; background:#f5f5f7; }
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 400;
+  color: #1d1d1f;
+}
+
+/* ── DECK ── */
+.deck { width:100%; height:100vh; position:relative; overflow:hidden; }
+
+.slide {
+  position:absolute; inset:0;
+  opacity:0; pointer-events:none;
+  transform:translateX(32px);
+  transition:opacity .48s cubic-bezier(.4,0,.2,1), transform .48s cubic-bezier(.4,0,.2,1);
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+}
+.slide.active { opacity:1; pointer-events:all; transform:translateX(0); }
+.slide.exit   { opacity:0; transform:translateX(-32px); }
+
+/* ── TOPBAR ── */
+.topbar {
+  position:fixed; top:0; left:0; right:0; z-index:300;
+  display:flex; justify-content:space-between; align-items:center;
+  padding:.9rem 2.4rem;
+  background:rgba(245,245,247,.88);
+  backdrop-filter:blur(24px) saturate(180%);
+  -webkit-backdrop-filter:blur(24px) saturate(180%);
+  border-bottom:1px solid rgba(0,0,0,.07);
+}
+.topbar-brand {
+  font-size:.72rem; font-weight:500;
+  letter-spacing:.04em; color:#6e6e73;
+}
+.topbar-brand span { color:#0071e3; }
+.slide-counter { font-size:.72rem; color:#a1a1a6; font-weight:400; }
+
+/* ── PROGRESS ── */
+.progress-bar {
+  position:fixed; top:0; left:0; right:0; z-index:400;
+  height:2px; background:transparent;
+}
+.progress-fill {
+  height:100%; background:#0071e3;
+  transition:width .4s ease; border-radius:0 1px 1px 0;
+}
+
+/* ── DOTS ── */
+.dot-nav {
+  position:fixed; bottom:1.8rem; left:50%; transform:translateX(-50%);
+  z-index:300; display:flex; gap:.45rem; align-items:center;
+}
+.dot {
+  width:5px; height:5px; border-radius:50%;
+  background:rgba(0,0,0,.18); cursor:pointer;
+  transition:all .25s;
+}
+.dot.active { background:#0071e3; width:18px; border-radius:3px; }
+
+/* ── ARROWS ── */
+.nav-arrows {
+  position:fixed; bottom:1.6rem; right:1.8rem;
+  z-index:300; display:flex; gap:.5rem;
+}
+.nav-btn {
+  width:38px; height:38px; border-radius:50%;
+  border:1px solid rgba(0,0,0,.1);
+  background:rgba(255,255,255,.8);
+  backdrop-filter:blur(12px);
+  color:#1d1d1f; font-size:.9rem;
+  cursor:pointer; display:flex; align-items:center; justify-content:center;
+  transition:all .2s; outline:none;
+  box-shadow:0 1px 4px rgba(0,0,0,.08);
+}
+.nav-btn:hover:not(:disabled) { background:#0071e3; border-color:#0071e3; color:#fff; }
+.nav-btn:disabled { opacity:.25; cursor:default; }
+
+/* ── INNER ── */
+.inner {
+  min-height:100vh;
+  display:flex; flex-direction:column; justify-content:center;
+  padding:5.5rem 3rem 4.5rem;
+}
+.inner.center { align-items:center; text-align:center; }
+
+/* ── TYPE ── */
+.kicker {
+  font-size:.62rem; font-weight:500;
+  letter-spacing:.12em; text-transform:uppercase;
+  color:#0071e3; margin-bottom:.9rem;
+}
+.h1 { font-size:clamp(2.6rem,6vw,5.2rem); font-weight:600; line-height:1.05; letter-spacing:-.025em; color:#1d1d1f; }
+.h2 { font-size:clamp(1.8rem,4vw,3.2rem); font-weight:600; line-height:1.08; letter-spacing:-.022em; color:#1d1d1f; }
+.h3 { font-size:clamp(1.2rem,2.5vw,1.8rem); font-weight:600; line-height:1.15; letter-spacing:-.018em; color:#1d1d1f; }
+.blue { color:#0071e3; }
+.muted { color:#6e6e73; }
+.body { font-size:clamp(.82rem,1.3vw,.95rem); line-height:1.72; color:#6e6e73; font-weight:400; max-width:520px; margin-top:.8rem; }
+.body.wide { max-width:640px; }
+.body.center { text-align:center; }
+
+/* ── DIVIDER ── */
+.rule { width:2.5rem; height:1.5px; background:#0071e3; border-radius:1px; margin:.8rem 0 1.6rem; }
+.rule.center { margin:1rem auto 1.8rem; }
+
+/* ── CARDS GRID ── */
+.grid2 { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:rgba(0,0,0,.07); border:1px solid rgba(0,0,0,.07); border-radius:12px; overflow:hidden; margin-top:2.4rem; }
+.grid2x2 { display:grid; grid-template-columns:1fr 1fr; gap:.9rem; margin-top:2.4rem; }
+.grid3 { display:grid; grid-template-columns:repeat(3,1fr); gap:.9rem; margin-top:1.6rem; }
+
+.card {
+  background:#fff; padding:2rem;
+  transition:background .2s;
+}
+.card:hover { background:#fafafa; }
+
+.card-label {
+  font-size:.6rem; font-weight:600;
+  letter-spacing:.1em; text-transform:uppercase;
+  color:#a1a1a6; margin-bottom:.6rem;
+}
+.card-body { font-size:.85rem; line-height:1.65; color:#6e6e73; font-weight:400; }
+.card-body strong { color:#1d1d1f; font-weight:500; }
+
+.mini-card {
+  background:#fff; border-radius:10px;
+  padding:1.6rem 1.8rem;
+  border:1px solid rgba(0,0,0,.07);
+}
+.mini-card-icon { font-size:1.3rem; margin-bottom:.8rem; display:block; }
+.mini-card-title { font-size:.88rem; font-weight:600; color:#1d1d1f; margin-bottom:.35rem; letter-spacing:-.01em; }
+.mini-card-desc { font-size:.78rem; line-height:1.6; color:#6e6e73; font-weight:400; }
+
+/* ── STAT TABLE ── */
+.stat-table {
+  border:1px solid rgba(0,0,0,.07); border-radius:12px; overflow:hidden;
+  background:#fff; margin-top:2rem;
+}
+.stat-row {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:1.2rem 1.8rem; border-bottom:1px solid rgba(0,0,0,.05);
+}
+.stat-row:last-child { border-bottom:none; }
+.stat-row.hi { background:#0071e3; }
+.stat-plat { font-size:.72rem; font-weight:500; color:#6e6e73; }
+.stat-detail { font-size:.65rem; color:#a1a1a6; margin-top:.1rem; }
+.stat-row.hi .stat-plat { color:rgba(255,255,255,.65); }
+.stat-row.hi .stat-detail { color:rgba(255,255,255,.45); }
+.stat-num { font-size:1.3rem; font-weight:600; color:#1d1d1f; letter-spacing:-.02em; }
+.stat-row.hi .stat-num { color:#fff; }
+
+/* ── SCOPE LIST ── */
+.scope-list { margin-top:2rem; display:flex; flex-direction:column; gap:0; border:1px solid rgba(0,0,0,.07); border-radius:12px; overflow:hidden; background:#fff; }
+.scope-item { display:grid; grid-template-columns:36px 1fr; gap:1.2rem; padding:1.4rem 1.8rem; border-bottom:1px solid rgba(0,0,0,.05); align-items:start; }
+.scope-item:last-child { border-bottom:none; }
+.scope-n { font-size:.72rem; font-weight:600; color:#0071e3; padding-top:2px; }
+.scope-t { font-size:.85rem; font-weight:500; color:#1d1d1f; margin-bottom:.25rem; letter-spacing:-.01em; }
+.scope-d { font-size:.78rem; line-height:1.6; color:#6e6e73; }
+.scope-note { margin-top:1rem; font-size:.72rem; font-weight:500; color:#0071e3; letter-spacing:.02em; }
+
+/* ── GESTAO LIST ── */
+.gestao-list { margin-top:2rem; border:1px solid rgba(0,0,0,.07); border-radius:12px; overflow:hidden; background:#fff; }
+.g-row { display:grid; grid-template-columns:44px 1fr; gap:1.2rem; padding:1.4rem 1.8rem; border-bottom:1px solid rgba(0,0,0,.05); align-items:start; }
+.g-row:last-child { border-bottom:none; }
+.g-n { font-size:1rem; font-weight:600; color:rgba(0,0,0,.1); }
+.g-t { font-size:.85rem; font-weight:500; color:#1d1d1f; margin-bottom:.25rem; }
+.g-d { font-size:.78rem; line-height:1.6; color:#6e6e73; }
+
+/* ── INV CARD ── */
+.inv-box {
+  background:#fff; border-radius:12px;
+  border:1px solid rgba(0,0,0,.07);
+  padding:2.2rem 2.4rem; margin-top:2rem;
+}
+.inv-lbl { font-size:.6rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:#a1a1a6; margin-bottom:.5rem; }
+.inv-val { font-size:clamp(2.4rem,5vw,4rem); font-weight:600; color:#1d1d1f; letter-spacing:-.03em; line-height:1; }
+.inv-per { font-size:.78rem; color:#a1a1a6; margin-top:.3rem; margin-bottom:1.6rem; }
+.inv-sep { height:1px; background:rgba(0,0,0,.07); margin:1.5rem 0; }
+.inv-inc-lbl { font-size:.6rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:#a1a1a6; margin-bottom:1rem; }
+.inv-list { list-style:none; display:grid; grid-template-columns:1fr 1fr; gap:.5rem .8rem; }
+.inv-item { font-size:.82rem; color:#6e6e73; display:flex; align-items:center; gap:.5rem; }
+.inv-item::before { content:''; display:block; width:4px; height:4px; background:#0071e3; border-radius:50%; flex-shrink:0; }
+.inv-foot { margin-top:1.5rem; font-size:.72rem; color:#a1a1a6; line-height:1.6; }
+
+.addon-mini { background:#fff; border-radius:10px; border:1px solid rgba(0,0,0,.07); padding:1.3rem 1.5rem; }
+.addon-tag { display:inline-block; background:#f0f6ff; color:#0071e3; font-size:.58rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; padding:.2rem .55rem; border-radius:4px; margin-bottom:.5rem; }
+.addon-t { font-size:.82rem; font-weight:500; color:#1d1d1f; margin-bottom:.25rem; }
+.addon-d { font-size:.74rem; line-height:1.55; color:#a1a1a6; }
+
+/* ── SUMMARY ── */
+.summary-table { border:1px solid rgba(0,0,0,.07); border-radius:12px; overflow:hidden; background:#fff; margin-top:2rem; }
+.sum-row { display:flex; justify-content:space-between; align-items:center; padding:1.1rem 1.8rem; border-bottom:1px solid rgba(0,0,0,.05); }
+.sum-row:last-child { border-bottom:none; }
+.sum-row.blue { background:#0071e3; }
+.sum-l { font-size:.68rem; font-weight:500; color:#a1a1a6; letter-spacing:.02em; }
+.sum-row.blue .sum-l { color:rgba(255,255,255,.55); }
+.sum-v { font-size:.9rem; font-weight:600; color:#1d1d1f; text-align:right; letter-spacing:-.01em; }
+.sum-row.blue .sum-v { color:#fff; }
+
+.cta-btn {
+  display:block; text-align:center; text-decoration:none;
+  background:#0071e3; color:#fff;
+  padding:.95rem 2rem; border-radius:980px;
+  font-size:.82rem; font-weight:500; letter-spacing:.01em;
+  margin-top:1.8rem;
+  transition:background .2s, transform .2s;
+}
+.cta-btn:hover { background:#0077ed; transform:translateY(-1px); }
+
+.acc-note { font-size:.68rem; color:#a1a1a6; text-align:center; margin-top:1rem; letter-spacing:.01em; }
+
+/* ── PLAT BADGE ── */
+.plat-badge {
+  display:inline-flex; align-items:center; gap:.4rem;
+  font-size:.62rem; font-weight:500; letter-spacing:.06em;
+  padding:.28rem .75rem; border-radius:980px;
+}
+.pb-insta { background:#fce8f3; color:#c13584; }
+.pb-tiktok { background:#fff0f3; color:#e1234c; }
+.pb-yt { background:#fff0f0; color:#d93025; }
+
+/* ── PHOTO / LAYOUT ── */
+.two-col { display:grid; grid-template-columns:1fr 1fr; gap:1.8rem; margin-top:2rem; align-items:start; }
+.lucas-img { width:100%; height:300px; object-fit:cover; object-position:top; border-radius:10px; display:block; }
+
+/* ── SLIDE BG VARIANTS ── */
+.bg-white { background:#ffffff; }
+.bg-f5 { background:#f5f5f7; }
+
+/* ── WELCOME WORDMARK ── */
+.welcome-logo {
+  font-size:clamp(4rem,14vw,10rem);
+  font-weight:600; color:#1d1d1f;
+  letter-spacing:-.03em; line-height:1;
+}
+.welcome-sub { font-size:clamp(.85rem,1.5vw,1.05rem); color:#6e6e73; max-width:440px; line-height:1.7; margin-top:1.4rem; }
+.acc-pill {
+  display:inline-flex; align-items:center; gap:.5rem;
+  background:#f0f6ff; border:1px solid rgba(0,113,227,.15);
+  padding:.4rem 1rem; border-radius:980px;
+  font-size:.68rem; font-weight:500; color:#0071e3;
+  margin-top:1.8rem;
+}
+.dot-sep { width:3px; height:3px; background:#0071e3; border-radius:50%; }
+
+/* ── SCOPE HEADER ── */
+.scope-hd { display:flex; align-items:baseline; gap:1rem; flex-wrap:wrap; margin-bottom:.4rem; }
+
+/* MOBILE */
+@media(max-width:680px){
+  .inner { padding:4.5rem 1.4rem 4rem; }
+  .two-col { grid-template-columns:1fr; gap:1.2rem; }
+  .lucas-img { height:200px; }
+  .grid2 { grid-template-columns:1fr; }
+  .grid2x2 { grid-template-columns:1fr; gap:.7rem; }
+  .grid3 { grid-template-columns:1fr; gap:.7rem; }
+  .inv-list { grid-template-columns:1fr; }
+  .topbar { padding:.8rem 1.2rem; }
+  .nav-arrows { right:1rem; }
+  .welcome-logo { font-size:clamp(3.5rem,18vw,7rem); }
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-brand">Anti Copy Club <span>×</span> JOOG</div>
+  <div class="slide-counter" id="counter">1 / 10</div>
+</div>
+
+<!-- PROGRESS -->
+<div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+
+<!-- DOTS -->
+<div class="dot-nav" id="dots"></div>
+
+<!-- ARROWS -->
+<div class="nav-arrows">
+  <button class="nav-btn" id="prevBtn" onclick="go(-1)" disabled>←</button>
+  <button class="nav-btn" id="nextBtn" onclick="go(1)">→</button>
+</div>
+
+<div class="deck">
+
+  <!-- 1 · BEM VINDO -->
+  <div class="slide active bg-white">
+    <div class="inner center">
+      <div class="kicker">Proposta confidencial · Abril 2026</div>
+      <div style="font-size:.78rem;color:#a1a1a6;margin-bottom:.4rem;font-weight:400;">Bem-vindos,</div>
+      <div class="welcome-logo">JOOG</div>
+      <div class="rule center"></div>
+      <p class="welcome-sub center">A Anti Copy Club preparou esta proposta para apresentar Lucas Lucco como embaixador da JOOG — uma campanha completa, gerenciada e com valor all-in.</p>
+      <div class="acc-pill">
+        <span>Anti Copy Club</span>
+        <span class="dot-sep"></span>
+        <span>Gestão de campanhas de influência</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2 · CONTEXTO -->
+  <div class="slide bg-f5">
+    <div class="inner">
+      <div class="kicker">Contexto</div>
+      <h2 class="h2">A oportunidade<br><span class="blue">certa.</span></h2>
+      <div class="rule"></div>
+      <div class="grid2">
+        <div class="card">
+          <div class="card-label">O que a JOOG precisa</div>
+          <div class="card-body">Presença forte no <strong>TikTok Shop</strong>, conteúdo que converte e uma face reconhecida que conecte o produto à vida real dos brasileiros.</div>
+        </div>
+        <div class="card">
+          <div class="card-label">O que a ACC entrega</div>
+          <div class="card-body">Uma campanha <strong>gerenciada de ponta a ponta</strong> — escopo, calendário, briefing, aprovação e relatório mensal inclusos.</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Por que Lucas Lucco</div>
+          <div class="card-body">Música e karaokê <strong>já fazem parte da sua identidade</strong>. A JOOG não vai parecer publi — vai parecer parte natural da vida dele.</div>
+        </div>
+        <div class="card">
+          <div class="card-label">O modelo</div>
+          <div class="card-body">Contrato de <strong>12 meses</strong>, cachê fixo mensal all-in. Cachê do Lucas e gestão ACC num único valor para a JOOG.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3 · AUDIÊNCIA -->
+  <div class="slide bg-white">
+    <div class="inner">
+      <div class="kicker">01 — Audiência</div>
+      <h2 class="h2">Lucas Lucco<br><span class="blue">em números.</span></h2>
+      <div class="rule"></div>
+      <div class="two-col">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Lucas_Lucco_em_2019.jpg/800px-Lucas_Lucco_em_2019.jpg" alt="Lucas Lucco" class="lucas-img" onerror="this.style.display='none';">
+        <div class="stat-table">
+          <div class="stat-row hi">
+            <div><div class="stat-plat">Instagram</div><div class="stat-detail">@lucaslucco · verificado</div></div>
+            <div class="stat-num">17,9M</div>
+          </div>
+          <div class="stat-row">
+            <div><div class="stat-plat">TikTok</div><div class="stat-detail">33,9M curtidas acumuladas</div></div>
+            <div class="stat-num">4,5M</div>
+          </div>
+          <div class="stat-row">
+            <div><div class="stat-plat">YouTube</div><div class="stat-detail">Canal principal + Diário</div></div>
+            <div class="stat-num">6,8M</div>
+          </div>
+          <div class="stat-row">
+            <div><div class="stat-plat">Spotify</div><div class="stat-detail">Ouvintes mensais</div></div>
+            <div class="stat-num">1M+</div>
+          </div>
+          <div class="stat-row">
+            <div><div class="stat-plat">Total combinado</div><div class="stat-detail">Todas as plataformas</div></div>
+            <div class="stat-num">29M+</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4 · POR QUE LUCAS -->
+  <div class="slide bg-f5">
+    <div class="inner">
+      <div class="kicker">02 — Fit de marca</div>
+      <h2 class="h2">Por que Lucas<br><span class="blue">é o certo.</span></h2>
+      <div class="rule"></div>
+      <div class="grid2x2">
+        <div class="mini-card">
+          <span class="mini-card-icon">🎤</span>
+          <div class="mini-card-title">Karaokê é a vida dele</div>
+          <div class="mini-card-desc">Já canta e usa microfone no conteúdo orgânico. A JOOG aparece naturalmente — sem roteiro forçado.</div>
+        </div>
+        <div class="mini-card">
+          <span class="mini-card-icon">📱</span>
+          <div class="mini-card-title">Presença multi-plataforma</div>
+          <div class="mini-card-desc">Instagram, TikTok e YouTube ativos. A JOOG ganha visibilidade em todos os canais com um único contrato.</div>
+        </div>
+        <div class="mini-card">
+          <span class="mini-card-icon">🛍</span>
+          <div class="mini-card-title">TikTok Shop integrado</div>
+          <div class="mini-card-desc">Vitrine ativa. A JOOG entra no fluxo de descoberta e compra da plataforma que mais cresce no Brasil.</div>
+        </div>
+        <div class="mini-card">
+          <span class="mini-card-icon">🔥</span>
+          <div class="mini-card-title">Momento de retorno</div>
+          <div class="mini-card-desc">Lucas está em pleno retorno às redes — novo canal, audiência engajada. A JOOG entra no melhor momento.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5 · INSTAGRAM -->
+  <div class="slide bg-white">
+    <div class="inner">
+      <div class="kicker">03 — Entregas</div>
+      <div class="scope-hd">
+        <h2 class="h2">Instagram</h2>
+        <span class="plat-badge pb-insta">📸 Instagram</span>
+      </div>
+      <div class="rule"></div>
+      <div class="scope-list">
+        <div class="scope-item">
+          <div class="scope-n">01</div>
+          <div><div class="scope-t">1 post no feed a cada 2 semanas</div><div class="scope-d">Lucas usando a JOOG em momentos reais — karaokê em casa, cantando versões, resenha com amigos. Formato orgânico.</div></div>
+        </div>
+        <div class="scope-item">
+          <div class="scope-n">02</div>
+          <div><div class="scope-t">Stories contínuos ao longo do mês</div><div class="scope-d">A JOOG aparece na rotina — bastidores, momentos espontâneos, uso real do produto no dia a dia.</div></div>
+        </div>
+        <div class="scope-item">
+          <div class="scope-n">03</div>
+          <div><div class="scope-t">Linguagem 100% autêntica</div><div class="scope-d">Segue a identidade do perfil do Lucas — natural, direto, sem parecer publicidade forçada.</div></div>
+        </div>
+      </div>
+      <div class="scope-note">↗ Mínimo 2 reels + séries de stories por mês</div>
+    </div>
+  </div>
+
+  <!-- 6 · TIKTOK -->
+  <div class="slide bg-f5">
+    <div class="inner">
+      <div class="kicker">03 — Entregas</div>
+      <div class="scope-hd">
+        <h2 class="h2">TikTok Shop</h2>
+        <span class="plat-badge pb-tiktok">🎵 TikTok</span>
+      </div>
+      <div class="rule"></div>
+      <div class="scope-list">
+        <div class="scope-item">
+          <div class="scope-n">01</div>
+          <div><div class="scope-t">Mínimo 2 posts por semana com botão de compra</div><div class="scope-d">Vídeos com a JOOG integrados ao TikTok Shop — da descoberta à compra sem sair do app.</div></div>
+        </div>
+        <div class="scope-item">
+          <div class="scope-n">02</div>
+          <div><div class="scope-t">JOOG fixada na vitrine do perfil</div><div class="scope-d">Visibilidade permanente para todo mundo que acessa o @lucaslucco no TikTok.</div></div>
+        </div>
+        <div class="scope-item">
+          <div class="scope-n">03</div>
+          <div><div class="scope-t">Stories com link direto para o produto</div><div class="scope-d">Integração total entre conteúdo e conversão — o seguidor vê, quer e compra na mesma plataforma.</div></div>
+        </div>
+        <div class="scope-item">
+          <div class="scope-n">04</div>
+          <div><div class="scope-t">Conteúdo pensado para viralizar</div><div class="scope-d">Karaokê, challenges, versões — formatos que amplificam o alcance da JOOG organicamente.</div></div>
+        </div>
+      </div>
+      <div class="scope-note">↗ Mínimo 8 posts/mês + vitrine ativa 24/7</div>
+    </div>
+  </div>
+
+  <!-- 7 · YOUTUBE -->
+  <div class="slide bg-white">
+    <div class="inner">
+      <div class="kicker">03 — Entregas</div>
+      <div class="scope-hd">
+        <h2 class="h2">YouTube</h2>
+        <span class="plat-badge pb-yt">▶ YouTube</span>
+      </div>
+      <div class="rule"></div>
+      <div class="scope-list">
+        <div class="scope-item">
+          <div class="scope-n">01</div>
+          <div><div class="scope-t">Product placement no Diário Lucas Lucco</div><div class="scope-d">A JOOG aparece naturalmente nos episódios — como parte da cena, sem corte brusco ou jingle.</div></div>
+        </div>
+        <div class="scope-item">
+          <div class="scope-n">02</div>
+          <div><div class="scope-t">Vídeo longo com alta retenção</div><div class="scope-d">Exposição prolongada para uma audiência engajada. Quem assiste o Diário já é fã declarado do Lucas.</div></div>
+        </div>
+        <div class="scope-item">
+          <div class="scope-n">03</div>
+          <div><div class="scope-t">Canal em crescimento ativo</div><div class="scope-d">Cada novo inscrito no Diário é audiência futura para a JOOG. A marca cresce junto com o canal.</div></div>
+        </div>
+      </div>
+      <div class="scope-note">↗ 2 inserções mensais nos episódios do Diário</div>
+    </div>
+  </div>
+
+  <!-- 8 · GESTÃO -->
+  <div class="slide bg-f5">
+    <div class="inner">
+      <div class="kicker">04 — Gestão Anti Copy Club</div>
+      <h2 class="h2">A ACC cuida<br><span class="blue">de tudo.</span></h2>
+      <div class="rule"></div>
+      <p class="body">A JOOG não precisa se preocupar com briefing, calendário ou relatórios. A Anti Copy Club gerencia a parceria de ponta a ponta.</p>
+      <div class="gestao-list">
+        <div class="g-row"><div class="g-n">01</div><div><div class="g-t">Calendário editorial mensal</div><div class="g-d">Planejamento de todas as entregas com datas e formatos. A JOOG sabe exatamente o que vai ser publicado e quando.</div></div></div>
+        <div class="g-row"><div class="g-n">02</div><div><div class="g-t">Briefing e aprovação de conteúdo</div><div class="g-d">Todo conteúdo passa por briefing alinhado com a JOOG antes de publicar. Aprovação garantida em cada peça.</div></div></div>
+        <div class="g-row"><div class="g-n">03</div><div><div class="g-t">Relatório mensal de performance</div><div class="g-d">Alcance, impressões, engajamento e dados do TikTok Shop — números reais para acompanhar o retorno.</div></div></div>
+        <div class="g-row"><div class="g-n">04</div><div><div class="g-t">Coordenação da parceria</div><div class="g-d">Um único ponto de contato. A ACC faz a ponte entre JOOG e Lucas — ágil, sem ruído, sem retrabalho.</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9 · INVESTIMENTO -->
+  <div class="slide bg-white">
+    <div class="inner">
+      <div class="kicker">05 — Investimento</div>
+      <h2 class="h2">Valor da<br><span class="blue">parceria.</span></h2>
+      <div class="rule"></div>
+      <div class="inv-box">
+        <div class="inv-lbl">Investimento mensal all-in</div>
+        <div class="inv-val">R$ 65.000</div>
+        <div class="inv-per">por mês · 12 meses · cachê do Lucas + gestão ACC inclusos</div>
+        <div class="inv-sep"></div>
+        <div class="inv-inc-lbl">Incluso no valor</div>
+        <ul class="inv-list">
+          <li class="inv-item">Cachê do Lucas Lucco</li>
+          <li class="inv-item">Gestão editorial mensal</li>
+          <li class="inv-item">Briefing e aprovação</li>
+          <li class="inv-item">Relatório de performance</li>
+          <li class="inv-item">Vitrine TikTok Shop</li>
+          <li class="inv-item">Product placement YouTube</li>
+        </ul>
+        <div class="inv-foot">Produção especial (equipe, locação, direção) cotada à parte mediante aprovação prévia.</div>
+      </div>
+      <div class="grid3" style="margin-top:1.2rem;">
+        <div class="addon-mini"><div class="addon-tag">Add-on</div><div class="addon-t">Kwai Shop</div><div class="addon-d">Extensão para Kwai com escopo similar. Valor à parte.</div></div>
+        <div class="addon-mini"><div class="addon-tag">Consulta</div><div class="addon-t">Exclusividade</div><div class="addon-d">Lucas não promove outros produtos de áudio durante o contrato.</div></div>
+        <div class="addon-mini"><div class="addon-tag">Consulta</div><div class="addon-t">Direitos de imagem</div><div class="addon-d">Uso da imagem do Lucas em anúncios pagos ou OOH.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 10 · FECHAMENTO -->
+  <div class="slide bg-f5">
+    <div class="inner">
+      <div class="kicker">Vamos fechar?</div>
+      <h2 class="h1">Prontos<br>para começar.</h2>
+      <div class="rule"></div>
+      <div class="summary-table">
+        <div class="sum-row"><span class="sum-l">Artista</span><span class="sum-v">Lucas Lucco</span></div>
+        <div class="sum-row"><span class="sum-l">Gestão</span><span class="sum-v">Anti Copy Club</span></div>
+        <div class="sum-row"><span class="sum-l">Plataformas</span><span class="sum-v">Instagram · TikTok · YouTube</span></div>
+        <div class="sum-row"><span class="sum-l">Contrato mínimo</span><span class="sum-v">12 meses</span></div>
+        <div class="sum-row blue"><span class="sum-l">Investimento mensal</span><span class="sum-v">R$ 65.000</span></div>
+        <div class="sum-row blue"><span class="sum-l">Total 12 meses</span><span class="sum-v">R$ 780.000</span></div>
+      </div>
+      <a href="https://wa.me/5534999320196" target="_blank" class="cta-btn">Falar com a Anti Copy Club →</a>
+      <div class="acc-note">Anti Copy Club · Proposta confidencial · Abril 2026</div>
+    </div>
+  </div>
+
+</div><!-- /deck -->
+
+<script>
+const TOTAL = 10;
+let cur = 0, startX = 0, dragging = false;
+
+const slides = document.querySelectorAll('.slide');
+const counter = document.getElementById('counter');
+const progress = document.getElementById('progress');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const dotsEl = document.getElementById('dots');
+
+for(let i=0;i<TOTAL;i++){
+  const d=document.createElement('div');
+  d.className='dot'+(i===0?' active':'');
+  d.onclick=()=>goTo(i);
+  dotsEl.appendChild(d);
+}
+
+function ui(){
+  counter.textContent=`${cur+1} / ${TOTAL}`;
+  progress.style.width=`${((cur+1)/TOTAL)*100}%`;
+  prevBtn.disabled=cur===0;
+  nextBtn.disabled=cur===TOTAL-1;
+  document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===cur));
+}
+
+function goTo(n){
+  if(n===cur||n<0||n>=TOTAL)return;
+  slides[cur].classList.remove('active');
+  slides[cur].classList.add('exit');
+  const old=cur; cur=n;
+  setTimeout(()=>slides[old].classList.remove('exit'),520);
+  slides[cur].classList.add('active');
+  slides[cur].scrollTop=0;
+  ui();
+}
+
+function go(d){ goTo(cur+d); }
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key==='ArrowDown') go(1);
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp') go(-1);
+});
+
+document.addEventListener('touchstart',e=>{ startX=e.touches[0].clientX; dragging=true; },{passive:true});
+document.addEventListener('touchend',e=>{
+  if(!dragging)return;
+  const d=startX-e.changedTouches[0].clientX;
+  if(Math.abs(d)>48) go(d>0?1:-1);
+  dragging=false;
+},{passive:true});
+
+document.addEventListener('mousedown',e=>{ startX=e.clientX; dragging=true; });
+document.addEventListener('mouseup',e=>{
+  if(!dragging)return;
+  const d=startX-e.clientX;
+  if(Math.abs(d)>80) go(d>0?1:-1);
+  dragging=false;
+});
+
+ui();
+</script>
+</body>
+</html>
