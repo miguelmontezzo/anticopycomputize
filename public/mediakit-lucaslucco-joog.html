@@ -291,6 +291,16 @@ body {
 .bg-white { background:#ffffff; }
 .bg-f5 { background:#f5f5f7; }
 
+/* ── WELCOME VIDEO ── */
+.welcome-video-slide { background:#000; }
+.welcome-video {
+  position:absolute; inset:0;
+  width:100%; height:100%;
+  object-fit:contain;
+  display:block;
+  background:#000;
+}
+
 /* ── WELCOME WORDMARK ── */
 .welcome-logo {
   font-size:clamp(4rem,14vw,10rem);
@@ -350,21 +360,11 @@ body {
 
 <div class="deck">
 
-  <!-- 1 · BEM VINDO -->
-  <div class="slide active bg-white">
-    <div class="inner center">
-      <div class="kicker">Proposta confidencial · Abril 2026</div>
-      <div class="portrait-frame"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Lucas_Lucco_2018.jpg?width=500" alt="Lucas Lucco" referrerpolicy="no-referrer" onerror="this.parentElement.style.display='none';"></div>
-      <div style="font-size:.78rem;color:#a1a1a6;margin-bottom:.4rem;font-weight:400;">Bem-vindos,</div>
-      <div class="welcome-logo">JOOG</div>
-      <div class="rule center"></div>
-      <p class="welcome-sub center">A Anti Copy Club preparou esta proposta para apresentar Lucas Lucco como embaixador da JOOG — uma campanha completa, gerenciada e com valor all-in.</p>
-      <div class="acc-pill">
-        <span>Anti Copy Club</span>
-        <span class="dot-sep"></span>
-        <span>Gestão de campanhas de influência</span>
-      </div>
-    </div>
+  <!-- 1 · BEM VINDO (vídeo loop) -->
+  <div class="slide active welcome-video-slide" style="padding:0;overflow:hidden;">
+    <video class="welcome-video" autoplay loop muted playsinline preload="auto">
+      <source src="/JoogWelcomeH.mp4" type="video/mp4">
+    </video>
   </div>
 
   <!-- 2 · CONTEXTO -->
