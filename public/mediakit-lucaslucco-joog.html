@@ -148,25 +148,31 @@ body {
 }
 .stat-row {
   display:flex; justify-content:space-between; align-items:center;
-  padding:.85rem 1.4rem; border-bottom:1px solid rgba(0,0,0,.05);
+  padding:1rem 1.5rem; border-bottom:1px solid rgba(0,0,0,.05);
 }
 .stat-row:last-child { border-bottom:none; }
 .stat-row.hi { background:#0071e3; }
-.stat-plat { font-size:.72rem; font-weight:500; color:#6e6e73; }
-.stat-detail { font-size:.65rem; color:#a1a1a6; margin-top:.1rem; }
-.stat-row.hi .stat-plat { color:rgba(255,255,255,.65); }
-.stat-row.hi .stat-detail { color:rgba(255,255,255,.45); }
-.stat-num { font-size:1.1rem; font-weight:600; color:#1d1d1f; letter-spacing:-.02em; }
+.stat-plat { font-size:.84rem; font-weight:600; color:#1d1d1f; letter-spacing:-.005em; }
+.stat-detail { font-size:.7rem; color:#a1a1a6; margin-top:.15rem; }
+.stat-row.hi .stat-plat { color:#fff; }
+.stat-row.hi .stat-detail { color:rgba(255,255,255,.7); }
+.stat-num { font-size:2.6rem; font-weight:700; color:#1d1d1f; letter-spacing:-.04em; line-height:1; }
 .stat-row.hi .stat-num { color:#fff; }
+
+/* highlight para total */
+.stat-row.total { background:#0a0a0a; }
+.stat-row.total .stat-plat { color:#fff; }
+.stat-row.total .stat-detail { color:rgba(255,255,255,.55); }
+.stat-row.total .stat-num { color:#0071e3; font-size:3rem; }
 
 /* ── SCOPE LIST ── */
 .scope-list { margin-top:1.2rem; display:flex; flex-direction:column; gap:0; border:1px solid rgba(0,0,0,.07); border-radius:12px; overflow:hidden; background:#fff; }
-.scope-item { display:grid; grid-template-columns:32px 1fr; gap:1rem; padding:.95rem 1.4rem; border-bottom:1px solid rgba(0,0,0,.05); align-items:start; }
+.scope-item { display:grid; grid-template-columns:32px 1fr; gap:1rem; padding:1.05rem 1.4rem; border-bottom:1px solid rgba(0,0,0,.05); align-items:start; }
 .scope-item:last-child { border-bottom:none; }
 .scope-n { font-size:.72rem; font-weight:600; color:#0071e3; padding-top:2px; }
-.scope-t { font-size:.8rem; font-weight:500; color:#1d1d1f; margin-bottom:.2rem; letter-spacing:-.01em; }
-.scope-d { font-size:.72rem; line-height:1.5; color:#6e6e73; }
-.scope-note { margin-top:.6rem; font-size:.68rem; font-weight:500; color:#0071e3; letter-spacing:.02em; }
+.scope-t { font-size:.92rem; font-weight:500; color:#1d1d1f; margin-bottom:.28rem; letter-spacing:-.01em; }
+.scope-d { font-size:.82rem; line-height:1.55; color:#6e6e73; }
+.scope-note { margin-top:.7rem; font-size:.76rem; font-weight:500; color:#0071e3; letter-spacing:.02em; }
 
 /* ── GESTAO LIST ── */
 .gestao-list { margin-top:1.2rem; border:1px solid rgba(0,0,0,.07); border-radius:12px; overflow:hidden; background:#fff; }
@@ -230,7 +236,8 @@ body {
 .pb-yt { background:#fff0f0; color:#d93025; }
 
 /* ── PHOTO / LAYOUT ── */
-.two-col { display:grid; grid-template-columns:1fr 1fr; gap:1.4rem; margin-top:1.2rem; align-items:stretch; }
+.two-col { display:grid; grid-template-columns:1.1fr 1fr; gap:1.6rem; margin-top:1.2rem; align-items:center; }
+.two-col > .text-box { max-width:440px; align-self:center; }
 .lucas-img {
   width:100%; height:100%;
   min-height:240px; max-height:62vh;
@@ -253,18 +260,33 @@ body {
 
 /* ── PHOTO STRIP (por que lucas) ── */
 .photo-strip {
-  display:grid; grid-template-columns:repeat(3,1fr); gap:.7rem;
-  margin:1rem 0 .2rem;
+  display:grid; grid-template-columns:repeat(3,1fr); gap:.8rem;
+  margin:1rem auto .4rem;
+  width:100%;
 }
 .photo-strip .ps-tile {
-  border-radius:10px; overflow:hidden;
-  aspect-ratio: 4 / 5; max-height:30vh;
-}
-.photo-strip .ps-tile img {
-  width:100%; height:100%;
-  object-fit:cover; object-position:center 22%;
+  border-radius:12px; overflow:hidden;
+  aspect-ratio: 3 / 2;
+  position:relative;
+  cursor:zoom-in;
+  transition:transform .3s ease, box-shadow .3s ease;
   display:block;
 }
+.photo-strip .ps-tile:hover { transform:translateY(-3px); box-shadow:0 12px 28px rgba(0,0,0,.12); }
+.photo-strip .ps-tile img {
+  width:100%; height:100%;
+  object-fit:cover; object-position:center 25%;
+  display:block;
+}
+.photo-strip .ps-tile::after {
+  content:'↗'; position:absolute; top:.5rem; right:.6rem;
+  width:22px; height:22px; border-radius:50%;
+  background:rgba(255,255,255,.92); color:#0071e3;
+  font-size:.72rem; font-weight:700;
+  display:flex; align-items:center; justify-content:center;
+  opacity:0; transition:opacity .25s;
+}
+.photo-strip .ps-tile:hover::after { opacity:1; }
 
 /* ── MEDIA CAPTION (platform slides) ── */
 .media-frame {
@@ -324,11 +346,13 @@ body {
 @media(max-width:680px){
   .inner { padding:3.8rem 1rem 3.2rem; gap:.3rem; }
   .two-col { grid-template-columns:1fr; gap:.8rem; }
+  .two-col > .text-box { max-width:100%; }
+  .stat-num { font-size:1.9rem; }
+  .stat-row.total .stat-num { font-size:2.2rem; }
   .lucas-img { max-height:32vh; min-height:180px; }
   .media-frame { max-height:32vh; min-height:180px; }
-  .photo-strip { grid-template-columns:1fr 1fr; gap:.4rem; }
-  .photo-strip .ps-tile { max-height:22vh; }
-  .photo-strip .ps-tile:nth-child(3) { display:none; }
+  .photo-strip { grid-template-columns:1fr; gap:.5rem; }
+  .photo-strip .ps-tile { aspect-ratio:16/9; max-height:22vh; }
   .portrait-frame { width:92px; height:92px; margin-bottom:.6rem; }
   .grid2 { grid-template-columns:1fr; }
   .grid2x2 { grid-template-columns:1fr; gap:.7rem; }
@@ -404,26 +428,28 @@ body {
       <div class="rule"></div>
       <div class="two-col">
         <img src="https://images.metroimg.com/2024/12/22123046/lucas-lucco-26.jpg" alt="Lucas Lucco" class="lucas-img" referrerpolicy="no-referrer" onerror="this.style.display='none';">
-        <div class="stat-table">
-          <div class="stat-row hi">
-            <div><div class="stat-plat">Instagram</div><div class="stat-detail">@lucaslucco · verificado</div></div>
-            <div class="stat-num">17,9M</div>
-          </div>
-          <div class="stat-row">
-            <div><div class="stat-plat">TikTok</div><div class="stat-detail">33,9M curtidas acumuladas</div></div>
-            <div class="stat-num">4,5M</div>
-          </div>
-          <div class="stat-row">
-            <div><div class="stat-plat">YouTube</div><div class="stat-detail">Canal principal + Diário</div></div>
-            <div class="stat-num">6,8M</div>
-          </div>
-          <div class="stat-row">
-            <div><div class="stat-plat">Spotify</div><div class="stat-detail">Ouvintes mensais</div></div>
-            <div class="stat-num">1M+</div>
-          </div>
-          <div class="stat-row">
-            <div><div class="stat-plat">Total combinado</div><div class="stat-detail">Todas as plataformas</div></div>
-            <div class="stat-num">29M+</div>
+        <div class="text-box">
+          <div class="stat-table">
+            <div class="stat-row hi">
+              <div><div class="stat-plat">Instagram</div><div class="stat-detail">@lucaslucco · verificado</div></div>
+              <div class="stat-num">17,9M</div>
+            </div>
+            <div class="stat-row">
+              <div><div class="stat-plat">TikTok</div><div class="stat-detail">33,9M curtidas acumuladas</div></div>
+              <div class="stat-num">4,5M</div>
+            </div>
+            <div class="stat-row">
+              <div><div class="stat-plat">YouTube</div><div class="stat-detail">Canal principal + Diário</div></div>
+              <div class="stat-num">6,8M</div>
+            </div>
+            <div class="stat-row">
+              <div><div class="stat-plat">Spotify</div><div class="stat-detail">Ouvintes mensais</div></div>
+              <div class="stat-num">1M+</div>
+            </div>
+            <div class="stat-row total">
+              <div><div class="stat-plat">Total combinado</div><div class="stat-detail">Todas as plataformas</div></div>
+              <div class="stat-num">29M+</div>
+            </div>
           </div>
         </div>
       </div>
@@ -437,9 +463,9 @@ body {
       <h2 class="h2">Por que Lucas<br><span class="blue">é o certo.</span></h2>
       <div class="rule"></div>
       <div class="photo-strip">
-        <div class="ps-tile"><img src="https://i.ibb.co/jkTPpPh7/freepik-homem-tatuado-usar-as-referncias-de-rosto-e-estilo-82328.png" alt="Lucas Lucco" referrerpolicy="no-referrer" onerror="this.parentElement.style.display='none';"></div>
-        <div class="ps-tile"><img src="https://i.ibb.co/Wp4Sm3xC/freepik-personagem-masculino-atltico-usar-foto-de-refernci-82327.png" alt="Lucas Lucco" referrerpolicy="no-referrer" onerror="this.parentElement.style.display='none';"></div>
-        <div class="ps-tile"><img src="https://i.ibb.co/20xfJMDJ/freepik-personagem-masculino-atltico-usar-foto-de-refernci-82326.jpg" alt="Lucas Lucco" referrerpolicy="no-referrer" onerror="this.parentElement.style.display='none';"></div>
+        <a class="ps-tile" href="https://i.ibb.co/jkTPpPh7/freepik-homem-tatuado-usar-as-referncias-de-rosto-e-estilo-82328.png" target="_blank" rel="noopener"><img src="https://i.ibb.co/jkTPpPh7/freepik-homem-tatuado-usar-as-referncias-de-rosto-e-estilo-82328.png" alt="Lucas Lucco" referrerpolicy="no-referrer" onerror="this.parentElement.style.display='none';"></a>
+        <a class="ps-tile" href="https://i.ibb.co/Wp4Sm3xC/freepik-personagem-masculino-atltico-usar-foto-de-refernci-82327.png" target="_blank" rel="noopener"><img src="https://i.ibb.co/Wp4Sm3xC/freepik-personagem-masculino-atltico-usar-foto-de-refernci-82327.png" alt="Lucas Lucco" referrerpolicy="no-referrer" onerror="this.parentElement.style.display='none';"></a>
+        <a class="ps-tile" href="https://i.ibb.co/20xfJMDJ/freepik-personagem-masculino-atltico-usar-foto-de-refernci-82326.jpg" target="_blank" rel="noopener"><img src="https://i.ibb.co/20xfJMDJ/freepik-personagem-masculino-atltico-usar-foto-de-refernci-82326.jpg" alt="Lucas Lucco" referrerpolicy="no-referrer" onerror="this.parentElement.style.display='none';"></a>
       </div>
       <div class="grid2x2">
         <div class="mini-card">
@@ -480,7 +506,7 @@ body {
           <img src="https://assets.portalleodias.com/2024/04/Lucas-Lucco-assume-depressao-pausa-em-shows-e-confusao-com-academia.jpg" alt="Lucas Lucco" referrerpolicy="no-referrer" onerror="this.parentElement.style.display='none';">
           <span class="media-cap"><span class="mdot"></span>@lucaslucco · 17,9M</span>
         </div>
-        <div class="scope-list" style="margin-top:0;">
+        <div class="text-box"><div class="scope-list" style="margin-top:0;">
           <div class="scope-item">
             <div class="scope-n">01</div>
             <div><div class="scope-t">1 post no feed a cada 2 semanas</div><div class="scope-d">Lucas usando a JOOG em momentos reais — karaokê em casa, cantando versões, resenha com amigos. Formato orgânico.</div></div>
@@ -493,7 +519,7 @@ body {
             <div class="scope-n">03</div>
             <div><div class="scope-t">Linguagem 100% autêntica</div><div class="scope-d">Segue a identidade do perfil do Lucas — natural, direto, sem parecer publicidade forçada.</div></div>
           </div>
-        </div>
+        </div></div>
       </div>
       <div class="scope-note">↗ Mínimo 2 reels + séries de stories por mês</div>
     </div>
@@ -513,7 +539,7 @@ body {
           <img src="https://i.ibb.co/jkTPpPh7/freepik-homem-tatuado-usar-as-referncias-de-rosto-e-estilo-82328.png" alt="Lucas Lucco" referrerpolicy="no-referrer" onerror="this.parentElement.style.display='none';">
           <span class="media-cap"><span class="mdot"></span>@lucaslucco · 4,5M · 33,9M curtidas</span>
         </div>
-        <div class="scope-list" style="margin-top:0;">
+        <div class="text-box"><div class="scope-list" style="margin-top:0;">
           <div class="scope-item">
             <div class="scope-n">01</div>
             <div><div class="scope-t">Mínimo 2 posts por semana com botão de compra</div><div class="scope-d">Vídeos com a JOOG integrados ao TikTok Shop — da descoberta à compra sem sair do app.</div></div>
@@ -530,7 +556,7 @@ body {
             <div class="scope-n">04</div>
             <div><div class="scope-t">Conteúdo pensado para viralizar</div><div class="scope-d">Karaokê, challenges, versões — formatos que amplificam o alcance da JOOG organicamente.</div></div>
           </div>
-        </div>
+        </div></div>
       </div>
       <div class="scope-note">↗ Mínimo 8 posts/mês + vitrine ativa 24/7</div>
     </div>
@@ -550,7 +576,7 @@ body {
           <img src="https://images.metroimg.com/2024/12/22123046/lucas-lucco-26.jpg" alt="Lucas Lucco" referrerpolicy="no-referrer" onerror="this.parentElement.style.display='none';">
           <span class="media-cap"><span class="mdot"></span>Diário Lucas Lucco · formato reality</span>
         </div>
-        <div class="scope-list" style="margin-top:0;">
+        <div class="text-box"><div class="scope-list" style="margin-top:0;">
           <div class="scope-item">
             <div class="scope-n">01</div>
             <div><div class="scope-t">Product placement no Diário Lucas Lucco</div><div class="scope-d">A JOOG aparece naturalmente nos episódios — como parte da cena, sem corte brusco ou jingle.</div></div>
@@ -563,7 +589,7 @@ body {
             <div class="scope-n">03</div>
             <div><div class="scope-t">Canal em crescimento ativo</div><div class="scope-d">Cada novo inscrito no Diário é audiência futura para a JOOG. A marca cresce junto com o canal.</div></div>
           </div>
-        </div>
+        </div></div>
       </div>
       <div class="scope-note">↗ 2 inserções mensais nos episódios do Diário</div>
     </div>
