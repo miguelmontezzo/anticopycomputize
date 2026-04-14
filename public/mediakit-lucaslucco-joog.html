@@ -359,7 +359,8 @@ body {
 
 /* MOBILE */
 @media(max-width:680px){
-  .inner { padding:3.8rem 1rem 3.2rem; gap:.3rem; }
+  .slide { overflow-y:auto; -webkit-overflow-scrolling:touch; }
+  .inner { height:auto; min-height:100vh; padding:3.8rem 1rem 4.5rem; gap:.3rem; }
   .two-col { grid-template-columns:1fr; gap:.8rem; }
   .two-col > .text-box { max-width:100%; }
   .stat-num { font-size:1.9rem; }
