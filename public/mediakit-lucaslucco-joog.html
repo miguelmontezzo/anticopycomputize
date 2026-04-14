@@ -231,15 +231,24 @@ body {
 
 /* ── PHOTO / LAYOUT ── */
 .two-col { display:grid; grid-template-columns:1fr 1fr; gap:1.8rem; margin-top:2rem; align-items:start; }
-.lucas-img { width:100%; height:300px; object-fit:cover; object-position:top; border-radius:10px; display:block; }
+.lucas-img {
+  width:100%; max-height:420px;
+  object-fit:contain; background:#0a0a0a;
+  border-radius:10px; display:block;
+}
 
 /* ── PORTRAIT (welcome / fechamento) ── */
-.portrait {
-  width:108px; height:108px; border-radius:50%;
-  object-fit:cover; object-position:center 20%;
-  border:3px solid #fff;
-  box-shadow:0 10px 28px rgba(0,0,0,.12), 0 0 0 1px rgba(0,0,0,.04);
+.portrait-frame {
+  width:140px; height:180px; border-radius:14px;
   margin:0 auto 1.6rem;
+  background:#0a0a0a;
+  box-shadow:0 10px 28px rgba(0,0,0,.12), 0 0 0 1px rgba(0,0,0,.04);
+  overflow:hidden;
+  display:flex; align-items:center; justify-content:center;
+}
+.portrait-frame img {
+  width:100%; height:100%;
+  object-fit:contain;
   display:block;
 }
 
@@ -248,15 +257,26 @@ body {
   display:grid; grid-template-columns:repeat(3,1fr); gap:.9rem;
   margin:1.8rem 0 .4rem;
 }
-.photo-strip img {
-  width:100%; height:180px; object-fit:cover; object-position:center 22%;
-  border-radius:10px; display:block;
-  filter:saturate(1.05);
+.photo-strip .ps-tile {
+  background:#0a0a0a; border-radius:10px; overflow:hidden;
+  aspect-ratio: 4 / 5;
+  display:flex; align-items:center; justify-content:center;
+}
+.photo-strip .ps-tile img {
+  width:100%; height:100%;
+  object-fit:contain;
+  display:block;
 }
 
 /* ── MEDIA CAPTION (platform slides) ── */
-.media-frame { position:relative; border-radius:12px; overflow:hidden; box-shadow:0 8px 28px rgba(0,0,0,.08); }
-.media-frame img { width:100%; height:360px; object-fit:cover; object-position:center 20%; display:block; }
+.media-frame {
+  position:relative; border-radius:12px; overflow:hidden;
+  background:#0a0a0a;
+  box-shadow:0 8px 28px rgba(0,0,0,.08);
+  aspect-ratio: 4 / 5;
+  display:flex; align-items:center; justify-content:center;
+}
+.media-frame img { width:100%; height:100%; object-fit:contain; display:block; }
 .media-cap {
   position:absolute; left:12px; bottom:12px;
   background:rgba(20,20,22,.78); color:#fff;
@@ -294,12 +314,10 @@ body {
 @media(max-width:680px){
   .inner { padding:4.5rem 1.4rem 4rem; }
   .two-col { grid-template-columns:1fr; gap:1.2rem; }
-  .lucas-img { height:200px; }
+  .lucas-img { max-height:320px; }
   .photo-strip { grid-template-columns:1fr 1fr; gap:.5rem; }
-  .photo-strip img { height:140px; }
-  .photo-strip img:nth-child(3) { display:none; }
-  .media-frame img { height:240px; }
-  .portrait { width:88px; height:88px; }
+  .photo-strip .ps-tile:nth-child(3) { display:none; }
+  .portrait-frame { width:120px; height:150px; }
   .grid2 { grid-template-columns:1fr; }
   .grid2x2 { grid-template-columns:1fr; gap:.7rem; }
   .grid3 { grid-template-columns:1fr; gap:.7rem; }
@@ -336,7 +354,7 @@ body {
   <div class="slide active bg-white">
     <div class="inner center">
       <div class="kicker">Proposta confidencial · Abril 2026</div>
-      <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Lucas_Lucco_2018.jpg?width=400" alt="Lucas Lucco" class="portrait" referrerpolicy="no-referrer" onerror="this.style.display='none';">
+      <div class="portrait-frame"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Lucas_Lucco_2018.jpg?width=500" alt="Lucas Lucco" referrerpolicy="no-referrer" onerror="this.parentElement.style.display='none';"></div>
       <div style="font-size:.78rem;color:#a1a1a6;margin-bottom:.4rem;font-weight:400;">Bem-vindos,</div>
       <div class="welcome-logo">JOOG</div>
       <div class="rule center"></div>
@@ -417,9 +435,9 @@ body {
       <h2 class="h2">Por que Lucas<br><span class="blue">é o certo.</span></h2>
       <div class="rule"></div>
       <div class="photo-strip">
-        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Lucas_Lucco_Multishow.jpg?width=700" alt="Lucas Lucco no Multishow" referrerpolicy="no-referrer" onerror="this.style.display='none';">
-        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Lucas_Lucco_se_apresenta_na_Expoacre_2015.jpg?width=700" alt="Lucas Lucco ao vivo" referrerpolicy="no-referrer" onerror="this.style.display='none';">
-        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Lucas_Lucco_2018.jpg?width=700" alt="Lucas Lucco retrato" referrerpolicy="no-referrer" onerror="this.style.display='none';">
+        <div class="ps-tile"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Lucas_Lucco_Multishow.jpg?width=700" alt="Lucas Lucco no Multishow" referrerpolicy="no-referrer" onerror="this.parentElement.style.display='none';"></div>
+        <div class="ps-tile"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Lucas_Lucco_se_apresenta_na_Expoacre_2015.jpg?width=700" alt="Lucas Lucco ao vivo" referrerpolicy="no-referrer" onerror="this.parentElement.style.display='none';"></div>
+        <div class="ps-tile"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Lucas_Lucco_2018.jpg?width=700" alt="Lucas Lucco retrato" referrerpolicy="no-referrer" onerror="this.parentElement.style.display='none';"></div>
       </div>
       <div class="grid2x2">
         <div class="mini-card">
@@ -599,7 +617,7 @@ body {
   <div class="slide bg-f5">
     <div class="inner">
       <div class="kicker">Vamos fechar?</div>
-      <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Lucas_Lucco_2018.jpg?width=400" alt="Lucas Lucco" class="portrait" style="margin:0 0 1.4rem;" referrerpolicy="no-referrer" onerror="this.style.display='none';">
+      <div class="portrait-frame" style="margin:0 0 1.4rem;"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Lucas_Lucco_2018.jpg?width=500" alt="Lucas Lucco" referrerpolicy="no-referrer" onerror="this.parentElement.style.display='none';"></div>
       <h2 class="h1">Prontos<br>para começar.</h2>
       <div class="rule"></div>
       <div class="summary-table">
