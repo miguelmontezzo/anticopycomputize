@@ -404,6 +404,7 @@ body {
   <!-- 1 · BEM VINDO (vídeo loop) -->
   <div class="slide active welcome-video-slide" style="padding:0;overflow:hidden;">
     <video id="welcomeVideo" class="welcome-video" autoplay loop muted playsinline preload="auto" disablepictureinpicture>
+      <source src="JoogWelcomeV.mp4" type="video/mp4" media="(orientation: portrait)">
       <source src="JoogWelcomeH.mp4" type="video/mp4">
     </video>
   </div>
@@ -716,6 +717,18 @@ function goTo(n){
   ui();
 }
 
+function pickWelcomeSrc(){
+  const v = document.getElementById('welcomeVideo');
+  if(!v) return;
+  const portrait = window.matchMedia('(orientation: portrait)').matches;
+  const want = portrait ? 'JoogWelcomeV.mp4' : 'JoogWelcomeH.mp4';
+  const cur = (v.currentSrc || v.src || '').split('/').pop();
+  if(cur === want) return;
+  v.src = want;
+  v.load();
+  tryPlayWelcome();
+}
+
 function tryPlayWelcome(){
   const v = document.getElementById('welcomeVideo');
   if(!v) return;
@@ -724,7 +737,11 @@ function tryPlayWelcome(){
   if(p && p.catch) p.catch(()=>{});
 }
 
-document.addEventListener('DOMContentLoaded', tryPlayWelcome);
+const portraitMQ = window.matchMedia('(orientation: portrait)');
+if(portraitMQ.addEventListener) portraitMQ.addEventListener('change', pickWelcomeSrc);
+else if(portraitMQ.addListener) portraitMQ.addListener(pickWelcomeSrc);
+
+document.addEventListener('DOMContentLoaded', ()=>{ pickWelcomeSrc(); tryPlayWelcome(); });
 window.addEventListener('load', tryPlayWelcome);
 document.addEventListener('click', tryPlayWelcome, { once:true });
 document.addEventListener('touchstart', tryPlayWelcome, { once:true });
