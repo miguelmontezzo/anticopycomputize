@@ -95,12 +95,13 @@ body {
 .inner.center { align-items:center; text-align:center; }
 
 /* slides com layout foto+texto: centraliza bloco inteiro */
-.inner:has(.two-col) { align-items:center; }
-.inner:has(.two-col) > .kicker,
-.inner:has(.two-col) > .h2,
-.inner:has(.two-col) > .rule,
-.inner:has(.two-col) > .scope-hd,
-.inner:has(.two-col) > .scope-note { width:100%; max-width:1040px; }
+.inner.two-col-slide { align-items:center; text-align:center; }
+.inner.two-col-slide > .kicker,
+.inner.two-col-slide > .h2,
+.inner.two-col-slide > .scope-hd,
+.inner.two-col-slide > .scope-note { width:100%; max-width:1040px; }
+.inner.two-col-slide > .scope-hd { justify-content:center; }
+.inner.two-col-slide > .rule { margin-left:auto; margin-right:auto; }
 
 /* ── TYPE ── */
 .kicker {
@@ -436,7 +437,7 @@ body {
 
   <!-- 3 · AUDIÊNCIA -->
   <div class="slide bg-white">
-    <div class="inner">
+    <div class="inner two-col-slide">
       <div class="kicker">01 — Audiência</div>
       <h2 class="h2">Lucas Lucco<br><span class="blue">em números.</span></h2>
       <div class="rule"></div>
@@ -508,7 +509,7 @@ body {
 
   <!-- 5 · INSTAGRAM -->
   <div class="slide bg-white">
-    <div class="inner">
+    <div class="inner two-col-slide">
       <div class="kicker">03 — Entregas</div>
       <div class="scope-hd">
         <h2 class="h2">Instagram</h2>
@@ -541,7 +542,7 @@ body {
 
   <!-- 6 · TIKTOK -->
   <div class="slide bg-f5">
-    <div class="inner">
+    <div class="inner two-col-slide">
       <div class="kicker">03 — Entregas</div>
       <div class="scope-hd">
         <h2 class="h2">TikTok Shop</h2>
@@ -578,7 +579,7 @@ body {
 
   <!-- 7 · YOUTUBE -->
   <div class="slide bg-white">
-    <div class="inner">
+    <div class="inner two-col-slide">
       <div class="kicker">03 — Entregas</div>
       <div class="scope-hd">
         <h2 class="h2">YouTube</h2>
