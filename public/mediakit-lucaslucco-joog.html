@@ -233,6 +233,40 @@ body {
 .two-col { display:grid; grid-template-columns:1fr 1fr; gap:1.8rem; margin-top:2rem; align-items:start; }
 .lucas-img { width:100%; height:300px; object-fit:cover; object-position:top; border-radius:10px; display:block; }
 
+/* ── PORTRAIT (welcome / fechamento) ── */
+.portrait {
+  width:108px; height:108px; border-radius:50%;
+  object-fit:cover; object-position:center 20%;
+  border:3px solid #fff;
+  box-shadow:0 10px 28px rgba(0,0,0,.12), 0 0 0 1px rgba(0,0,0,.04);
+  margin:0 auto 1.6rem;
+  display:block;
+}
+
+/* ── PHOTO STRIP (por que lucas) ── */
+.photo-strip {
+  display:grid; grid-template-columns:repeat(3,1fr); gap:.9rem;
+  margin:1.8rem 0 .4rem;
+}
+.photo-strip img {
+  width:100%; height:180px; object-fit:cover; object-position:center 22%;
+  border-radius:10px; display:block;
+  filter:saturate(1.05);
+}
+
+/* ── MEDIA CAPTION (platform slides) ── */
+.media-frame { position:relative; border-radius:12px; overflow:hidden; box-shadow:0 8px 28px rgba(0,0,0,.08); }
+.media-frame img { width:100%; height:360px; object-fit:cover; object-position:center 20%; display:block; }
+.media-cap {
+  position:absolute; left:12px; bottom:12px;
+  background:rgba(20,20,22,.78); color:#fff;
+  backdrop-filter:blur(8px);
+  padding:.35rem .7rem; border-radius:999px;
+  font-size:.62rem; font-weight:500; letter-spacing:.04em;
+  display:inline-flex; align-items:center; gap:.4rem;
+}
+.media-cap .mdot { width:5px; height:5px; border-radius:50%; background:#0071e3; }
+
 /* ── SLIDE BG VARIANTS ── */
 .bg-white { background:#ffffff; }
 .bg-f5 { background:#f5f5f7; }
@@ -261,6 +295,11 @@ body {
   .inner { padding:4.5rem 1.4rem 4rem; }
   .two-col { grid-template-columns:1fr; gap:1.2rem; }
   .lucas-img { height:200px; }
+  .photo-strip { grid-template-columns:1fr 1fr; gap:.5rem; }
+  .photo-strip img { height:140px; }
+  .photo-strip img:nth-child(3) { display:none; }
+  .media-frame img { height:240px; }
+  .portrait { width:88px; height:88px; }
   .grid2 { grid-template-columns:1fr; }
   .grid2x2 { grid-template-columns:1fr; gap:.7rem; }
   .grid3 { grid-template-columns:1fr; gap:.7rem; }
@@ -297,6 +336,7 @@ body {
   <div class="slide active bg-white">
     <div class="inner center">
       <div class="kicker">Proposta confidencial · Abril 2026</div>
+      <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Lucas_Lucco_2018.jpg?width=400" alt="Lucas Lucco" class="portrait" referrerpolicy="no-referrer" onerror="this.style.display='none';">
       <div style="font-size:.78rem;color:#a1a1a6;margin-bottom:.4rem;font-weight:400;">Bem-vindos,</div>
       <div class="welcome-logo">JOOG</div>
       <div class="rule center"></div>
@@ -343,7 +383,7 @@ body {
       <h2 class="h2">Lucas Lucco<br><span class="blue">em números.</span></h2>
       <div class="rule"></div>
       <div class="two-col">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Lucas_Lucco_em_2019.jpg/800px-Lucas_Lucco_em_2019.jpg" alt="Lucas Lucco" class="lucas-img" onerror="this.style.display='none';">
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Lucas_Lucco_Multishow.jpg?width=800" alt="Lucas Lucco" class="lucas-img" referrerpolicy="no-referrer" onerror="this.style.display='none';">
         <div class="stat-table">
           <div class="stat-row hi">
             <div><div class="stat-plat">Instagram</div><div class="stat-detail">@lucaslucco · verificado</div></div>
@@ -376,6 +416,11 @@ body {
       <div class="kicker">02 — Fit de marca</div>
       <h2 class="h2">Por que Lucas<br><span class="blue">é o certo.</span></h2>
       <div class="rule"></div>
+      <div class="photo-strip">
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Lucas_Lucco_Multishow.jpg?width=700" alt="Lucas Lucco no Multishow" referrerpolicy="no-referrer" onerror="this.style.display='none';">
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Lucas_Lucco_se_apresenta_na_Expoacre_2015.jpg?width=700" alt="Lucas Lucco ao vivo" referrerpolicy="no-referrer" onerror="this.style.display='none';">
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Lucas_Lucco_2018.jpg?width=700" alt="Lucas Lucco retrato" referrerpolicy="no-referrer" onerror="this.style.display='none';">
+      </div>
       <div class="grid2x2">
         <div class="mini-card">
           <span class="mini-card-icon">🎤</span>
@@ -410,18 +455,24 @@ body {
         <span class="plat-badge pb-insta">📸 Instagram</span>
       </div>
       <div class="rule"></div>
-      <div class="scope-list">
-        <div class="scope-item">
-          <div class="scope-n">01</div>
-          <div><div class="scope-t">1 post no feed a cada 2 semanas</div><div class="scope-d">Lucas usando a JOOG em momentos reais — karaokê em casa, cantando versões, resenha com amigos. Formato orgânico.</div></div>
+      <div class="two-col">
+        <div class="media-frame">
+          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Lucas_Lucco_se_apresenta_na_Expoacre_2015.jpg?width=900" alt="Lucas Lucco no palco" referrerpolicy="no-referrer" onerror="this.parentElement.style.display='none';">
+          <span class="media-cap"><span class="mdot"></span>@lucaslucco · 17,9M</span>
         </div>
-        <div class="scope-item">
-          <div class="scope-n">02</div>
-          <div><div class="scope-t">Stories contínuos ao longo do mês</div><div class="scope-d">A JOOG aparece na rotina — bastidores, momentos espontâneos, uso real do produto no dia a dia.</div></div>
-        </div>
-        <div class="scope-item">
-          <div class="scope-n">03</div>
-          <div><div class="scope-t">Linguagem 100% autêntica</div><div class="scope-d">Segue a identidade do perfil do Lucas — natural, direto, sem parecer publicidade forçada.</div></div>
+        <div class="scope-list" style="margin-top:0;">
+          <div class="scope-item">
+            <div class="scope-n">01</div>
+            <div><div class="scope-t">1 post no feed a cada 2 semanas</div><div class="scope-d">Lucas usando a JOOG em momentos reais — karaokê em casa, cantando versões, resenha com amigos. Formato orgânico.</div></div>
+          </div>
+          <div class="scope-item">
+            <div class="scope-n">02</div>
+            <div><div class="scope-t">Stories contínuos ao longo do mês</div><div class="scope-d">A JOOG aparece na rotina — bastidores, momentos espontâneos, uso real do produto no dia a dia.</div></div>
+          </div>
+          <div class="scope-item">
+            <div class="scope-n">03</div>
+            <div><div class="scope-t">Linguagem 100% autêntica</div><div class="scope-d">Segue a identidade do perfil do Lucas — natural, direto, sem parecer publicidade forçada.</div></div>
+          </div>
         </div>
       </div>
       <div class="scope-note">↗ Mínimo 2 reels + séries de stories por mês</div>
@@ -437,22 +488,28 @@ body {
         <span class="plat-badge pb-tiktok">🎵 TikTok</span>
       </div>
       <div class="rule"></div>
-      <div class="scope-list">
-        <div class="scope-item">
-          <div class="scope-n">01</div>
-          <div><div class="scope-t">Mínimo 2 posts por semana com botão de compra</div><div class="scope-d">Vídeos com a JOOG integrados ao TikTok Shop — da descoberta à compra sem sair do app.</div></div>
+      <div class="two-col">
+        <div class="media-frame">
+          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Lucas_Lucco_se_apresenta_na_Expoacre_2015_(cropped).jpg?width=900" alt="Lucas Lucco cantando" referrerpolicy="no-referrer" onerror="this.parentElement.style.display='none';">
+          <span class="media-cap"><span class="mdot"></span>@lucaslucco · 4,5M · 33,9M curtidas</span>
         </div>
-        <div class="scope-item">
-          <div class="scope-n">02</div>
-          <div><div class="scope-t">JOOG fixada na vitrine do perfil</div><div class="scope-d">Visibilidade permanente para todo mundo que acessa o @lucaslucco no TikTok.</div></div>
-        </div>
-        <div class="scope-item">
-          <div class="scope-n">03</div>
-          <div><div class="scope-t">Stories com link direto para o produto</div><div class="scope-d">Integração total entre conteúdo e conversão — o seguidor vê, quer e compra na mesma plataforma.</div></div>
-        </div>
-        <div class="scope-item">
-          <div class="scope-n">04</div>
-          <div><div class="scope-t">Conteúdo pensado para viralizar</div><div class="scope-d">Karaokê, challenges, versões — formatos que amplificam o alcance da JOOG organicamente.</div></div>
+        <div class="scope-list" style="margin-top:0;">
+          <div class="scope-item">
+            <div class="scope-n">01</div>
+            <div><div class="scope-t">Mínimo 2 posts por semana com botão de compra</div><div class="scope-d">Vídeos com a JOOG integrados ao TikTok Shop — da descoberta à compra sem sair do app.</div></div>
+          </div>
+          <div class="scope-item">
+            <div class="scope-n">02</div>
+            <div><div class="scope-t">JOOG fixada na vitrine do perfil</div><div class="scope-d">Visibilidade permanente para todo mundo que acessa o @lucaslucco no TikTok.</div></div>
+          </div>
+          <div class="scope-item">
+            <div class="scope-n">03</div>
+            <div><div class="scope-t">Stories com link direto para o produto</div><div class="scope-d">Integração total entre conteúdo e conversão — o seguidor vê, quer e compra na mesma plataforma.</div></div>
+          </div>
+          <div class="scope-item">
+            <div class="scope-n">04</div>
+            <div><div class="scope-t">Conteúdo pensado para viralizar</div><div class="scope-d">Karaokê, challenges, versões — formatos que amplificam o alcance da JOOG organicamente.</div></div>
+          </div>
         </div>
       </div>
       <div class="scope-note">↗ Mínimo 8 posts/mês + vitrine ativa 24/7</div>
@@ -468,18 +525,24 @@ body {
         <span class="plat-badge pb-yt">▶ YouTube</span>
       </div>
       <div class="rule"></div>
-      <div class="scope-list">
-        <div class="scope-item">
-          <div class="scope-n">01</div>
-          <div><div class="scope-t">Product placement no Diário Lucas Lucco</div><div class="scope-d">A JOOG aparece naturalmente nos episódios — como parte da cena, sem corte brusco ou jingle.</div></div>
+      <div class="two-col">
+        <div class="media-frame">
+          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Lucas_Lucco.jpg?width=900" alt="Lucas Lucco" referrerpolicy="no-referrer" onerror="this.parentElement.style.display='none';">
+          <span class="media-cap"><span class="mdot"></span>Diário Lucas Lucco · formato reality</span>
         </div>
-        <div class="scope-item">
-          <div class="scope-n">02</div>
-          <div><div class="scope-t">Vídeo longo com alta retenção</div><div class="scope-d">Exposição prolongada para uma audiência engajada. Quem assiste o Diário já é fã declarado do Lucas.</div></div>
-        </div>
-        <div class="scope-item">
-          <div class="scope-n">03</div>
-          <div><div class="scope-t">Canal em crescimento ativo</div><div class="scope-d">Cada novo inscrito no Diário é audiência futura para a JOOG. A marca cresce junto com o canal.</div></div>
+        <div class="scope-list" style="margin-top:0;">
+          <div class="scope-item">
+            <div class="scope-n">01</div>
+            <div><div class="scope-t">Product placement no Diário Lucas Lucco</div><div class="scope-d">A JOOG aparece naturalmente nos episódios — como parte da cena, sem corte brusco ou jingle.</div></div>
+          </div>
+          <div class="scope-item">
+            <div class="scope-n">02</div>
+            <div><div class="scope-t">Vídeo longo com alta retenção</div><div class="scope-d">Exposição prolongada para uma audiência engajada. Quem assiste o Diário já é fã declarado do Lucas.</div></div>
+          </div>
+          <div class="scope-item">
+            <div class="scope-n">03</div>
+            <div><div class="scope-t">Canal em crescimento ativo</div><div class="scope-d">Cada novo inscrito no Diário é audiência futura para a JOOG. A marca cresce junto com o canal.</div></div>
+          </div>
         </div>
       </div>
       <div class="scope-note">↗ 2 inserções mensais nos episódios do Diário</div>
@@ -536,6 +599,7 @@ body {
   <div class="slide bg-f5">
     <div class="inner">
       <div class="kicker">Vamos fechar?</div>
+      <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Lucas_Lucco_2018.jpg?width=400" alt="Lucas Lucco" class="portrait" style="margin:0 0 1.4rem;" referrerpolicy="no-referrer" onerror="this.style.display='none';">
       <h2 class="h1">Prontos<br>para começar.</h2>
       <div class="rule"></div>
       <div class="summary-table">
